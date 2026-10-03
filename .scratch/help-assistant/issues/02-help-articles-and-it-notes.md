@@ -12,7 +12,7 @@ The AI drafts the content and Sebastian skims every piece. The source material i
 - [x] The 14 holes are left on purpose. That's 8 No match, 4 Not covered, and 2 out-of-date articles (MFA still describes SMS codes, and badge access still says to email Facilities).
 - [x] About 25 IT team notes are stored. They cover every hole except rDNA approval and CRO accruals, and they're never sent to the answer call.
 - [x] A question that names a system Northwake doesn't use gets an answer from the right Northwake article, not a Gap. For example, Expensify gets the Concur article.
-- [ ] Sebastian has skimmed every article and note.
+- [x] ~~Sebastian has skimmed every article and note.~~ Waived by Sebastian on 2026-10-03 because the demo is a prototype.
 
 ## Comments
 
@@ -23,3 +23,5 @@ The laptop article is tagged Microsoft 365, following the planning file. The pla
 Checked against `openai/gpt-6-luna` on the dev deployment. Expensify, SAP Ariba, BambooHR, DocuSign, Jira, and Google Drive questions were each answered from the right Northwake article. The first run showed two prompt problems: the rDNA question came back Off topic, and No match holes came back Not covered whenever a nearby article existed. The answer instructions now define the two Gap reasons more sharply and say company approvals for lab work are on topic. After that change, all 12 detectable holes got their planned reason (8 No match, 4 Not covered), Expensify still went to Concur, and the Western blot question stayed Off topic. These were practice questions; the Test set doesn't exist yet.
 
 `seed:load` still loads only into an empty deployment. To replace ticket 01's 3 placeholder articles on dev, the `helpArticles` table was emptied with `pnpm exec convex import --replace` first.
+
+**2026-10-03, sign-off:** Sebastian waived the skim because the demo is a prototype, and chose to keep the test that checks notes never reach the answer call.
