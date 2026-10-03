@@ -28,6 +28,9 @@ export default defineSchema({
     contactTeam: v.string(),
     body: v.string(),
   }),
+  itTeamNotes: defineTable({
+    text: v.string(),
+  }),
   questions: defineTable({
     visitorId: v.string(),
     text: v.string(),

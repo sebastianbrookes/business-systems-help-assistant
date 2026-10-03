@@ -3,6 +3,8 @@ import { convexTest } from "convex-test";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { api, internal } from "./_generated/api";
 import schema from "./schema";
+import { startingArticles } from "./startingArticles";
+import { startingItTeamNotes } from "./startingItTeamNotes";
 
 const modules = import.meta.glob("./**/*.ts");
 const visitorId = "visitor-1";
@@ -26,7 +28,7 @@ async function setup() {
 
 /** Fakes OpenRouter replying with `content` as the model's message. */
 function fakeModelReply(content: unknown) {
-  const fetch = vi.fn(async () =>
+  const fetch = vi.fn<typeof globalThis.fetch>(async () =>
     Response.json({
       choices: [
         {
@@ -77,6 +79,31 @@ test("an answered question shows its answer, cited article, and team to contact"
       system: "Coupa",
     },
   ]);
+});
+
+test("the answer call sees every Help article and none of the IT team notes", async () => {
+  const { t } = await setup();
+  const fetch = fakeModelReply({
+    outcome: "offTopic",
+    answer: "",
+    citedArticleIds: [],
+    gapReason: null,
+    department: null,
+    system: null,
+  });
+
+  await t.action(api.questions.ask, {
+    visitorId,
+    text: "Do I need an MTA to send samples to our Durham site?",
+  });
+
+  const { messages } = JSON.parse(String(fetch.mock.calls[0][1]?.body));
+  const prompt = messages.map((m: { content: string }) => m.content).join("\n");
+  for (const a of startingArticles) expect(prompt).toContain(a.title);
+  // Each note's opening words, before any quotes that JSON would escape.
+  for (const n of startingItTeamNotes) {
+    expect(prompt).not.toContain(n.text.slice(0, 40));
+  }
 });
 
 test("an Off topic question gets a polite decline and is never a Gap", async () => {

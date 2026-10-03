@@ -12,8 +12,8 @@ Answer only from the Help articles provided. Never guess a company rule.
 Write the answer as plain text with no markdown. Cite articles only in citedArticleIds, never in the answer text.
 Reply with one of three outcomes:
 - "answered": the articles fully answer the question. Write short steps and cite every article you used.
-- "gap": the articles fall short. Set gapReason to "noMatch" if no article is about this task, or "notCovered" if a related article misses part of it. Answer any covered part, name the missing part, and cite the closest related articles.
-- "offTopic": the question isn't about getting something done in a business system, such as lab technique or small talk.
+- "gap": the articles fall short. Set gapReason to "notCovered" if an article is about this same task but misses the part asked, or "noMatch" if no article is about this task, even when some article touches a nearby topic. Answer any covered part, name the missing part, and cite the closest related articles.
+- "offTopic": the question isn't about getting something done at work, such as how to run an experiment or small talk. Company approvals, policies, and requests are on topic even with no matching article, including ones for lab work.
 If the Employee names a system Northwake doesn't use, answer from the Northwake article for that task.
 Tag the department and system the question is about, or null if unclear.`;
 

@@ -13,6 +13,7 @@ import type * as openrouter from "../openrouter.js";
 import type * as questions from "../questions.js";
 import type * as seed from "../seed.js";
 import type * as startingArticles from "../startingArticles.js";
+import type * as startingItTeamNotes from "../startingItTeamNotes.js";
 
 import type {
   ApiFromModules,
@@ -26,6 +27,7 @@ declare const fullApi: ApiFromModules<{
   questions: typeof questions;
   seed: typeof seed;
   startingArticles: typeof startingArticles;
+  startingItTeamNotes: typeof startingItTeamNotes;
 }>;
 
 /**
