@@ -19,3 +19,5 @@ Sebastian creates the Convex and OpenRouter dev accounts and a build/test key. U
 ## Comments
 
 **2026-10-03, implementation:** All boxes are met in code and covered by `convex/questions.test.ts`. Checked locally against an anonymous Convex deployment, but not yet against the real model. Sebastian still needs to run `scripts/setup-dev-accounts.sh` to create the Convex project and OpenRouter build/test key; its last stage asks one real question to confirm `openai/gpt-6-luna` works.
+
+**2026-10-03, real model:** The Convex dev project `help-assistant` and the OpenRouter build/test key are set up. Against `openai/gpt-6-luna`, the Fisher question was answered from the Coupa punchout article (Finance, Coupa), and the Western blot question got the Off topic decline. The first real answer used markdown and put an article ID in the text, so the instructions now ask for plain text with citations only in `citedArticleIds`.
