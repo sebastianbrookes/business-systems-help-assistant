@@ -2,29 +2,43 @@ import { useAction, useQuery } from "convex/react";
 import { ConvexError } from "convex/values";
 import { useState, type FormEvent } from "react";
 import { api } from "../convex/_generated/api";
+import type { Id } from "../convex/_generated/dataModel";
 import { visitorId } from "./visitorId";
 
 export function EmployeePanel() {
   const questions = useQuery(api.questions.list, { visitorId });
   const ask = useAction(api.questions.ask);
+  const didntHelp = useAction(api.questions.didntHelp);
   const [text, setText] = useState("");
   const [asking, setAsking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [markingId, setMarkingId] = useState<Id<"questions"> | null>(null);
 
-  async function onSubmit(event: FormEvent) {
-    event.preventDefault();
-    setAsking(true);
+  /** Runs `call`, showing any failure as the error message. Returns whether it worked. */
+  async function withErrorMessage(call: () => Promise<unknown>) {
     setError(null);
     try {
-      await ask({ visitorId, text });
-      setText("");
+      await call();
+      return true;
     } catch (e) {
       setError(
         e instanceof ConvexError ? String(e.data) : "Something went wrong. Try again.",
       );
-    } finally {
-      setAsking(false);
+      return false;
     }
+  }
+
+  async function onSubmit(event: FormEvent) {
+    event.preventDefault();
+    setAsking(true);
+    if (await withErrorMessage(() => ask({ visitorId, text }))) setText("");
+    setAsking(false);
+  }
+
+  async function onDidntHelp(questionId: Id<"questions">) {
+    setMarkingId(questionId);
+    await withErrorMessage(() => didntHelp({ visitorId, questionId }));
+    setMarkingId(null);
   }
 
   return (
@@ -36,6 +50,13 @@ export function EmployeePanel() {
         {questions?.map((q) => (
           <li key={q._id} className="question">
             <p className="asked">{q.text}</p>
+            {q.outcome === "gap" && (
+              <p className="sent">
+                {q.gapReason === "didntHelp"
+                  ? "Thanks. We sent this to the IT team so they can fix the article."
+                  : "The Help articles don't fully cover this, so your question went to the IT team."}
+              </p>
+            )}
             <p className="answer">{q.answer}</p>
             {q.citedArticles.length > 0 && (
               <ul className="sources">
@@ -45,6 +66,20 @@ export function EmployeePanel() {
                   </li>
                 ))}
               </ul>
+            )}
+            {q.outcome === "gap" && q.citedArticles.length === 0 && (
+              <ul className="sources">
+                <li>Contact the IT Service Desk</li>
+              </ul>
+            )}
+            {q.outcome === "answered" && (
+              <button
+                className="didnt-help"
+                disabled={markingId !== null}
+                onClick={() => onDidntHelp(q._id)}
+              >
+                {markingId === q._id ? "Sending…" : "Didn't help"}
+              </button>
             )}
           </li>
         ))}

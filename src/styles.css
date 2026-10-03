@@ -18,3 +18,15 @@ input { flex: 1; padding: 10px 12px; border: 1px solid #c4cad3; border-radius: 6
 button { padding: 10px 16px; border: 0; border-radius: 6px; background: #1d5c8f; color: white; font: inherit; cursor: pointer; }
 button:disabled { opacity: 0.5; cursor: default; }
 .error { color: #b42318; }
+.split { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+.split > .panel + .panel { border-left: 1px solid #dde1e7; background: #eef1f5; }
+@media (max-width: 800px) { .split { grid-template-columns: 1fr; } }
+h2 { margin: 0 0 4px; font-size: 1.2rem; }
+.sent { margin: 0 0 8px; color: #8a4b00; font-size: 0.95rem; }
+button.didnt-help { margin-top: 10px; padding: 4px 10px; background: none; color: #5b6573; border: 1px solid #c4cad3; font-size: 0.85rem; }
+.groups { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.group { background: white; border: 1px solid #dde1e7; border-radius: 8px; }
+button.group-toggle { width: 100%; display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; background: none; color: inherit; text-align: left; font-weight: 600; }
+.count { color: #5b6573; font-weight: 400; white-space: nowrap; }
+.group-questions { margin: 0; padding: 0 14px 12px 32px; display: grid; gap: 6px; font-size: 0.95rem; }
+.reason { margin-left: 8px; padding: 1px 6px; border-radius: 4px; background: #eef1f5; color: #5b6573; font-size: 0.8rem; white-space: nowrap; }

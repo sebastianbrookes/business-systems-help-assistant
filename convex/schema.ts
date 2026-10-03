@@ -12,7 +12,9 @@ export const SYSTEMS = [
 ] as const;
 
 export const OUTCOMES = ["answered", "gap", "offTopic"] as const;
-export const GAP_REASONS = ["noMatch", "notCovered"] as const;
+/** The Gap reasons the answer call can give. */
+export const MODEL_GAP_REASONS = ["noMatch", "notCovered"] as const;
+export const GAP_REASONS = [...MODEL_GAP_REASONS, "didntHelp"] as const;
 
 const literals = <T extends string>(values: readonly [T, T, ...T[]]) =>
   v.union(...values.map((value) => v.literal(value)));
@@ -31,8 +33,9 @@ export default defineSchema({
   itTeamNotes: defineTable({
     text: v.string(),
   }),
+  // Rows with no visitorId are starting data, seen by every Visitor.
   questions: defineTable({
-    visitorId: v.string(),
+    visitorId: v.optional(v.string()),
     text: v.string(),
     answer: v.string(),
     citedArticleIds: v.array(v.id("helpArticles")),
@@ -40,5 +43,12 @@ export default defineSchema({
     gapReason: v.optional(literals(GAP_REASONS)),
     department: v.optional(department),
     system: v.optional(system),
+    gapGroupId: v.optional(v.id("gapGroups")),
+  })
+    .index("by_visitor", ["visitorId"])
+    .index("by_gap_group", ["gapGroupId"]),
+  gapGroups: defineTable({
+    visitorId: v.optional(v.string()),
+    title: v.string(),
   }).index("by_visitor", ["visitorId"]),
 });

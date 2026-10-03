@@ -9,6 +9,8 @@
  */
 
 import type * as answerAndTag from "../answerAndTag.js";
+import type * as gapGroups from "../gapGroups.js";
+import type * as groupGap from "../groupGap.js";
 import type * as openrouter from "../openrouter.js";
 import type * as questions from "../questions.js";
 import type * as seed from "../seed.js";
@@ -23,6 +25,8 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   answerAndTag: typeof answerAndTag;
+  gapGroups: typeof gapGroups;
+  groupGap: typeof groupGap;
   openrouter: typeof openrouter;
   questions: typeof questions;
   seed: typeof seed;
