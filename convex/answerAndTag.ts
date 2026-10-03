@@ -1,10 +1,10 @@
 import { z } from "zod";
 import type { Doc, Id } from "./_generated/dataModel";
 import { askModelForJson } from "./openrouter";
-import { DEPARTMENTS, SYSTEMS } from "./schema";
+import { DEPARTMENTS, GAP_REASONS, OUTCOMES, SYSTEMS } from "./schema";
 
 const OFF_TOPIC_DECLINE =
-  "Sorry, I can only help with getting things done in Northwake's business systems, like Coupa, Concur, Workday, Ironclad, ServiceNow, and Microsoft 365.";
+  "Sorry, I can only help with getting things done in Northwake's business systems.";
 
 const INSTRUCTIONS = `You are the help assistant for Northwake Therapeutics, a biotech. Employees ask how to get things done in its business systems: ${SYSTEMS.join(", ")}.
 
@@ -19,10 +19,10 @@ Tag the department and system the question is about, or null if unclear.`;
 function replySchema(articleIds: string[]) {
   return z
     .strictObject({
-      outcome: z.enum(["answered", "gap", "offTopic"]),
+      outcome: z.enum(OUTCOMES),
       answer: z.string(),
       citedArticleIds: z.array(z.enum(articleIds)),
-      gapReason: z.enum(["noMatch", "notCovered"]).nullable(),
+      gapReason: z.enum(GAP_REASONS).nullable(),
       department: z.enum(DEPARTMENTS).nullable(),
       system: z.enum(SYSTEMS).nullable(),
     })

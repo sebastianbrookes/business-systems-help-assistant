@@ -2,7 +2,7 @@ import type { WithoutSystemFields } from "convex/server";
 import type { Doc } from "./_generated/dataModel";
 
 // A few placeholder articles until ticket 02 loads Northwake's full set.
-export const sampleArticles: WithoutSystemFields<Doc<"helpArticles">>[] = [
+export const startingArticles: WithoutSystemFields<Doc<"helpArticles">>[] = [
   {
     title: "Ordering lab supplies through a Coupa punchout",
     department: "Finance",

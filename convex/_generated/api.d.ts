@@ -11,8 +11,8 @@
 import type * as answerAndTag from "../answerAndTag.js";
 import type * as openrouter from "../openrouter.js";
 import type * as questions from "../questions.js";
-import type * as sampleArticles from "../sampleArticles.js";
 import type * as seed from "../seed.js";
+import type * as startingArticles from "../startingArticles.js";
 
 import type {
   ApiFromModules,
@@ -24,8 +24,8 @@ declare const fullApi: ApiFromModules<{
   answerAndTag: typeof answerAndTag;
   openrouter: typeof openrouter;
   questions: typeof questions;
-  sampleArticles: typeof sampleArticles;
   seed: typeof seed;
+  startingArticles: typeof startingArticles;
 }>;
 
 /**

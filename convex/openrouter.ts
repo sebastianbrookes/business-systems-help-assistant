@@ -2,7 +2,7 @@ import { ConvexError } from "convex/values";
 import { z } from "zod";
 
 /** The one place the model is named. */
-export const MODEL = "openai/gpt-6-luna";
+const MODEL = "openai/gpt-6-luna";
 
 /**
  * Asks the model for JSON matching `schema` and returns it checked.
@@ -38,8 +38,8 @@ export async function askModelForJson<T>(
   if (!response.ok) {
     throw new Error(`OpenRouter returned ${response.status}`);
   }
-  const body = await response.json();
   try {
+    const body = await response.json();
     return schema.parse(JSON.parse(body.choices[0].message.content));
   } catch {
     throw new ConvexError("The assistant gave an unusable reply. Try again.");

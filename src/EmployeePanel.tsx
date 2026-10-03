@@ -41,7 +41,7 @@ export function EmployeePanel() {
               <ul className="sources">
                 {q.citedArticles.map((a) => (
                   <li key={a._id}>
-                    From <strong>{a.title}</strong> · Contact {a.contactTeam}
+                    {q.outcome === "gap" ? "Related" : "From"} <strong>{a.title}</strong> · Contact {a.contactTeam}
                   </li>
                 ))}
               </ul>

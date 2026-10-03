@@ -11,8 +11,14 @@ export const SYSTEMS = [
   "Microsoft 365",
 ] as const;
 
-export const department = v.union(...DEPARTMENTS.map((d) => v.literal(d)));
-export const system = v.union(...SYSTEMS.map((s) => v.literal(s)));
+export const OUTCOMES = ["answered", "gap", "offTopic"] as const;
+export const GAP_REASONS = ["noMatch", "notCovered"] as const;
+
+const literals = <T extends string>(values: readonly [T, T, ...T[]]) =>
+  v.union(...values.map((value) => v.literal(value)));
+
+const department = literals(DEPARTMENTS);
+const system = literals(SYSTEMS);
 
 export default defineSchema({
   helpArticles: defineTable({
@@ -27,14 +33,8 @@ export default defineSchema({
     text: v.string(),
     answer: v.string(),
     citedArticleIds: v.array(v.id("helpArticles")),
-    outcome: v.union(
-      v.literal("answered"),
-      v.literal("gap"),
-      v.literal("offTopic"),
-    ),
-    gapReason: v.optional(
-      v.union(v.literal("noMatch"), v.literal("notCovered")),
-    ),
+    outcome: literals(OUTCOMES),
+    gapReason: v.optional(literals(GAP_REASONS)),
     department: v.optional(department),
     system: v.optional(system),
   }).index("by_visitor", ["visitorId"]),
