@@ -197,10 +197,10 @@ say "Convex writes CONVEX_DEPLOYMENT and VITE_CONVEX_URL to .env.local itself."
 note "It replaces the anonymous local deployment the agent used for codegen."
 step "When asked, log in through the browser it opens."
 step "Name the project help-assistant."
-if confirm "Run npx convex dev --once --configure new --dev-deployment cloud now?"; then
-  npx convex dev --once --configure new --dev-deployment cloud
+if confirm "Run pnpm exec convex dev --once --configure new --dev-deployment cloud now?"; then
+  pnpm exec convex dev --once --configure new --dev-deployment cloud
 else
-  SKIPPED+=("Convex project (run: npx convex dev --configure new --dev-deployment cloud)")
+  SKIPPED+=("Convex project (run: pnpm exec convex dev --configure new --dev-deployment cloud)")
 fi
 pause
 
@@ -220,22 +220,22 @@ step "If the form offers a credit limit, set \$2 so dev work can't spend the who
 step "Copy the key now. OpenRouter shows it only once."
 ask_secret OPENROUTER_API_KEY "Paste the key (starts sk-or-):"
 note "The key goes only into Convex, never into .env.local or the browser."
-printf '%s' "$OPENROUTER_API_KEY" | npx convex env set OPENROUTER_API_KEY
+printf '%s' "$OPENROUTER_API_KEY" | pnpm exec convex env set OPENROUTER_API_KEY
 printf '  %s✓ set%s OPENROUTER_API_KEY on the Convex dev deployment\n' "$GREEN" "$RESET"
 pause
 
 stage "Smoke test: one real question"
 say "This loads the sample Help articles and asks one question through the real model."
 note "It costs a fraction of a cent and confirms the model name in convex/openrouter.ts works."
-npx convex run seed:load
-if npx convex run questions:ask '{"visitorId":"wizard-smoke-test","text":"How do I order lab supplies from Fisher?"}' \
-  && npx convex run questions:list '{"visitorId":"wizard-smoke-test"}'; then
+pnpm exec convex run seed:load
+if pnpm exec convex run questions:ask '{"visitorId":"wizard-smoke-test","text":"How do I order lab supplies from Fisher?"}' \
+  && pnpm exec convex run questions:list '{"visitorId":"wizard-smoke-test"}'; then
   printf '  %s✓ the assistant answered%s\n' "$GREEN" "$RESET"
 else
-  warn "the question failed; check the error above and the logs with: npx convex logs"
+  warn "the question failed; check the error above and the logs with: pnpm exec convex logs"
   SKIPPED+=("a working smoke-test question")
 fi
 pause
 
 finish
-say "Next: run npm run dev:convex and npm run dev in two terminals, then open http://localhost:5173."
+say "Next: run pnpm dev:convex and pnpm dev in two terminals, then open http://localhost:5173."
