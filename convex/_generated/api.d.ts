@@ -14,6 +14,7 @@ import type * as fillFromNotes from "../fillFromNotes.js";
 import type * as gapGroups from "../gapGroups.js";
 import type * as groupGap from "../groupGap.js";
 import type * as history from "../history.js";
+import type * as limits from "../limits.js";
 import type * as openrouter from "../openrouter.js";
 import type * as placeholders from "../placeholders.js";
 import type * as questions from "../questions.js";
@@ -38,6 +39,7 @@ declare const fullApi: ApiFromModules<{
   gapGroups: typeof gapGroups;
   groupGap: typeof groupGap;
   history: typeof history;
+  limits: typeof limits;
   openrouter: typeof openrouter;
   placeholders: typeof placeholders;
   questions: typeof questions;

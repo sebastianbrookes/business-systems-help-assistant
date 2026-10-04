@@ -12,6 +12,8 @@ import {
 import { answerAndTag } from "./answerAndTag";
 import { placeInGroup } from "./gapGroups";
 import { groupGap, groupingValidator } from "./groupGap";
+import { countAiCall } from "./limits";
+import { PausedError } from "./openrouter";
 import schema from "./schema";
 import { visibleArticles } from "./visibility";
 
@@ -40,16 +42,30 @@ export const ask = action({
     const articles = await ctx.runQuery(internal.questions.articlesFor, {
       visitorId,
     });
-    const result = await answerAndTag(text, articles);
-    // A Gap's grouping call is part of the same question.
-    const grouping =
-      result.outcome === "gap"
-        ? await groupVisitorGap(ctx, visitorId, { text, ...result })
-        : undefined;
-    return await ctx.runMutation(internal.questions.save, {
-      question: { visitorId, text, ...result },
-      grouping,
-    });
+    try {
+      await countAiCall(ctx, visitorId);
+      const result = await answerAndTag(text, articles);
+      // A Gap's grouping call is part of the same question.
+      const grouping =
+        result.outcome === "gap"
+          ? await groupVisitorGap(ctx, visitorId, { text, ...result })
+          : undefined;
+      return await ctx.runMutation(internal.questions.save, {
+        question: { visitorId, text, ...result },
+        grouping,
+      });
+    } catch (e) {
+      if (!(e instanceof PausedError)) throw e;
+      return await ctx.runMutation(internal.questions.save, {
+        question: {
+          visitorId,
+          text,
+          outcome: "paused",
+          answer: e.data,
+          citedArticleIds: [],
+        },
+      });
+    }
   },
 });
 

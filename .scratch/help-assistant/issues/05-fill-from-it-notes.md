@@ -9,7 +9,7 @@
 - [x] **Fill from IT notes** sends the draft and the IT team notes to a second AI call. It works on any Gap group, including a Visitor's own.
 - [x] Only placeholders the notes back are filled. All others stay as [Check: …].
 - [x] The rDNA approval and CRO accruals drafts keep their placeholders empty.
-- [ ] If limits exist (ticket 06), each click counts as one AI call.
+- [x] If limits exist (ticket 06), each click counts as one AI call.
 - [x] Tests cover a fill that uses only the notes and a placeholder left empty when the notes don't state the fact.
 
 ## Comments
@@ -25,3 +25,5 @@ Checked against `openai/gpt-6-luna` with the real notes. The time off draft got 
 **2026-10-04, review fixes:** A fill is also dropped when the fact states a number its cited note doesn't, or contains a bracket. Facts with "$", such as "$325", are now inserted as written. The placeholder pattern lives in `convex/placeholders.ts`, shared by approval, the fill, and the UI. The action returns `filledCount` for the "Filled N" message. Two small risks remain. A slow fill overwrites anything saved to the same draft from another tab in the meantime. A fill that pushes the body past 5,000 characters fails after the AI call.
 
 **2026-10-04, sign-off:** Sebastian ran the demo locally and confirmed that Fill from IT notes works on the time off draft and leaves the rDNA draft's placeholders empty.
+
+**2026-10-04, ticket 06:** Each Fill from IT notes click now counts as one AI call, but only when it reaches the model call. Over a limit, or on an OpenRouter 402, the click shows the paused message.

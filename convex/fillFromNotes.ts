@@ -23,22 +23,26 @@ const backs = (note: string | undefined, fact: string) =>
 /**
  * Runs the Fill from IT notes AI call on a draft. Only placeholders a note
  * backs are filled. The rest, and all other text, come back unchanged. Makes
- * no call when there are no closed placeholders to fill.
+ * no call, and skips `beforeCall`, when there are no closed placeholders to fill.
  */
-export async function fillFromNotes({
-  title,
-  body,
-  notes,
-}: {
-  title: string;
-  body: string;
-  notes: string[];
-}) {
+export async function fillFromNotes(
+  {
+    title,
+    body,
+    notes,
+  }: {
+    title: string;
+    body: string;
+    notes: string[];
+  },
+  beforeCall: () => Promise<void>,
+) {
   const placeholders = [
     ...new Set(placeholdersIn(`${title}\n${body}`).filter((p) => p.endsWith("]"))),
   ];
   let filledCount = 0;
   if (!placeholders.length) return { title, body, filledCount };
+  await beforeCall();
   const { fills } = await askModelForJson(replySchema, [
     { role: "system", content: INSTRUCTIONS },
     {

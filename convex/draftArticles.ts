@@ -16,6 +16,7 @@ import {
   visibleQuestions,
 } from "./gapGroups";
 import { fillFromNotes } from "./fillFromNotes";
+import { countAiCall } from "./limits";
 import { placeholdersIn } from "./placeholders";
 import { articleFields } from "./schema";
 import { currentVersion, visibleArticles } from "./visibility";
@@ -53,6 +54,7 @@ export const draft = action({
       visitorId,
       gapGroupId,
     });
+    await countAiCall(ctx, visitorId);
     await ctx.runMutation(internal.draftArticles.insert, {
       visitorId,
       gapGroupId,
@@ -144,7 +146,9 @@ export const fill = action({
       visitorId,
       gapGroupId,
     });
-    const filled = await fillFromNotes(input);
+    const filled = await fillFromNotes(input, () =>
+      countAiCall(ctx, visitorId),
+    );
     if (filled.filledCount) {
       await ctx.runMutation(api.draftArticles.save, {
         visitorId,

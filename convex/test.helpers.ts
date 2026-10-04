@@ -73,6 +73,15 @@ export function fakeModelReply(...contents: unknown[]) {
   return fetch;
 }
 
+/** Fakes OpenRouter refusing every call with a 402 because the credit ran out. */
+export function fakeOutOfCredit() {
+  const fetch = vi.fn<typeof globalThis.fetch>(
+    async () => new Response("Insufficient credits", { status: 402 }),
+  );
+  vi.stubGlobal("fetch", fetch);
+  return fetch;
+}
+
 /** The text of every message sent in one faked OpenRouter call. */
 export function promptOf(fetch: ReturnType<typeof fakeModelReply>, call = 0) {
   const { messages } = JSON.parse(String(fetch.mock.calls[call][1]?.body));

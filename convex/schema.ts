@@ -56,6 +56,8 @@ export default defineSchema({
     visitorId: v.optional(v.string()),
     text: v.string(),
     ...resultFields,
+    // Paused: a limit was hit or OpenRouter was out of credit, so the answer is the paused message.
+    outcome: literals([...OUTCOMES, "paused"]),
     // Set when the Employee clicks Didn't help. The outcome stays answered.
     didntHelp: v.optional(v.boolean()),
     daysAgo: v.optional(v.number()),
@@ -84,4 +86,10 @@ export default defineSchema({
     hint: v.string(),
     ...resultFields,
   }),
+  // AI calls per UTC day ("2026-10-04"): a Visitor's, or the whole app's with no visitorId.
+  usageCounters: defineTable({
+    day: v.string(),
+    visitorId: v.optional(v.string()),
+    calls: v.number(),
+  }).index("by_day_visitor", ["day", "visitorId"]),
 });
