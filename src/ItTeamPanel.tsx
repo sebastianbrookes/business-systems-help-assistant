@@ -1,9 +1,9 @@
 import { useAction, useMutation, useQuery } from "convex/react";
-import { useEffect, useRef, useState } from "react";
+import { type TextareaHTMLAttributes, useEffect, useRef, useState } from "react";
 import type { FunctionReturnType } from "convex/server";
 import { api } from "../convex/_generated/api";
 import type { Doc, Id } from "../convex/_generated/dataModel";
-import { placeholdersIn } from "../convex/placeholders";
+import { PLACEHOLDER, placeholdersIn } from "../convex/placeholders";
 import { Dashboard } from "./Dashboard";
 import { daysAgo } from "./daysAgo";
 import { errorMessage } from "./errorMessage";
@@ -37,16 +37,39 @@ export function ItTeamPanel({ flashingGroupIds }: { flashingGroupIds: Set<Id<"ga
   );
 }
 
+const FILTERS = ["all", "open", "drafted", "resolved"] as const;
+
 function GapGroups({ flashingGroupIds }: { flashingGroupIds: Set<Id<"gapGroups">> }) {
   const groups = useQuery(api.gapGroups.list, { visitorId });
   const [openId, setOpenId] = useState<Id<"gapGroups"> | null>(null);
+  const [filter, setFilter] = useState<(typeof FILTERS)[number]>("all");
+  // A new Gap's group must be listed for its flash to be seen.
+  useEffect(() => {
+    if (flashingGroupIds.size) setFilter("all");
+  }, [flashingGroupIds]);
+
+  const inFilter = (f: (typeof FILTERS)[number]) => groups?.filter((g) => f === "all" || g.state === f) ?? [];
+  // The open group stays listed when drafting or approving moves it out of the filter.
+  const shown = groups?.filter((g) => filter === "all" || g.state === filter || g._id === openId);
 
   return (
     <>
       <p className="muted">Questions the Help articles didn't answer.</p>
       {groups?.length === 0 && <p className="muted">No Gaps yet.</p>}
+      {!!groups?.length && (
+        <div className="filters" role="group" aria-label="Filter by state">
+          {FILTERS.map((f) => (
+            <button key={f} aria-pressed={filter === f} onClick={() => setFilter(f)}>
+              {f === "all" ? "All" : STATE_LABELS[f]} <span className="filter-count">{inFilter(f).length}</span>
+            </button>
+          ))}
+        </div>
+      )}
+      {!!groups?.length && shown?.length === 0 && (
+        <p className="muted">No {filter !== "all" && STATE_LABELS[filter]} groups.</p>
+      )}
       <ul className="groups">
-        {groups?.map((g) => (
+        {shown?.map((g) => (
           <GroupItem
             key={g._id}
             group={g}
@@ -76,8 +99,21 @@ function GroupItem({
     if (flashing) ref.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }, [flashing]);
 
+  // Drafting or approving moves the group down the list, so follow it there.
+  const [moved, setMoved] = useState(false);
+  const prevState = useRef(g.state);
+  useEffect(() => {
+    if (g.state === prevState.current) return;
+    prevState.current = g.state;
+    if (!expanded) return;
+    ref.current?.scrollIntoView({ block: "start", behavior: "smooth" });
+    setMoved(true);
+    const timer = setTimeout(() => setMoved(false), 2500);
+    return () => clearTimeout(timer);
+  }, [g.state]);
+
   return (
-    <li ref={ref} className={flashing ? "group flash" : "group"}>
+    <li ref={ref} className={flashing || moved ? "group flash" : "group"}>
       <button className="group-toggle" aria-expanded={expanded} onClick={() => onToggle(!expanded)}>
         <span>{g.title}</span>
         <span className="count">
@@ -243,7 +279,7 @@ function DraftEditor({
       </label>
       <label>
         Article
-        <textarea
+        <HighlightedTextarea
           value={body}
           rows={14}
           readOnly={filling}
@@ -275,6 +311,27 @@ function DraftEditor({
         </button>
       </div>
       {error && <p className="error">{error}</p>}
+    </div>
+  );
+}
+
+// Splits text so placeholders land at the odd indexes.
+const PLACEHOLDER_SPLIT = new RegExp(`(${PLACEHOLDER.source})`, "i");
+
+/**
+ * A textarea that highlights its [Check: …] placeholders. A textarea can't style
+ * its own text, so a copy with the placeholders marked sits behind it. The copy
+ * sets the height, so the textarea grows with its text and never scrolls apart.
+ */
+function HighlightedTextarea(props: TextareaHTMLAttributes<HTMLTextAreaElement> & { value: string }) {
+  const parts = props.value.split(PLACEHOLDER_SPLIT);
+  return (
+    <div className="highlighted">
+      <div className="highlights" aria-hidden>
+        {parts.map((part, i) => (i % 2 ? <mark key={i}>{part}</mark> : part))}
+        {"\n"}
+      </div>
+      <textarea {...props} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useAction, useMutation, useQuery } from "convex/react";
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { api } from "../convex/_generated/api";
 import type { Id } from "../convex/_generated/dataModel";
 import { errorMessage } from "./errorMessage";
@@ -15,6 +15,24 @@ export function EmployeePanel() {
   const [asking, setAsking] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [markingId, setMarkingId] = useState<Id<"questions"> | null>(null);
+
+  // A new answer lands at the bottom of the list, so scroll it into view and flash it.
+  const newestRef = useRef<HTMLLIElement>(null);
+  const shownCount = useRef<number>(undefined);
+  const [flashingId, setFlashingId] = useState<Id<"questions"> | null>(null);
+  useEffect(() => {
+    if (!questions) return;
+    const isNew = shownCount.current !== undefined && questions.length > shownCount.current;
+    shownCount.current = questions.length;
+    if (!isNew) return;
+    newestRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    setFlashingId(questions[questions.length - 1]._id);
+  }, [questions]);
+  useEffect(() => {
+    if (!flashingId) return;
+    const timer = setTimeout(() => setFlashingId(null), 2500);
+    return () => clearTimeout(timer);
+  }, [flashingId]);
 
   /** Runs `call`, showing any failure as the error message. Returns whether it worked. */
   async function withErrorMessage(call: () => Promise<unknown>) {
@@ -67,8 +85,8 @@ export function EmployeePanel() {
       </ul>
 
       <ol className="questions">
-        {questions?.map((q) => (
-          <li key={q._id} className="question">
+        {questions?.map((q, i) => (
+          <li key={q._id} ref={i === questions.length - 1 ? newestRef : undefined} className={q._id === flashingId ? "question flash" : "question"}>
             <p className="asked">{q.text}</p>
             {q.outcome === "gap" && (
               <p className="sent">

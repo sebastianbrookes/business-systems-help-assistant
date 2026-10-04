@@ -24,7 +24,6 @@ function onStartOver() {
 export function App() {
   const isPhone = useIsPhone();
   const [tab, setTab] = useState<"employee" | "itTeam">("employee");
-  const [aboutOpen, setAboutOpen] = useState(false);
   const itTeamInView = !isPhone || tab === "itTeam";
   const { newGapCount, flashingGroupIds } = useNewGaps(itTeamInView);
 
@@ -36,26 +35,19 @@ export function App() {
         </a>
         <p className="demo-label">
           DEMO · fictional company, fake data ·{" "}
-          <button
-            className="about-toggle"
-            aria-label="About this demo"
-            aria-expanded={aboutOpen}
-            onClick={() => setAboutOpen(!aboutOpen)}
-          >
+          <button className="about-toggle" aria-label="About this demo" popoverTarget="about">
             ⓘ
           </button>
         </p>
         <button className="start-over" onClick={onStartOver}>
           Start over
         </button>
-        {aboutOpen && (
-          <p className="about">
-            Sebastian Brookes built this demo with AI-assisted coding. Northwake Therapeutics is made up, and the demo
-            isn't affiliated with Coupa, Concur, Workday, Ironclad, ServiceNow, Microsoft, or any other vendor. Your
-            activity is private: other Visitors never see your questions or drafts. Sebastian can review saved activity to
-            improve the demo.
-          </p>
-        )}
+        {/* A popover floats over the page and closes on Escape or an outside click. */}
+        <p id="about" className="about" popover="auto">
+          Northwake Therapeutics is made up, and the demo isn't affiliated with Coupa, Concur, Workday, Ironclad,
+          ServiceNow, Microsoft, or any other vendor. Your activity is private: other Visitors never see your questions
+          or drafts. Sebastian can review saved activity to improve the demo.
+        </p>
       </header>
       {isPhone && (
         <div className="tabs phone-tabs" role="tablist">
