@@ -29,7 +29,19 @@ export const articleFields = {
   body: v.string(),
 };
 
-// Rows with no visitorId are starting data, seen by every Visitor.
+/** What the assistant did with a question, saved on it or on a Suggested question. */
+const resultFields = {
+  answer: v.string(),
+  citedArticleIds: v.array(v.id("helpArticles")),
+  outcome: literals(OUTCOMES),
+  gapReason: v.optional(literals(GAP_REASONS)),
+  department: v.optional(department),
+  system: v.optional(system),
+  gapGroupId: v.optional(v.id("gapGroups")),
+};
+
+// Rows with no visitorId are starting data, seen by every Visitor. Starting
+// history stores daysAgo instead of a date, so it always ends today.
 export default defineSchema({
   helpArticles: defineTable({
     visitorId: v.optional(v.string()),
@@ -43,15 +55,10 @@ export default defineSchema({
   questions: defineTable({
     visitorId: v.optional(v.string()),
     text: v.string(),
-    answer: v.string(),
-    citedArticleIds: v.array(v.id("helpArticles")),
-    outcome: literals(OUTCOMES),
-    gapReason: v.optional(literals(GAP_REASONS)),
-    department: v.optional(department),
-    system: v.optional(system),
-    gapGroupId: v.optional(v.id("gapGroups")),
+    ...resultFields,
     // Set when the Employee clicks Didn't help. The outcome stays answered.
     didntHelp: v.optional(v.boolean()),
+    daysAgo: v.optional(v.number()),
   })
     .index("by_visitor", ["visitorId"])
     .index("by_gap_group", ["gapGroupId"]),
@@ -66,5 +73,15 @@ export default defineSchema({
     gapGroupId: v.id("gapGroups"),
     ...articleFields,
     status: literals(DRAFT_STATUSES),
+    // The Help article an approved draft became.
+    articleId: v.optional(v.id("helpArticles")),
+    // For a starting approved draft, when it was approved.
+    daysAgo: v.optional(v.number()),
   }).index("by_gap_group", ["gapGroupId"]),
+  // Each has a saved result, so asking one makes no AI call.
+  suggestedQuestions: defineTable({
+    text: v.string(),
+    hint: v.string(),
+    ...resultFields,
+  }),
 });

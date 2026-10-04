@@ -1,4 +1,4 @@
-import { useAction, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { useState, type FormEvent } from "react";
 import { api } from "../convex/_generated/api";
 import type { Id } from "../convex/_generated/dataModel";
@@ -7,7 +7,9 @@ import { visitorId } from "./visitorId";
 
 export function EmployeePanel() {
   const questions = useQuery(api.questions.list, { visitorId });
+  const suggested = useQuery(api.questions.suggested, {});
   const ask = useAction(api.questions.ask);
+  const askSuggested = useMutation(api.questions.askSuggested);
   const didntHelp = useAction(api.questions.didntHelp);
   const [text, setText] = useState("");
   const [asking, setAsking] = useState(false);
@@ -33,6 +35,12 @@ export function EmployeePanel() {
     setAsking(false);
   }
 
+  async function onSuggested(suggestedQuestionId: Id<"suggestedQuestions">) {
+    setAsking(true);
+    await withErrorMessage(() => askSuggested({ visitorId, suggestedQuestionId }));
+    setAsking(false);
+  }
+
   async function onDidntHelp(questionId: Id<"questions">) {
     setMarkingId(questionId);
     await withErrorMessage(() => didntHelp({ visitorId, questionId }));
@@ -43,6 +51,20 @@ export function EmployeePanel() {
     <main className="panel">
       <h1>Northwake Help</h1>
       <p className="muted">Ask how to get something done in a business system.</p>
+
+      <ul className="suggested">
+        {suggested?.map((s) => (
+          <li key={s._id}>
+            <button disabled={asking} onClick={() => onSuggested(s._id)}>
+              {s.text}
+              <span className="hint">
+                {s.hint}
+                {s.outcome === "gap" && <strong> · try this one</strong>}
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
 
       <ol className="questions">
         {questions?.map((q) => (

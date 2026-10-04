@@ -4,21 +4,31 @@ import { convexTest } from "convex-test";
 import { afterEach, beforeEach, vi } from "vitest";
 import { internal } from "./_generated/api";
 import schema from "./schema";
+import { loadArticlesAndNotes } from "./seed";
 
 const modules = import.meta.glob("./**/*.ts");
 
-/** Stubs the OpenRouter key and clears stubs after each test. Call once per test file. */
+/** Stubs the OpenRouter key and clears stubs and fake clocks after each test. Call once per test file. */
 export function useTestEnv() {
   beforeEach(() => vi.stubEnv("OPENROUTER_API_KEY", "test-key"));
   afterEach(() => {
     vi.unstubAllEnvs();
     vi.unstubAllGlobals();
+    vi.useRealTimers();
   });
 }
 
-export async function setup() {
+/** A test deployment loaded with all the starting data, history included. */
+export async function setupWithHistory() {
   const t = convexTest(schema, modules);
   await t.mutation(internal.seed.load);
+  return t;
+}
+
+/** A test deployment with only the starting Help articles and IT team notes. */
+export async function setup() {
+  const t = convexTest(schema, modules);
+  await t.run(loadArticlesAndNotes);
   const articleId = (title: string) =>
     t.run(async (ctx) => {
       const articles = await ctx.db.query("helpArticles").collect();

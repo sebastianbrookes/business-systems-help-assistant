@@ -6,3 +6,4 @@ SPEC.md
 node_modules/
 dist/
 .env.local
+scripts/history/.cache.json

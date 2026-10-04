@@ -7,7 +7,12 @@ import {
   type QueryCtx,
 } from "./_generated/server";
 import type { Grouping } from "./groupGap";
-import { isVisible, visibleGroups } from "./visibility";
+import { happenedAt } from "./history";
+import {
+  isVisible,
+  startingAndOwnQuestions,
+  visibleGroups,
+} from "./visibility";
 
 export async function visibleGroup(
   ctx: QueryCtx,
@@ -64,7 +69,12 @@ export async function groupDraft(
   return { state, draft: draft ?? null };
 }
 
-/** The Visitor's Gap groups, most-asked first. Counts are starting questions plus the Visitor's own. */
+const STATE_ORDER = { open: 0, drafted: 1, resolved: 2 } as const;
+
+/**
+ * The Visitor's Gap groups: Open, then Drafted, then Resolved, each most-asked
+ * first. Counts are starting questions plus the Visitor's own.
+ */
 export const list = query({
   args: { visitorId: v.string() },
   handler: async (ctx, { visitorId }) => {
@@ -76,24 +86,50 @@ export const list = query({
         questionCount: (await visibleQuestions(ctx, visitorId, g._id)).length,
       })),
     );
-    return groups.sort((a, b) => b.questionCount - a.questionCount);
+    return groups.sort(
+      (a, b) =>
+        STATE_ORDER[a.state] - STATE_ORDER[b.state] ||
+        b.questionCount - a.questionCount,
+    );
   },
 });
 
-/** One Gap group with its questions, their Gap reasons, its state, and the Visitor's draft. */
+/**
+ * One Gap group with its questions, their Gap reasons and dates, its state, and
+ * the Visitor's draft. A Resolved group also shows when it was approved and the
+ * questions answered from its article since.
+ */
 export const get = query({
   args: { visitorId: v.string(), gapGroupId: v.id("gapGroups") },
   handler: async (ctx, { visitorId, gapGroupId }) => {
     const group = await visibleGroup(ctx, visitorId, gapGroupId);
     const questions = await visibleQuestions(ctx, visitorId, gapGroupId);
+    const { state, draft } = await groupDraft(ctx, visitorId, gapGroupId);
+    const articleId = state === "resolved" ? draft?.articleId : undefined;
+    const answeredAfter = articleId
+      ? (await startingAndOwnQuestions(ctx, visitorId)).filter(
+          (q) => q.outcome === "answered" && q.citedArticleIds.includes(articleId),
+        )
+      : [];
     return {
       _id: group._id,
       title: group.title,
-      questions: questions.map((q) => ({ _id: q._id, ...gapView(q) })),
+      questions: questions.map((q) => ({
+        _id: q._id,
+        ...gapView(q),
+        askedAt: happenedAt(q),
+      })),
       revisesArticle: group.revisesArticleId
         ? { title: (await ctx.db.get(group.revisesArticleId))!.title }
         : null,
-      ...(await groupDraft(ctx, visitorId, gapGroupId)),
+      state,
+      draft,
+      approvedAt: articleId ? happenedAt(draft!) : null,
+      answeredAfter: answeredAfter.map((q) => ({
+        _id: q._id,
+        text: q.text,
+        askedAt: happenedAt(q),
+      })),
     };
   },
 });

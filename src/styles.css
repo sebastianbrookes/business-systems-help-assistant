@@ -47,3 +47,8 @@ textarea { width: 100%; padding: 10px 12px; border: 1px solid #c4cad3; border-ra
 .approved { margin: 0; color: #1f7a3f; font-weight: 600; }
 .draft-actions { display: flex; gap: 8px; }
 .draft-actions .error { margin: 0; align-self: center; }
+.suggested { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 8px; }
+.suggested button { width: 100%; display: grid; gap: 2px; padding: 10px 14px; background: white; color: inherit; border: 1px solid #c4cad3; text-align: left; font-weight: 600; }
+.hint { color: #5b6573; font-size: 0.85rem; font-weight: 400; }
+.hint strong { color: #1d5c8f; }
+.when { margin-left: 8px; color: #8a929e; font-size: 0.8rem; white-space: nowrap; }

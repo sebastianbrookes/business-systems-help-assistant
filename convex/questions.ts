@@ -6,6 +6,7 @@ import {
   type ActionCtx,
   internalMutation,
   internalQuery,
+  mutation,
   query,
 } from "./_generated/server";
 import { answerAndTag } from "./answerAndTag";
@@ -69,6 +70,32 @@ export const didntHelp = action({
       questionId,
       grouping,
     });
+  },
+});
+
+/** The Suggested questions, in the order they're offered, each with a hint saying what will happen. */
+export const suggested = query({
+  args: {},
+  handler: async (ctx) =>
+    (await ctx.db.query("suggestedQuestions").collect()).map(
+      ({ _id, text, hint, outcome }) => ({ _id, text, hint, outcome }),
+    ),
+});
+
+/**
+ * Asks a Suggested question for the Visitor. It saves the question with its
+ * saved answer and Gap group, so it makes no AI call and uses no limit.
+ */
+export const askSuggested = mutation({
+  args: {
+    visitorId: v.string(),
+    suggestedQuestionId: v.id("suggestedQuestions"),
+  },
+  handler: async (ctx, { visitorId, suggestedQuestionId }) => {
+    const suggested = await ctx.db.get(suggestedQuestionId);
+    if (!suggested) throw new ConvexError("Suggested question not found.");
+    const { _id, _creationTime, hint, ...question } = suggested;
+    return ctx.db.insert("questions", { ...question, visitorId });
   },
 });
 

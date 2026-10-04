@@ -113,7 +113,7 @@ async function ownPendingDraft(
     throw new ConvexError("This Gap group has no pending Draft article.");
   }
   if (draft.visitorId === visitorId) return draft;
-  const { _id, _creationTime, ...fields } = draft;
+  const { _id, _creationTime, daysAgo, ...fields } = draft;
   const ownId = await ctx.db.insert("draftArticles", { ...fields, visitorId });
   return (await ctx.db.get(ownId))!;
 }
@@ -151,19 +151,24 @@ export const approve = mutation({
     ctx,
     { visitorId, gapGroupId },
   ): Promise<Id<"helpArticles">> => {
-    const { _id, _creationTime, gapGroupId: _, status, ...article } =
-      await ownPendingDraft(ctx, visitorId, gapGroupId);
-    if (PLACEHOLDER.test(article.title + article.body)) {
+    const draft = await ownPendingDraft(ctx, visitorId, gapGroupId);
+    const { title, department, system, contactTeam, body } = draft;
+    if (PLACEHOLDER.test(title + body)) {
       throw new ConvexError(
         "Fill in every [Check: …] placeholder before approving.",
       );
     }
-    await ctx.db.patch(_id, { status: "approved" });
     const group = (await ctx.db.get(gapGroupId))!;
-    return ctx.db.insert("helpArticles", {
-      ...article,
+    const articleId = await ctx.db.insert("helpArticles", {
+      title,
+      department,
+      system,
+      contactTeam,
+      body,
       visitorId,
       revisesArticleId: (await revisedVersion(ctx, visitorId, group))?._id,
     });
+    await ctx.db.patch(draft._id, { status: "approved", articleId });
+    return articleId;
   },
 });

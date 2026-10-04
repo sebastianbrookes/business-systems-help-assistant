@@ -2,6 +2,7 @@ import { useAction, useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 import { api } from "../convex/_generated/api";
 import type { Doc, Id } from "../convex/_generated/dataModel";
+import { daysAgo } from "./daysAgo";
 import { errorMessage } from "./errorMessage";
 import { GAP_REASON_LABELS } from "./gapReasons";
 import { visitorId } from "./visitorId";
@@ -49,6 +50,7 @@ function GroupDetail({ gapGroupId }: { gapGroupId: Id<"gapGroups"> }) {
           <li key={q._id}>
             {q.text}
             {q.gapReason && <span className="reason">{GAP_REASON_LABELS[q.gapReason]}</span>}
+            <span className="when">{daysAgo(q.askedAt)}</span>
             {q.answer && <p className="given-answer">Answer given: {q.answer}</p>}
           </li>
         ))}
@@ -62,9 +64,25 @@ function GroupDetail({ gapGroupId }: { gapGroupId: Id<"gapGroups"> }) {
       )}
       {group.state === "resolved" && group.draft && (
         <div className="draft">
-          <p className="approved">Approved. Employees now get answers from this article.</p>
+          <p className="approved">
+            Approved {group.approvedAt !== null && daysAgo(group.approvedAt)}. Employees now get answers
+            from this article.
+          </p>
           <h3>{group.draft.title}</h3>
           <p className="answer">{group.draft.body}</p>
+          {group.answeredAfter.length > 0 && (
+            <>
+              <h3>Answered from it since</h3>
+              <ul className="group-questions">
+                {group.answeredAfter.map((q) => (
+                  <li key={q._id}>
+                    {q.text}
+                    <span className="when">{daysAgo(q.askedAt)}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       )}
     </div>

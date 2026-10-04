@@ -23,6 +23,16 @@ export const visibleGroups = (ctx: QueryCtx, visitorId: string) =>
     visitorId,
   );
 
+export const startingAndOwnQuestions = (ctx: QueryCtx, visitorId: string) =>
+  startingThenOwn(
+    (id) =>
+      ctx.db
+        .query("questions")
+        .withIndex("by_visitor", (q) => q.eq("visitorId", id))
+        .collect(),
+    visitorId,
+  );
+
 const startingAndOwnArticles = (ctx: QueryCtx, visitorId: string) =>
   startingThenOwn(
     (id) =>
