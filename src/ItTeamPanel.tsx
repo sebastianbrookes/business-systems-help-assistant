@@ -1,5 +1,6 @@
 import { useAction, useMutation, useQuery } from "convex/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { FunctionReturnType } from "convex/server";
 import { api } from "../convex/_generated/api";
 import type { Doc, Id } from "../convex/_generated/dataModel";
 import { placeholdersIn } from "../convex/placeholders";
@@ -11,8 +12,14 @@ import { visitorId } from "./visitorId";
 
 const STATE_LABELS = { open: "Open", drafted: "Drafted", resolved: "Resolved" } as const;
 
-export function ItTeamPanel() {
+type GroupSummary = FunctionReturnType<typeof api.gapGroups.list>[number];
+
+export function ItTeamPanel({ flashingGroupIds }: { flashingGroupIds: Set<Id<"gapGroups">> }) {
   const [tab, setTab] = useState<"groups" | "dashboard">("groups");
+  // A new Gap brings the Gap groups tab back, so its group's flash is seen.
+  useEffect(() => {
+    if (flashingGroupIds.size) setTab("groups");
+  }, [flashingGroupIds]);
 
   return (
     <section className="panel">
@@ -25,12 +32,12 @@ export function ItTeamPanel() {
           Dashboard
         </button>
       </div>
-      <div role="tabpanel">{tab === "groups" ? <GapGroups /> : <Dashboard />}</div>
+      <div role="tabpanel">{tab === "groups" ? <GapGroups flashingGroupIds={flashingGroupIds} /> : <Dashboard />}</div>
     </section>
   );
 }
 
-function GapGroups() {
+function GapGroups({ flashingGroupIds }: { flashingGroupIds: Set<Id<"gapGroups">> }) {
   const groups = useQuery(api.gapGroups.list, { visitorId });
   const [openId, setOpenId] = useState<Id<"gapGroups"> | null>(null);
 
@@ -40,23 +47,52 @@ function GapGroups() {
       {groups?.length === 0 && <p className="muted">No Gaps yet.</p>}
       <ul className="groups">
         {groups?.map((g) => (
-          <li key={g._id} className="group">
-            <button
-              className="group-toggle"
-              aria-expanded={openId === g._id}
-              onClick={() => setOpenId(openId === g._id ? null : g._id)}
-            >
-              <span>{g.title}</span>
-              <span className="count">
-                <span className={`state ${g.state}`}>{STATE_LABELS[g.state]}</span>
-                {g.questionCount} {g.questionCount === 1 ? "question" : "questions"}
-              </span>
-            </button>
-            {openId === g._id && <GroupDetail gapGroupId={g._id} />}
-          </li>
+          <GroupItem
+            key={g._id}
+            group={g}
+            flashing={flashingGroupIds.has(g._id)}
+            expanded={openId === g._id}
+            onToggle={(expand) => setOpenId(expand ? g._id : null)}
+          />
         ))}
       </ul>
     </>
+  );
+}
+
+function GroupItem({
+  group: g,
+  flashing,
+  expanded,
+  onToggle,
+}: {
+  group: GroupSummary;
+  flashing: boolean;
+  expanded: boolean;
+  onToggle: (expand: boolean) => void;
+}) {
+  const ref = useRef<HTMLLIElement>(null);
+  useEffect(() => {
+    if (flashing) ref.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [flashing]);
+
+  return (
+    <li ref={ref} className={flashing ? "group flash" : "group"}>
+      <button className="group-toggle" aria-expanded={expanded} onClick={() => onToggle(!expanded)}>
+        <span>{g.title}</span>
+        <span className="count">
+          <span className={`state ${g.state}`}>{STATE_LABELS[g.state]}</span>
+          {g.questionCount} {g.questionCount === 1 ? "question" : "questions"}
+          {g.includesYours && <strong className="yours"> · incl. yours</strong>}
+        </span>
+      </button>
+      {g.draftHint && !expanded && (
+        <button className="draft-hint" onClick={() => onToggle(true)}>
+          Next: draft the missing article →
+        </button>
+      )}
+      {expanded && <GroupDetail gapGroupId={g._id} />}
+    </li>
   );
 }
 

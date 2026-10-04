@@ -19,17 +19,36 @@ button { padding: 10px 16px; border: 0; border-radius: 6px; background: #1d5c8f;
 button:disabled { opacity: 0.5; cursor: default; }
 .error { color: #b42318; }
 .app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
-.topbar { display: flex; justify-content: flex-end; padding: 6px 16px; border-bottom: 1px solid #dde1e7; background: white; }
-button.start-over { padding: 4px 10px; background: none; color: #5b6573; border: 1px solid #c4cad3; font-size: 0.85rem; }
+.topbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 6px 16px; border-bottom: 1px solid #dde1e7; background: white; font-size: 0.85rem; }
+.how-it-works { color: #1d5c8f; text-decoration: none; }
+.demo-label { flex: 1; margin: 0; text-align: center; color: #5b6573; letter-spacing: 0.02em; }
+button.about-toggle { padding: 0 2px; background: none; color: inherit; font-size: 1rem; }
+.about { flex-basis: 100%; max-width: 640px; margin: 4px auto; color: #5b6573; line-height: 1.45; }
+button.start-over { margin-left: auto; padding: 4px 10px; background: none; color: #5b6573; border: 1px solid #c4cad3; }
 .split { display: grid; grid-template-columns: 1fr 1fr; }
-.split > .panel + .panel { border-left: 1px solid #dde1e7; background: #eef1f5; }
-@media (max-width: 800px) { .split { grid-template-columns: 1fr; } }
+@media (min-width: 801px) {
+  /* Each side scrolls on its own, so the IT team's groups stay in view while the Employee asks. */
+  .app { height: 100vh; }
+  .split { min-height: 0; }
+  .pane { overflow-y: auto; }
+  .split > .pane + .pane { border-left: 1px solid #dde1e7; background: #eef1f5; }
+}
+@media (max-width: 800px) {
+  .split { grid-template-columns: 1fr; }
+  .demo-label { order: 1; flex-basis: 100%; }
+  .about { order: 2; }
+  .tabs.phone-tabs { position: sticky; top: 0; z-index: 1; margin: 0; padding: 0 16px; background: white; }
+  .phone-tabs button { flex: 1; }
+  .split > .pane:last-child { background: #eef1f5; }
+}
+.badge { margin-left: 6px; padding: 1px 6px; border-radius: 10px; background: #eb6834; color: white; font-size: 0.75rem; font-weight: 600; }
 h2 { margin: 0 0 4px; font-size: 1.2rem; }
 .sent { margin: 8px 0; color: #8a4b00; font-size: 0.95rem; }
 button.didnt-help { margin-top: 10px; padding: 4px 10px; background: none; color: #5b6573; border: 1px solid #c4cad3; font-size: 0.85rem; }
 .groups { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
 .group { background: white; border: 1px solid #dde1e7; border-radius: 8px; }
-button.group-toggle { width: 100%; display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; background: none; color: inherit; text-align: left; font-weight: 600; }
+button.group-toggle { width: 100%; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; padding: 12px 14px; background: none; color: inherit; text-align: left; font-weight: 600; }
+.group-toggle > span:first-child { flex: 1 1 12em; }
 .count { color: #5b6573; font-weight: 400; white-space: nowrap; }
 .group-questions { margin: 0; padding: 0 14px 12px 32px; display: grid; gap: 6px; font-size: 0.95rem; }
 .reason { margin-left: 8px; padding: 1px 6px; border-radius: 4px; background: #eef1f5; color: #5b6573; font-size: 0.8rem; white-space: nowrap; }
@@ -77,3 +96,10 @@ textarea { width: 100%; padding: 10px 12px; border: 1px solid #c4cad3; border-ra
 .dashboard .answered { background: #2a78d6; }
 .dashboard .gap { background: #eb6834; }
 .chart .total { margin-left: 6px; color: #5b6573; font-size: 0.85rem; }
+.yours { color: #1d5c8f; font-weight: 600; }
+.group.flash { animation: flash 2.5s ease-out; }
+@keyframes flash {
+  0%, 30% { background: #fff1d6; box-shadow: 0 0 0 3px #eb6834; }
+  100% { background: white; box-shadow: 0 0 0 3px transparent; }
+}
+button.draft-hint { padding: 0 14px 12px; background: none; color: #1d5c8f; font-weight: 600; font-size: 0.9rem; }

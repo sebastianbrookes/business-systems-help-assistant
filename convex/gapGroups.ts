@@ -73,24 +73,40 @@ const STATE_ORDER = { open: 0, drafted: 1, resolved: 2 } as const;
 
 /**
  * The Visitor's Gap groups: Open, then Drafted, then Resolved, each most-asked
- * first. Counts are starting questions plus the Visitor's own.
+ * first. Counts are starting questions plus the Visitor's own. Until the
+ * Visitor drafts an article, each Open group holding one of their Gaps gets the
+ * draft hint.
  */
 export const list = query({
   args: { visitorId: v.string() },
   handler: async (ctx, { visitorId }) => {
     const groups = await Promise.all(
-      (await visibleGroups(ctx, visitorId)).map(async (g) => ({
-        _id: g._id,
-        title: g.title,
-        state: (await groupDraft(ctx, visitorId, g._id)).state,
-        questionCount: (await visibleQuestions(ctx, visitorId, g._id)).length,
-      })),
+      (await visibleGroups(ctx, visitorId)).map(async (g) => {
+        const { state, draft } = await groupDraft(ctx, visitorId, g._id);
+        const questions = await visibleQuestions(ctx, visitorId, g._id);
+        return {
+          group: {
+            _id: g._id,
+            title: g.title,
+            state,
+            questionCount: questions.length,
+            includesYours: questions.some((q) => q.visitorId === visitorId),
+          },
+          ownDraft: draft?.visitorId === visitorId,
+        };
+      }),
     );
-    return groups.sort(
-      (a, b) =>
-        STATE_ORDER[a.state] - STATE_ORDER[b.state] ||
-        b.questionCount - a.questionCount,
-    );
+    const hasDrafted = groups.some((g) => g.ownDraft);
+    return groups
+      .map(({ group }) => ({
+        ...group,
+        draftHint: !hasDrafted && group.includesYours && group.state === "open",
+      }))
+      .sort(
+        (a, b) =>
+          STATE_ORDER[a.state] - STATE_ORDER[b.state] ||
+          b.questionCount - a.questionCount,
+      );
   },
 });
 
