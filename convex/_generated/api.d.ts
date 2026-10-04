@@ -9,6 +9,7 @@
  */
 
 import type * as answerAndTag from "../answerAndTag.js";
+import type * as dashboard from "../dashboard.js";
 import type * as draftArticles from "../draftArticles.js";
 import type * as fillFromNotes from "../fillFromNotes.js";
 import type * as gapGroups from "../gapGroups.js";
@@ -34,6 +35,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   answerAndTag: typeof answerAndTag;
+  dashboard: typeof dashboard;
   draftArticles: typeof draftArticles;
   fillFromNotes: typeof fillFromNotes;
   gapGroups: typeof gapGroups;

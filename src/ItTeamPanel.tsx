@@ -3,6 +3,7 @@ import { useState } from "react";
 import { api } from "../convex/_generated/api";
 import type { Doc, Id } from "../convex/_generated/dataModel";
 import { placeholdersIn } from "../convex/placeholders";
+import { Dashboard } from "./Dashboard";
 import { daysAgo } from "./daysAgo";
 import { errorMessage } from "./errorMessage";
 import { GAP_REASON_LABELS } from "./gapReasons";
@@ -11,13 +12,31 @@ import { visitorId } from "./visitorId";
 const STATE_LABELS = { open: "Open", drafted: "Drafted", resolved: "Resolved" } as const;
 
 export function ItTeamPanel() {
-  const groups = useQuery(api.gapGroups.list, { visitorId });
-  const [openId, setOpenId] = useState<Id<"gapGroups"> | null>(null);
+  const [tab, setTab] = useState<"groups" | "dashboard">("groups");
 
   return (
     <section className="panel">
       <h2>IT team</h2>
-      <p className="muted">Gap groups: questions the Help articles didn't answer.</p>
+      <div className="tabs" role="tablist">
+        <button role="tab" aria-selected={tab === "groups"} onClick={() => setTab("groups")}>
+          Gap groups
+        </button>
+        <button role="tab" aria-selected={tab === "dashboard"} onClick={() => setTab("dashboard")}>
+          Dashboard
+        </button>
+      </div>
+      <div role="tabpanel">{tab === "groups" ? <GapGroups /> : <Dashboard />}</div>
+    </section>
+  );
+}
+
+function GapGroups() {
+  const groups = useQuery(api.gapGroups.list, { visitorId });
+  const [openId, setOpenId] = useState<Id<"gapGroups"> | null>(null);
+
+  return (
+    <>
+      <p className="muted">Questions the Help articles didn't answer.</p>
       {groups?.length === 0 && <p className="muted">No Gaps yet.</p>}
       <ul className="groups">
         {groups?.map((g) => (
@@ -37,7 +56,7 @@ export function ItTeamPanel() {
           </li>
         ))}
       </ul>
-    </section>
+    </>
   );
 }
 
