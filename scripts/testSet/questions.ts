@@ -10,20 +10,28 @@
 // one-line brief per slot. Every answer key was cross-checked by another
 // AI agent that saw the Help articles and the shuffled questions, never the keys.
 
-/** The 11 Known gaps, each with the Gap reason it should get. */
+/**
+ * The 11 Known gaps, each with the Gap reason it should get and the history
+ * Gap group its phrasings should join. The history files the MTA hole's
+ * question about sending cell lines to Durham under samples, so it shares that
+ * group. The IT team notes cover every hole except rDNA approval and CRO accruals.
+ */
 export const KNOWN_GAPS = {
-  "Shipping samples between sites": "noMatch",
-  "AI tools with company files": "noMatch",
-  "Durham parking": "noMatch",
-  "Budget transfers": "noMatch",
-  "rDNA approval": "noMatch",
-  "Employment verification letter": "noMatch",
-  "CRO accruals": "noMatch",
-  "MTA to Northwake's own site": "notCovered",
-  "Carrying over time off": "notCovered",
-  "Large files for a CRO": "notCovered",
-  "Boston hotel rate": "notCovered",
-} as const;
+  "Shipping samples between sites": { reason: "noMatch", group: "Sending samples between Cambridge and Durham" },
+  "AI tools with company files": { reason: "noMatch", group: "Using AI tools with company files" },
+  "Durham parking": { reason: "noMatch", group: "Parking at the Durham site" },
+  "Budget transfers": { reason: "noMatch", group: "Getting approval for a budget transfer" },
+  "rDNA approval": { reason: "noMatch", group: "Getting approval for recombinant DNA work", notInNotes: true },
+  "Employment verification letter": { reason: "noMatch", group: "Requesting an employment verification letter" },
+  "CRO accruals": { reason: "noMatch", group: "Reporting clinical study accruals at month end", notInNotes: true },
+  "MTA to Northwake's own site": { reason: "notCovered", group: "Sending samples between Cambridge and Durham" },
+  "Carrying over time off": { reason: "notCovered", group: "Carrying over unused time off" },
+  "Large files for a CRO": { reason: "notCovered", group: "Sharing large files with external partners" },
+  "Boston hotel rate": { reason: "notCovered", group: "Maximum hotel rates by city" },
+} as const satisfies Record<
+  string,
+  { reason: "noMatch" | "notCovered"; group: string; notInNotes?: true }
+>;
 export type KnownGap = keyof typeof KNOWN_GAPS;
 
 /** A question's answer key. An answerable question lists every acceptable article by title. */
