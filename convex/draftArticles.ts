@@ -1,5 +1,5 @@
 import { ConvexError, v } from "convex/values";
-import { internal } from "./_generated/api";
+import { api, internal } from "./_generated/api";
 import type { Doc, Id } from "./_generated/dataModel";
 import {
   action,
@@ -15,13 +15,14 @@ import {
   visibleGroup,
   visibleQuestions,
 } from "./gapGroups";
+import { fillFromNotes } from "./fillFromNotes";
+import { placeholdersIn } from "./placeholders";
 import { articleFields } from "./schema";
 import { currentVersion, visibleArticles } from "./visibility";
 import { writeDraft } from "./writeDraft";
 
 const MAX_TITLE_LENGTH = 120;
 const MAX_BODY_LENGTH = 5000;
-const PLACEHOLDER = /\[Check:/i;
 
 /** For a revision group, the version of the revised article the Visitor sees now. */
 const revisedVersion = async (
@@ -99,6 +100,19 @@ export const insert = internalMutation({
   },
 });
 
+/** The pending draft the Visitor sees for a group, which may be a starting draft. */
+async function pendingDraft(
+  ctx: QueryCtx,
+  visitorId: string,
+  gapGroupId: Id<"gapGroups">,
+) {
+  const { state, draft } = await groupDraft(ctx, visitorId, gapGroupId);
+  if (state !== "drafted" || !draft) {
+    throw new ConvexError("This Gap group has no pending Draft article.");
+  }
+  return draft;
+}
+
 /**
  * The Visitor's pending draft for a group. A starting draft is copied to the
  * Visitor first, so their changes never reach anyone else.
@@ -108,15 +122,54 @@ async function ownPendingDraft(
   visitorId: string,
   gapGroupId: Id<"gapGroups">,
 ) {
-  const { state, draft } = await groupDraft(ctx, visitorId, gapGroupId);
-  if (state !== "drafted" || !draft) {
-    throw new ConvexError("This Gap group has no pending Draft article.");
-  }
+  const draft = await pendingDraft(ctx, visitorId, gapGroupId);
   if (draft.visitorId === visitorId) return draft;
   const { _id, _creationTime, daysAgo, ...fields } = draft;
   const ownId = await ctx.db.insert("draftArticles", { ...fields, visitorId });
   return (await ctx.db.get(ownId))!;
 }
+
+/**
+ * Fills the group's pending draft from the IT team notes, saves it as the
+ * Visitor's own, and returns the filled title and body and how many
+ * placeholders were filled.
+ */
+export const fill = action({
+  args: { visitorId: v.string(), gapGroupId: v.id("gapGroups") },
+  handler: async (
+    ctx,
+    { visitorId, gapGroupId },
+  ): Promise<{ title: string; body: string; filledCount: number }> => {
+    const input = await ctx.runQuery(internal.draftArticles.fillInput, {
+      visitorId,
+      gapGroupId,
+    });
+    const filled = await fillFromNotes(input);
+    if (filled.filledCount) {
+      await ctx.runMutation(api.draftArticles.save, {
+        visitorId,
+        gapGroupId,
+        title: filled.title,
+        body: filled.body,
+      });
+    }
+    return filled;
+  },
+});
+
+export const fillInput = internalQuery({
+  args: { visitorId: v.string(), gapGroupId: v.id("gapGroups") },
+  handler: async (ctx, { visitorId, gapGroupId }) => {
+    await visibleGroup(ctx, visitorId, gapGroupId);
+    const draft = await pendingDraft(ctx, visitorId, gapGroupId);
+    const notes = await ctx.db.query("itTeamNotes").collect();
+    return {
+      title: draft.title,
+      body: draft.body,
+      notes: notes.map((n) => n.text),
+    };
+  },
+});
 
 /** Saves the Visitor's edits to a group's pending draft. */
 export const save = mutation({
@@ -153,7 +206,7 @@ export const approve = mutation({
   ): Promise<Id<"helpArticles">> => {
     const draft = await ownPendingDraft(ctx, visitorId, gapGroupId);
     const { title, department, system, contactTeam, body } = draft;
-    if (PLACEHOLDER.test(title + body)) {
+    if (placeholdersIn(`${title}\n${body}`).length) {
       throw new ConvexError(
         "Fill in every [Check: …] placeholder before approving.",
       );

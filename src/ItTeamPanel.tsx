@@ -2,6 +2,7 @@ import { useAction, useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 import { api } from "../convex/_generated/api";
 import type { Doc, Id } from "../convex/_generated/dataModel";
+import { placeholdersIn } from "../convex/placeholders";
 import { daysAgo } from "./daysAgo";
 import { errorMessage } from "./errorMessage";
 import { GAP_REASON_LABELS } from "./gapReasons";
@@ -115,9 +116,6 @@ function DraftButton({ gapGroupId }: { gapGroupId: Id<"gapGroups"> }) {
   );
 }
 
-/** Every [Check: …] placeholder left in the text. Any "[Check:" blocks approval on the server. */
-const placeholdersIn = (text: string) => text.match(/\[Check:[^\]]*\]?/gi) ?? [];
-
 function DraftEditor({
   gapGroupId,
   draft,
@@ -127,9 +125,12 @@ function DraftEditor({
 }) {
   const save = useMutation(api.draftArticles.save);
   const approve = useMutation(api.draftArticles.approve);
+  const fill = useAction(api.draftArticles.fill);
   const [title, setTitle] = useState(draft.title);
   const [body, setBody] = useState(draft.body);
   const [approving, setApproving] = useState(false);
+  const [filling, setFilling] = useState(false);
+  const [fillResult, setFillResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const placeholders = placeholdersIn(`${title}\n${body}`);
 
@@ -144,6 +145,27 @@ function DraftEditor({
       setError(errorMessage(e));
       return false;
     }
+  }
+
+  async function onFill() {
+    setFilling(true);
+    setFillResult(null);
+    setError(null);
+    if (await saveEdits()) {
+      try {
+        const filled = await fill({ visitorId, gapGroupId });
+        setTitle(filled.title);
+        setBody(filled.body);
+        setFillResult(
+          filled.filledCount === 0
+            ? "The IT team notes don't state any of these facts."
+            : `Filled ${filled.filledCount} from the IT team notes.`,
+        );
+      } catch (e) {
+        setError(errorMessage(e));
+      }
+    }
+    setFilling(false);
   }
 
   async function onApprove() {
@@ -162,13 +184,14 @@ function DraftEditor({
     <div className="draft">
       <label>
         Title
-        <input value={title} onChange={(e) => setTitle(e.target.value)} onBlur={saveEdits} />
+        <input value={title} readOnly={filling} onChange={(e) => setTitle(e.target.value)} onBlur={saveEdits} />
       </label>
       <label>
         Article
         <textarea
           value={body}
           rows={14}
+          readOnly={filling}
           onChange={(e) => setBody(e.target.value)}
           onBlur={saveEdits}
         />
@@ -185,8 +208,14 @@ function DraftEditor({
       ) : (
         <p className="muted">No placeholders left.</p>
       )}
+      {fillResult && <p className="muted">{fillResult}</p>}
       <div className="draft-actions">
-        <button disabled={approving || placeholders.length > 0} onClick={onApprove}>
+        {placeholders.length > 0 && (
+          <button disabled={filling || approving} onClick={onFill}>
+            {filling ? "Filling…" : "Fill from IT notes"}
+          </button>
+        )}
+        <button disabled={filling || approving || placeholders.length > 0} onClick={onApprove}>
           {approving ? "Approving…" : "Approve"}
         </button>
       </div>

@@ -10,10 +10,12 @@
 
 import type * as answerAndTag from "../answerAndTag.js";
 import type * as draftArticles from "../draftArticles.js";
+import type * as fillFromNotes from "../fillFromNotes.js";
 import type * as gapGroups from "../gapGroups.js";
 import type * as groupGap from "../groupGap.js";
 import type * as history from "../history.js";
 import type * as openrouter from "../openrouter.js";
+import type * as placeholders from "../placeholders.js";
 import type * as questions from "../questions.js";
 import type * as seed from "../seed.js";
 import type * as startingArticles from "../startingArticles.js";
@@ -32,10 +34,12 @@ import type {
 declare const fullApi: ApiFromModules<{
   answerAndTag: typeof answerAndTag;
   draftArticles: typeof draftArticles;
+  fillFromNotes: typeof fillFromNotes;
   gapGroups: typeof gapGroups;
   groupGap: typeof groupGap;
   history: typeof history;
   openrouter: typeof openrouter;
+  placeholders: typeof placeholders;
   questions: typeof questions;
   seed: typeof seed;
   startingArticles: typeof startingArticles;
