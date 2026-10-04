@@ -7,7 +7,7 @@
 **Status:** ready-for-human
 
 - [ ] The Test set has 120 questions that don't copy or closely reword the history questions. That's about 74 answerable (2 per article, about 10 naming the wrong system), 33 known-gap questions (3 phrasings of each of the 11 known gaps), and 13 Off topic.
-- [ ] Sebastian writes about 20 in his own words and checks every answer key. An answer key can list more than one acceptable article.
+- [x] About 20 are written blind, by a separate AI agent that never saw the Help articles (changed from Sebastian writing them, 2026-10-04). Every answer key is cross-checked by a separate AI agent that never saw the keys (changed from Sebastian checking them by hand, 2026-10-04). An answer key can list more than one acceptable article.
 - [x] A separate Convex deployment is loaded with a fresh copy of the starting data for each run, and questions run in a fixed order.
 - [x] A script scores with no AI grading. **Correct article** means the expected article is cited and no Gap is logged. **Known gaps flagged** means a known-gap question gets a Gap with any reason.
 - [ ] Each of the 3 runs saves a results file with every question, its answer key, the result, and pass/fail. A summary records the date, model, article count, both numbers (the lowest of 3), and Sebastian's spot-check note on about 20 answers.
@@ -24,8 +24,11 @@
 - **Smoke test:** before the review, three history questions ran on `dev/test-set`. A Known gap's two phrasings joined one group, an answer cited its article, and Off topic was declined. No Test set question has been asked.
 
 Next, for Sebastian:
-1. Write the 20 `bySebastian` questions and check every answer key. An answer key can list more than one acceptable article.
-2. Build ticket 12 before the runs, so its measures come from the same 3 runs.
-3. Run the runner, then fill in "Sebastian's checks" in `results/summary.md`: confirm the key check, and add the spot-check note on about 20 answers.
+1. Build ticket 12 before the runs, so its measures come from the same 3 runs.
+2. Run the runner, then fill in "Sebastian's checks" in `results/summary.md`: add the spot-check note on about 20 answers.
 
 Ticket 12 needs a decision first. "MTA to Northwake's own site" overlaps "Shipping samples between sites": the Suggested Gap question joins the samples group. The MTA phrasings may land in that group with a No match reason.
+
+**2026-10-04, blind questions:** Sebastian chose to have a separate AI agent (Sonnet 5.5) write the 20 empty slots instead of writing them himself. It got only a one-line brief per slot and a one-line description of Northwake, never the Help articles or the other questions. They're marked `writtenBlind`, and the summary says who wrote them. Each answerable one was checked against its article, and all fit their keys.
+
+**2026-10-04, key check:** Sebastian can't check 120 keys by hand, so a separate AI agent (Sonnet 5.5) built its own key blind. It got the 37 live Help articles and the 120 questions in shuffled order, never the keys. It agreed on 118. The 2 disagreements were both "Large files for a CRO" phrasings that a OneDrive link really does answer ("too big for email"), so they were reworded to ask about files too big for OneDrive or SharePoint, and the agent then agreed on those too.

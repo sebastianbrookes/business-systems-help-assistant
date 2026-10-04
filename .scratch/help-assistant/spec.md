@@ -86,7 +86,7 @@ A case study page on Sebastian's site explains the project. It shows a static Ho
 
 **Measuring**
 
-49. As Sebastian, I want a fixed Test set of 120 new questions, so that the resume numbers are honest. It has 74 answerable, 33 known-gap phrasings, and 13 Off topic, and Sebastian checks every answer key.
+49. As Sebastian, I want a fixed Test set of 120 new questions, so that the resume numbers are honest. It has 74 answerable, 33 known-gap phrasings, and 13 Off topic, and every answer key is cross-checked by a separate AI agent that never saw the keys.
 50. As Sebastian, I want a script that runs the Test set 3 times against a fresh copy of the starting data, separate from the live demo, and keeps the lowest score, so that one lucky run doesn't set the number.
 51. As Sebastian, I want each run saved as a results file, plus a summary recording the date, model, article count, and every number, so that the resume bullet can cite it.
 52. As Sebastian, I want the tracked measures and the Fill from IT notes check recorded, so that the case study page shows more than the two resume numbers. The tracked measures are correct Gap reason, false alarms, Off topic declined, and Gaps grouped correctly.

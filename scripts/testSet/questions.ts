@@ -5,8 +5,10 @@
 // 120 questions, run in this order: 74 answerable (2 for each of the 37 Help
 // articles a new Visitor sees, 10 naming a system Northwake doesn't use), 33
 // Known gap questions (3 phrasings of each of the 11 Known gaps), and 13 Off
-// topic. AI wrote 100. Sebastian writes the 20 marked `bySebastian`, in his
-// own words, and checks every answer key.
+// topic. AI wrote 100 with the Help articles in view. A separate AI agent
+// that never saw the articles wrote the 20 marked `writtenBlind`, from a
+// one-line brief per slot. Every answer key was cross-checked by another
+// AI agent that saw the Help articles and the shuffled questions, never the keys.
 
 /** The 11 Known gaps, each with the Gap reason it should get. */
 export const KNOWN_GAPS = {
@@ -34,7 +36,7 @@ export type TestQuestion = AnswerKey & {
   text: string;
   /** Names a system Northwake doesn't use, such as Expensify for Concur. */
   wrongSystem?: true;
-  bySebastian?: true;
+  writtenBlind?: true;
 };
 
 const answered = (text: string, ...articles: string[]): TestQuestion => ({
@@ -52,10 +54,10 @@ const gap = (knownGap: KnownGap, text: string): TestQuestion => ({
   knownGap,
 });
 const offTopic = (text: string): TestQuestion => ({ text, outcome: "offTopic" });
-/** A question Sebastian writes in his own words. The comment beside each says what to ask. */
-const bySebastian = (question: TestQuestion): TestQuestion => ({
+/** A question written by a separate AI agent that never saw the Help articles. */
+const writtenBlind = (question: TestQuestion): TestQuestion => ({
   ...question,
-  bySebastian: true,
+  writtenBlind: true,
 });
 
 const PUNCHOUT = "Ordering lab supplies through a Coupa punchout";
@@ -99,7 +101,7 @@ const CONTRACTOR_LAPTOP = "Getting a laptop for a consultant or contractor";
 export const testSet: TestQuestion[] = [
   // Finance: Coupa
   answered("What ship-to address should I pick for a punchout order going to the Durham lab?", PUNCHOUT),
-  bySebastian(answered("", PUNCHOUT)), // Any question about ordering from Fisher, VWR, or Sigma.
+  writtenBlind(answered("I need to order a box of 15 mL conical tubes and some pipette tips. Do I just go through Fisher or is there a preferred way to place orders at Northwake?", PUNCHOUT)),
   answered("I'm buying a $15,000 instrument that only one company makes. What do I attach to the request?", NOT_IN_CATALOG),
   wrongSystem("How do I submit a non-catalog purchase request in SAP Ariba for a custom antibody?", NOT_IN_CATALOG),
   answered("My Coupa requisition shows Pending next to my director's name. What does that mean, and what can I do?", APPROVAL_STATUS),
@@ -111,9 +113,9 @@ export const testSet: TestQuestion[] = [
 
   // Finance: Concur
   answered("I paid for a conference registration with my own credit card. How do I get paid back?", EXPENSE_REPORT),
-  bySebastian(wrongSystem("", EXPENSE_REPORT)), // Submitting an expense, naming a tool Northwake doesn't use, like Navan (the history already has Expensify).
+  writtenBlind(wrongSystem("I need to submit expenses for my flight to San Diego. Do I do that in Navan?", EXPENSE_REPORT)),
   answered("The parking garage machine didn't print a receipt. Can I still expense it?", MISSING_RECEIPT, EXPENSE_REPORT),
-  bySebastian(answered("", MISSING_RECEIPT)), // Any question about a lost or missing receipt.
+  writtenBlind(answered("i lost the receipt for a $42 lunch I bought on a work trip last week, can I still get reimbursed?", MISSING_RECEIPT)),
   answered("Do I enter the hotel room tax separately in Concur?", HOTEL_BILL),
   answered("I watched a movie in my hotel room. How do I take it off the expense?", HOTEL_BILL, CORPORATE_CARD),
   answered("Do I have to put every corporate card charge on a report, even when I'm not owed anything?", CORPORATE_CARD),
@@ -125,7 +127,7 @@ export const testSet: TestQuestion[] = [
   wrongSystem("Where's my sick time balance in BambooHR?", TIME_OFF),
   answered("When do I get my sick days each year?", TIME_OFF),
   answered("Can I print my payslip from last March for an apartment application?", PAY),
-  bySebastian(answered("", PAY)), // Any question about pay stubs, W-2s, withholding, or direct deposit.
+  writtenBlind(answered("Where do I find my W-2 from last year? I also want to bump up my federal withholding a bit and make sure my direct deposit is going to the right account.", PAY)),
   answered("I'm moving from Boston to Cambridge next month. Where do I change my address?", ADDRESS),
   answered("How soon after moving do I have to update my address?", ADDRESS),
   answered("My wife lost her job and her health insurance. Can I add her to my plan now?", BENEFITS),
@@ -133,13 +135,13 @@ export const testSet: TestQuestion[] = [
   answered("I'm due in March. When should I put my maternity leave into Workday?", LEAVE),
   answered("I've only been at Northwake for 4 months. Do I get paid parental leave?", LEAVE),
   answered("My manager added a course for me. Where do I find it?", TRAINING),
-  bySebastian(answered("", TRAINING)), // Any question about required training.
+  writtenBlind(answered("My training page says I have some overdue courses. Which ones am I actually required to complete and how long do I have?", TRAINING)),
   answered("How long does someone I referred have to stay before I get the bonus?", REFERRAL),
   answered("I've never met this person, but a friend vouched for them. Can I refer them?", REFERRAL),
 
   // Legal: Ironclad
   answered("We want to talk to a startup about a partnership. What do I need before showing them our data?", NDA),
-  bySebastian(wrongSystem("", NDA)), // Getting an NDA, naming a tool Northwake doesn't use, like DocuSign.
+  writtenBlind(wrongSystem("Hey, I have to send an NDA to an outside vendor before our call Friday. Can I generate it in DocuSign or is there a template somewhere?", NDA)),
   answered("We're sending a compound to a hospital lab for testing. Can I ship it today?", MTA),
   answered("Our MTA involves patient blood samples. Is there any extra review?", MTA),
   answered("Who needs to approve a consultant who will bill $150,000 this year?", CONSULTING),
@@ -153,31 +155,31 @@ export const testSet: TestQuestion[] = [
 
   // Ops: ServiceNow
   answered("How do I mark a broken shaker so nobody uses it?", EQUIPMENT),
-  bySebastian(answered("", EQUIPMENT)), // Any question about broken lab equipment or a freezer alarm.
+  writtenBlind(answered("The -80 freezer on the 3rd floor of the Cambridge lab is beeping and the display says the temp is climbing. Who do I call right now??", EQUIPMENT)),
   answered("How long after my manager approves does badge access take?", BADGE),
   answered("What does a replacement badge cost if I've lost one before?", BADGE),
   answered("A job candidate is interviewing in Cambridge on Thursday. What do I need to do?", GUEST),
-  bySebastian(answered("", GUEST)), // Any question about registering a visitor.
+  writtenBlind(answered("My collaborator from MIT is coming to the Durham site next Tuesday for a meeting. How do I register her so she can get in at the front desk?", GUEST)),
   wrongSystem("How do I put in a Zendesk ticket to get our full sharps containers taken away?", WASTE),
   answered("Our waste bottle is getting full. When should I request a pickup?", WASTE),
   answered("My back hurts from my desk chair. What can I get?", WORKSPACE),
   answered("What day of the week do desk moves happen?", WORKSPACE),
   answered("Can I just email the team about my open request instead of using ServiceNow?", REQUEST_STATUS),
-  bySebastian(wrongSystem("", REQUEST_STATUS)), // Checking on a request, naming a tool Northwake doesn't use, like Jira.
+  writtenBlind(wrongSystem("I put in a request for a new monitor two weeks ago and haven't heard anything. How can I check the status in Jira?", REQUEST_STATUS)),
 
   // IT
   answered("Do I need a different password for Coupa and Workday?", PASSWORD),
-  bySebastian(answered("", PASSWORD)), // Any question about a forgotten or expiring password.
+  writtenBlind(answered("my password expires in 3 days and I'm traveling, can I change it remotely or do I have to be on the VPN?", PASSWORD)),
   answered("My old phone broke and I can't get my sign-in code. What now?", MFA),
   answered("Can I use my desk landline for MFA?", MFA),
   answered("Why do I have to reconfirm my access to HR data every few months?", ACCESS),
-  bySebastian(answered("", ACCESS)), // Any question about getting access to an app or SharePoint site.
+  writtenBlind(answered("I just joined the Clinical Ops team and can't open their SharePoint site, it says I need permission. How do I request access?", ACCESS)),
   wrongSystem("How do I make a Box link to our slides expire after a month?", SHARING),
   answered("Our collaborator says the link I shared asks for a code. Is that normal?", SHARING),
   wrongSystem("How do I get added to the lab's group inbox in Gmail?", OUTLOOK),
   answered("Who approves adding me to a shared mailbox?", OUTLOOK),
   answered("Should I join a meeting from my laptop or the room's touch panel?", TEAMS_ROOM),
-  bySebastian(wrongSystem("", TEAMS_ROOM)), // A conference room problem, naming a tool Northwake doesn't use, like Zoom.
+  writtenBlind(wrongSystem("the conference room in Building 2 won't connect to the display and I have a Zoom call with a client in 10 minutes. what do I do", TEAMS_ROOM)),
   answered("My laptop battery dies after an hour. Can I get a new one?", LAPTOP),
   answered("Is there a way to get my files back if my laptop dies and I only saved them on the laptop?", LAPTOP),
   answered("Our contractor starts in three days. Is it too late to get them a laptop?", CONTRACTOR_LAPTOP),
@@ -186,16 +188,16 @@ export const testSet: TestQuestion[] = [
   // Known gaps
   gap("Shipping samples between sites", "What days can I get something from our Cambridge lab down to Durham?"),
   gap("Shipping samples between sites", "I need to get a box of tissue samples to our North Carolina site. How do I book that?"),
-  bySebastian(gap("Shipping samples between sites", "")), // Moving samples between Cambridge and Durham.
+  writtenBlind(gap("Shipping samples between sites", "We need to send a box of frozen aliquots from Cambridge to the Durham site. What's the process for shipping samples between our sites, and do they need dry ice?")),
   gap("AI tools with company files", "Is it okay to upload a draft protocol to Claude to help me edit it?"),
   gap("AI tools with company files", "Which AI assistant are we allowed to use with work documents?"),
-  bySebastian(gap("AI tools with company files", "")), // Using AI tools like ChatGPT or Copilot with work files.
+  writtenBlind(gap("AI tools with company files", "Is it okay to paste a draft protocol into ChatGPT to help me clean up the wording? Or should I use Copilot for work documents instead?")),
   gap("Durham parking", "I drive to the Durham site. Is parking free?"),
   gap("Durham parking", "I'm driving down to Durham for a site visit. Where should I leave my car?"),
-  bySebastian(gap("Durham parking", "")), // Parking at the Durham site.
+  writtenBlind(gap("Durham parking", "I'm starting at the Durham site next month and drive in. Where do I park and do I need a permit or pass?")),
   gap("Budget transfers", "We underspent on travel. Can I shift that money to my lab supplies cost center?"),
   gap("Budget transfers", "Is there a cutoff for moving money between cost centers before the quarter closes?"),
-  bySebastian(gap("Budget transfers", "")), // Moving budget between cost centers.
+  writtenBlind(gap("Budget transfers", "I'm a project manager and we have about $8k left in our cost center but need it in a different one for a new study. How do I move budget between cost centers?")),
   gap("rDNA approval", "Do I need biosafety committee sign-off before cloning a new gene into E. coli?"),
   gap("rDNA approval", "Which committee signs off on genetically modified organisms here?"),
   gap("rDNA approval", "Is there an approval process for starting genetic engineering work here?"),
@@ -210,10 +212,10 @@ export const testSet: TestQuestion[] = [
   gap("MTA to Northwake's own site", "Our Durham colleagues asked for antibodies we make in Cambridge. What agreement do we need?"),
   gap("Carrying over time off", "I have 60 hours of vacation left in December. What happens to them?"),
   gap("Carrying over time off", "I'm saving vacation for a long trip next spring. Can I bank days from this year?"),
-  bySebastian(gap("Carrying over time off", "")), // Carrying unused vacation into next year.
-  gap("Large files for a CRO", "Is there a Northwake site for exchanging big datasets with a CDMO?"),
+  writtenBlind(gap("Carrying over time off", "I have about 6 vacation days left and probably won't use them all by December. Can I carry them over into next year, and is there a cap?")),
+  gap("Large files for a CRO", "Our CDMO needs 2 TB of raw sequencing data, which is too much for a OneDrive link. What do we use to send it?"),
   gap("Large files for a CRO", "What's the size limit on sharing a file outside Northwake?"),
-  gap("Large files for a CRO", "How do I get imaging files that are too big for email to our CRO?"),
+  gap("Large files for a CRO", "Our imaging files are about 400 GB each, too big to share from SharePoint. How do I get them to our CRO?"),
   gap("Boston hotel rate", "I found a Back Bay hotel for $380 a night. Is that within policy?"),
   gap("Boston hotel rate", "What do I do if the only hotel near my Boston meeting costs more than the limit?"),
   gap("Boston hotel rate", "Does the travel policy set a different hotel budget for Boston than for other cities?"),
@@ -229,7 +231,7 @@ export const testSet: TestQuestion[] = [
   offTopic("Give me a recipe for banana bread."),
   offTopic("How do I stain a gel with SYBR Safe?"),
   offTopic("Is coffee bad for you?"),
-  bySebastian(offTopic("")), // Lab technique or small talk.
-  bySebastian(offTopic("")),
-  bySebastian(offTopic("")),
+  writtenBlind(offTopic("What's the best way to reduce background in a Western blot when I'm using a phospho-specific antibody?")),
+  writtenBlind(offTopic("how's your day going? do you ever get tired of answering questions lol")),
+  writtenBlind(offTopic("Can you recommend a good Italian restaurant near Kendall Square for a birthday dinner?")),
 ];
