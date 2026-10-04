@@ -11,7 +11,7 @@
 - [x] On phones the demo shows **Employee | IT team** tabs. After a Gap, the IT team tab shows a "1 new Gap" badge.
 - [x] A single label line reads "DEMO · fictional company, fake data · ⓘ" on phones and desktop. ⓘ says the demo was built with AI-assisted coding, the Visitor's activity is private, and it isn't affiliated with any vendor.
 - [x] A thin header has "← How it works" linking to the case study page.
-- [ ] Sebastian has checked the flow by hand on a desktop browser and a phone.
+- [x] Sebastian has checked the flow by hand on a desktop browser and a phone.
 
 ## Comments
 
@@ -27,3 +27,5 @@ Choices to check:
 - On a phone the hidden tab is kept in the page, not removed, so a question still being answered isn't lost when the Visitor switches tabs.
 - The ⓘ text names the six vendors. It says other Visitors never see the Visitor's activity and that Sebastian can review saved activity.
 - "← How it works" links to `https://sebastianbrookes.com/projects/help-assistant`, which doesn't exist until ticket 13.
+
+**2026-10-04, sign-off:** Sebastian checked the flow on the live site from a phone and a desktop during go-live (ticket 10).
