@@ -4,7 +4,7 @@
 
 **Blocked by:** 11 (Test set and the two resume numbers), 05 (Fill from IT notes)
 
-**Status:** ready-for-human
+**Status:** ready-for-agent
 
 - [x] The summary adds: correct Gap reason, false-alarm rate (answerable questions logged as Gaps), Off topic declined correctly, and Gaps grouped correctly (the 3 phrasings of a hole land in one group).
 - [x] A Fill from IT notes check runs across the 11 known gaps. It passes when every filled value comes from the notes and the rDNA and accruals placeholders stay empty.
@@ -29,3 +29,7 @@ Smoke test on `dev/test-set`, with no Test set questions asked: a fresh Visitor 
 **2026-10-04, review fixes:** Grouping now compares group IDs against the starting groups rather than titles, so a new group that copies a starting title fails. The fill check fails a covered hole with nothing filled, and checks that rDNA and accruals still have placeholders. A run where a measure counted nothing, such as 0 flagged Known gaps, is left out of that measure's worst. The runner reads the notes from `convex/startingItTeamNotes.ts`, which the reload loads.
 
 Next, for Sebastian: run `pnpm exec tsx scripts/runTestSet.ts`, then add the spot-check note in `results/summary.md` (ticket 11).
+
+**2026-10-04, results:** From the same 3 runs, the worst of 3 is: Correct Gap reason 30/33 (90%), False alarms 6/74 (8%), Off topic declined 13/13 (100%), Gaps grouped correctly 9/11 (81%), and Fill from IT notes 3/11 (27%).
+
+The fill number mostly measures rewording. An AI agent (Sonnet 5.5) read all 85 filled values against the notes. 83 state only what a note states, 2 add something, and none contradicts a note. By that reading, the worst run passes 10 of 11 Known gaps. The 2 that add something are a "the notes don't specify…" sentence written into the run 1 employment letter draft, and "files over 10 GB can't be shared" in run 2. The summary keeps 3/11, the rule set before the runs, and records the review under Checks. Ticket 13 should show both numbers, or the reviewed one with the rule explained. The scoring rule wasn't changed after the results.

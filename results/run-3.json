@@ -1,0 +1,2065 @@
+{
+  "run": 3,
+  "date": "2026-10-04",
+  "model": "openai/gpt-6-luna",
+  "articleCount": 37,
+  "score": {
+    "correctArticle": {
+      "count": 68,
+      "total": 74
+    },
+    "knownGapsFlagged": {
+      "count": 33,
+      "total": 33
+    },
+    "correctGapReason": {
+      "count": 30,
+      "total": 33
+    },
+    "falseAlarms": {
+      "count": 6,
+      "total": 74
+    },
+    "offTopicDeclined": {
+      "count": 13,
+      "total": 13
+    },
+    "gapsGrouped": {
+      "count": 9,
+      "total": 11
+    },
+    "fillFromNotes": {
+      "count": 3,
+      "total": 11
+    }
+  },
+  "questions": [
+    {
+      "text": "What ship-to address should I pick for a punchout order going to the Durham lab?",
+      "outcome": "answered",
+      "articles": [
+        "Ordering lab supplies through a Coupa punchout"
+      ],
+      "visitorId": "test-set-run-3-q1",
+      "result": {
+        "outcome": "answered",
+        "answer": "Choose Durham as the ship-to address. If the order contains hazardous chemicals, ship them to the receiving dock, not directly to the lab.",
+        "citedArticles": [
+          "Ordering lab supplies through a Coupa punchout"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "I need to order a box of 15 mL conical tubes and some pipette tips. Do I just go through Fisher or is there a preferred way to place orders at Northwake?",
+      "outcome": "answered",
+      "articles": [
+        "Ordering lab supplies through a Coupa punchout"
+      ],
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q2",
+      "result": {
+        "outcome": "answered",
+        "answer": "Use Fisher Scientific’s punchout in Coupa, rather than ordering directly or using a corporate card. Open Shop, choose the Fisher punchout tile, add the tubes and pipette tips to your cart, then select Return to Coupa. Check the quantities, cost center, and ship-to address, and submit the requisition. Orders under $2,500 need manager approval; orders of $2,500 or more also need Finance approval.",
+        "citedArticles": [
+          "Ordering lab supplies through a Coupa punchout"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "I'm buying a $15,000 instrument that only one company makes. What do I attach to the request?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting something that isn't in a Coupa catalog"
+      ],
+      "visitorId": "test-set-run-3-q3",
+      "result": {
+        "outcome": "answered",
+        "answer": "Attach the supplier’s quote and a sole-source justification explaining that only one company makes the instrument. Requests of $10,000 or more need three quotes or a sole-source justification.",
+        "citedArticles": [
+          "Requesting something that isn't in a Coupa catalog"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "How do I submit a non-catalog purchase request in SAP Ariba for a custom antibody?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting something that isn't in a Coupa catalog"
+      ],
+      "wrongSystem": true,
+      "visitorId": "test-set-run-3-q4",
+      "result": {
+        "outcome": "answered",
+        "answer": "Northwake uses Coupa rather than SAP Ariba. To request the custom antibody, open Shop in Coupa and select Write a Request. Enter the item description, supplier, price, quantity, needed-by date, and cost center; attach the supplier quote, then submit. A buyer reviews the request before it goes for approval. Requests of $10,000 or more need three quotes or an attached sole-source justification. The supplier must already be set up in Coupa.",
+        "citedArticles": [
+          "Requesting something that isn't in a Coupa catalog"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "My Coupa requisition shows Pending next to my director's name. What does that mean, and what can I do?",
+      "outcome": "answered",
+      "articles": [
+        "Checking where a Coupa requisition is waiting for approval"
+      ],
+      "visitorId": "test-set-run-3-q5",
+      "result": {
+        "outcome": "answered",
+        "answer": "Pending means your director is the current approver in the requisition’s approval chain. In Coupa, open Requisitions, select the requisition, and scroll to Approvals to see the chain and any earlier approvals. If your director is out of office, ask your manager to approve on their behalf or contact Procurement & AP to reroute it. Approvers have 3 business days to act; Coupa sends a reminder after that. Don’t create a duplicate requisition while this one is pending.",
+        "citedArticles": [
+          "Checking where a Coupa requisition is waiting for approval"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Why is my approver's manager getting copied on reminders about my requisition?",
+      "outcome": "answered",
+      "articles": [
+        "Checking where a Coupa requisition is waiting for approval"
+      ],
+      "visitorId": "test-set-run-3-q6",
+      "result": {
+        "outcome": "answered",
+        "answer": "Coupa sends a reminder and copies the approver’s manager if the approver hasn’t acted within 3 business days. You can check the Approvals section of your requisition to see who it’s waiting on.",
+        "citedArticles": [
+          "Checking where a Coupa requisition is waiting for approval"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "I ordered reagents for a coworker, and she unpacked them. Which of us receives the order in Coupa?",
+      "outcome": "answered",
+      "articles": [
+        "Receiving an order in Coupa"
+      ],
+      "visitorId": "test-set-run-3-q7",
+      "result": {
+        "outcome": "answered",
+        "answer": "You receive the order in Coupa because the person who requested it is responsible, even if someone else unpacked it. Open Orders, find the purchase order, select Receive, enter the quantities received, and submit. Do this within 5 business days of delivery.",
+        "citedArticles": [
+          "Receiving an order in Coupa"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Our supplier put us on credit hold. Could that be because of how we handle deliveries?",
+      "outcome": "answered",
+      "articles": [
+        "Receiving an order in Coupa"
+      ],
+      "visitorId": "test-set-run-3-q8",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. Orders not recorded as received can hold up invoice payment and put the supplier on credit hold. The person who requested the order is responsible for receiving it in Coupa, even if the receiving dock signed for it. Open Orders, find the purchase order, select Receive, enter the quantities that arrived, and submit. Receive orders within 5 business days of delivery; if only part arrived, record that portion and receive the rest when it arrives.",
+        "citedArticles": [
+          "Receiving an order in Coupa"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "What do I need to explain in a new supplier request?",
+      "outcome": "answered",
+      "articles": [
+        "Adding a new supplier in Coupa"
+      ],
+      "visitorId": "test-set-run-3-q9",
+      "result": {
+        "outcome": "answered",
+        "answer": "In the new supplier request, explain why an existing supplier won't work. Also enter the supplier's name, contact person and email, and what Northwake will buy from them. Search Coupa's supplier list first; requests for suppliers already listed are closed.",
+        "citedArticles": [
+          "Adding a new supplier in Coupa"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "How will I know when a new supplier is ready to use in Coupa?",
+      "outcome": "answered",
+      "articles": [
+        "Adding a new supplier in Coupa"
+      ],
+      "visitorId": "test-set-run-3-q10",
+      "result": {
+        "outcome": "answered",
+        "answer": "Coupa emails you when the supplier is active and ready to use.",
+        "citedArticles": [
+          "Adding a new supplier in Coupa"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "I paid for a conference registration with my own credit card. How do I get paid back?",
+      "outcome": "answered",
+      "articles": [
+        "Submitting an expense report in Concur"
+      ],
+      "visitorId": "test-set-run-3-q11",
+      "result": {
+        "outcome": "answered",
+        "answer": "In Concur, select Create, then Start a Report, and name the report after the trip or month. Add the conference registration as an out-of-pocket expense, choose the expense type, and attach a receipt photo. Check the cost center and select Submit Report. Your manager approves the report and Procurement & AP audits it; reimbursement arrives in your next payroll. Submit within 30 days. Receipts are required for expenses of $25 or more.",
+        "citedArticles": [
+          "Submitting an expense report in Concur"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "I need to submit expenses for my flight to San Diego. Do I do that in Navan?",
+      "outcome": "answered",
+      "articles": [
+        "Submitting an expense report in Concur"
+      ],
+      "wrongSystem": true,
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q12",
+      "result": {
+        "outcome": "answered",
+        "answer": "Submit the flight expense in Concur: create a report, add the flight charge (or enter it as an out-of-pocket expense), choose the expense type, attach the receipt, check the cost center, and submit the report. Receipts are required for expenses of $25 or more. Northwake’s expense-submission instructions are for Concur, not Navan.",
+        "citedArticles": [
+          "Submitting an expense report in Concur"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "The parking garage machine didn't print a receipt. Can I still expense it?",
+      "outcome": "answered",
+      "articles": [
+        "Handling a missing or lost receipt in Concur",
+        "Submitting an expense report in Concur"
+      ],
+      "visitorId": "test-set-run-3-q13",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. First try to get a copy of the receipt. If you can’t, open the expense in Concur, choose Receipt Options, then Missing Receipt Declaration. Describe the purchase and why the receipt is missing, accept the declaration, and submit your report as usual. Declarations are allowed for expenses up to $250; for an expense over $250, contact Procurement & AP before submitting.",
+        "citedArticles": [
+          "Handling a missing or lost receipt in Concur"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "i lost the receipt for a $42 lunch I bought on a work trip last week, can I still get reimbursed?",
+      "outcome": "answered",
+      "articles": [
+        "Handling a missing or lost receipt in Concur"
+      ],
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q14",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. First try to get a copy of the receipt. If you can’t, open the expense in Concur, select Receipt Options, then Missing Receipt Declaration. Describe what you bought and why, accept and create the declaration, and submit your report as usual. Missing receipt declarations are allowed for expenses up to $250. If this was a team meal, add the attendees’ names to the expense.",
+        "citedArticles": [
+          "Handling a missing or lost receipt in Concur",
+          "Submitting an expense report in Concur"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Do I enter the hotel room tax separately in Concur?",
+      "outcome": "answered",
+      "articles": [
+        "Itemizing a hotel bill in Concur"
+      ],
+      "visitorId": "test-set-run-3-q15",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. When you select Itemize Nightly, enter the room rate and room tax for one night; Concur copies them to each night of the stay. Make sure the itemized total matches the hotel bill.",
+        "citedArticles": [
+          "Itemizing a hotel bill in Concur"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "I watched a movie in my hotel room. How do I take it off the expense?",
+      "outcome": "answered",
+      "articles": [
+        "Itemizing a hotel bill in Concur",
+        "Clearing corporate card charges in Concur"
+      ],
+      "visitorId": "test-set-run-3-q16",
+      "result": {
+        "outcome": "answered",
+        "answer": "In Concur, open the hotel expense and add the movie charge from the hotel folio as a separate item. Set its expense type to Personal so it’s removed from the reimbursable total. Make sure the itemized total matches the hotel bill and attach the itemized folio.",
+        "citedArticles": [
+          "Itemizing a hotel bill in Concur"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Do I have to put every corporate card charge on a report, even when I'm not owed anything?",
+      "outcome": "answered",
+      "articles": [
+        "Clearing corporate card charges in Concur"
+      ],
+      "visitorId": "test-set-run-3-q17",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. Every corporate card charge must be added to an expense report, even if you’re not owed reimbursement. Submit the report in Concur; Northwake pays the card company directly.",
+        "citedArticles": [
+          "Clearing corporate card charges in Concur"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Someone stole my corporate card. What should I do first?",
+      "outcome": "answered",
+      "articles": [
+        "Clearing corporate card charges in Concur"
+      ],
+      "visitorId": "test-set-run-3-q18",
+      "result": {
+        "outcome": "answered",
+        "answer": "Report the stolen card to the card company right away.",
+        "citedArticles": [
+          "Clearing corporate card charges in Concur"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "After I fix a returned report, does it go straight to Procurement or back to my manager?",
+      "outcome": "answered",
+      "articles": [
+        "Fixing a returned expense report in Concur"
+      ],
+      "visitorId": "test-set-run-3-q19",
+      "result": {
+        "outcome": "answered",
+        "answer": "After you fix it and select Submit Report, it goes back through the approval chain from the beginning: your manager approves it, then Procurement & AP audits it.",
+        "citedArticles": [
+          "Fixing a returned expense report in Concur",
+          "Submitting an expense report in Concur"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Do I need to explain what I changed when I resubmit a returned report?",
+      "outcome": "answered",
+      "articles": [
+        "Fixing a returned expense report in Concur"
+      ],
+      "visitorId": "test-set-run-3-q20",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. Add a comment explaining what you changed, then select Submit Report to resubmit the same report.",
+        "citedArticles": [
+          "Fixing a returned expense report in Concur"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Where's my sick time balance in BambooHR?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting time off in Workday"
+      ],
+      "wrongSystem": true,
+      "visitorId": "test-set-run-3-q21",
+      "result": {
+        "outcome": "answered",
+        "answer": "Northwake uses Workday for time off, not BambooHR. Open the Time Off and Leave app and select Time Off Balance to check your balance.",
+        "citedArticles": [
+          "Requesting time off in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "When do I get my sick days each year?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting time off in Workday"
+      ],
+      "visitorId": "test-set-run-3-q22",
+      "result": {
+        "outcome": "answered",
+        "answer": "You get 5 sick days each January.",
+        "citedArticles": [
+          "Requesting time off in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Can I print my payslip from last March for an apartment application?",
+      "outcome": "answered",
+      "articles": [
+        "Viewing pay stubs, tax forms, and direct deposit in Workday"
+      ],
+      "visitorId": "test-set-run-3-q23",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. In Workday, open the Pay app, select Payslips, choose the pay date from last March, and view or print the payslip.",
+        "citedArticles": [
+          "Viewing pay stubs, tax forms, and direct deposit in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Where do I find my W-2 from last year? I also want to bump up my federal withholding a bit and make sure my direct deposit is going to the right account.",
+      "outcome": "answered",
+      "articles": [
+        "Viewing pay stubs, tax forms, and direct deposit in Workday"
+      ],
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q24",
+      "result": {
+        "outcome": "answered",
+        "answer": "In Workday, open the Pay app and select Tax Documents to find your W-2. To increase federal withholding, select Withholding Elections, update your federal W-4, and submit it. To check or change your direct deposit, select Payment Elections, then Edit, and review the account details and allocation. Changes made by the 5th or 20th take effect on the next pay date; later changes take effect one pay date after. Make these changes only in Workday.",
+        "citedArticles": [
+          "Viewing pay stubs, tax forms, and direct deposit in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "I'm moving from Boston to Cambridge next month. Where do I change my address?",
+      "outcome": "answered",
+      "articles": [
+        "Updating your address and emergency contacts in Workday"
+      ],
+      "visitorId": "test-set-run-3-q25",
+      "result": {
+        "outcome": "answered",
+        "answer": "In Workday, select your profile picture, then View Profile. Go to Contact, select Edit, update your home address, and submit. Update it within 30 days of moving. Since Boston and Cambridge are both in Massachusetts, the article’s additional withholding reminder for moves to a different state does not apply.",
+        "citedArticles": [
+          "Updating your address and emergency contacts in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "How soon after moving do I have to update my address?",
+      "outcome": "answered",
+      "articles": [
+        "Updating your address and emergency contacts in Workday"
+      ],
+      "visitorId": "test-set-run-3-q26",
+      "result": {
+        "outcome": "answered",
+        "answer": "Update your address in Workday within 30 days of moving. If you move to a different state, also check your tax withholding elections in the Pay app.",
+        "citedArticles": [
+          "Updating your address and emergency contacts in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "My wife lost her job and her health insurance. Can I add her to my plan now?",
+      "outcome": "answered",
+      "articles": [
+        "Changing your benefits after a life event in Workday"
+      ],
+      "visitorId": "test-set-run-3-q27",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. Losing other coverage is a qualifying life event. In Workday, open Benefits and select Change Benefits, choose the life event for losing other coverage, enter the date, and upload proof. Add your wife as a dependent, enroll her in the plans you want, review the costs, and submit. Make the change within 30 days of the event; the People Team approves it, and coverage starts on the event date.",
+        "citedArticles": [
+          "Changing your benefits after a life event in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "I don't have my newborn's Social Security number yet. Can I still add her to my insurance?",
+      "outcome": "answered",
+      "articles": [
+        "Changing your benefits after a life event in Workday"
+      ],
+      "visitorId": "test-set-run-3-q28",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. You can add your newborn and enroll her in your plans without her Social Security number; enter it later within 90 days. In Workday, open Benefits, select Change Benefits, choose Birth/Adoption, enter the event date, upload proof, add your child, select the plans, and submit. You must make the change within 30 days of the birth.",
+        "citedArticles": [
+          "Changing your benefits after a life event in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "I'm due in March. When should I put my maternity leave into Workday?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting a leave of absence in Workday"
+      ],
+      "visitorId": "test-set-run-3-q29",
+      "result": {
+        "outcome": "answered",
+        "answer": "For a planned maternity/parental leave, submit the leave request in Workday at least 30 days before your leave starts. If the leave is unexpected, request it as soon as you can. In Workday, open Time Off and Leave, select Request Leave of Absence, choose Parental, enter the expected first and last days, and submit. The People Team will contact you within 2 business days.",
+        "citedArticles": [
+          "Requesting a leave of absence in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "I've only been at Northwake for 4 months. Do I get paid parental leave?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting a leave of absence in Workday"
+      ],
+      "visitorId": "test-set-run-3-q30",
+      "result": {
+        "outcome": "answered",
+        "answer": "Northwake offers 16 weeks of fully paid parental leave to every parent after 6 months of employment. At 4 months, you have not yet met that service requirement. For a planned leave, request it in Workday at least 30 days before it starts; the People Team can explain your pay and benefits.",
+        "citedArticles": [
+          "Requesting a leave of absence in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "My manager added a course for me. Where do I find it?",
+      "outcome": "answered",
+      "articles": [
+        "Completing your required training in Workday"
+      ],
+      "visitorId": "test-set-run-3-q31",
+      "result": {
+        "outcome": "answered",
+        "answer": "In Workday, open the Learning app and select My Learning. Your manager-assigned course appears under Required with its due date. Select the course and choose Start for an online course, or select a session date and choose Enroll for an in-person course.",
+        "citedArticles": [
+          "Completing your required training in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "My training page says I have some overdue courses. Which ones am I actually required to complete and how long do I have?",
+      "outcome": "answered",
+      "articles": [
+        "Completing your required training in Workday"
+      ],
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q32",
+      "result": {
+        "outcome": "gap",
+        "answer": "In Workday, open Learning > My Learning and check the Required section for your assigned courses and their individual due dates. Everyone must complete Code of Conduct and Information Security training each year. Lab staff must complete Lab Safety Basics before starting lab work, and Durham manufacturing staff must complete GMP training on their site’s schedule. New hires must finish required training within 30 days of their start date. The article doesn’t identify which courses are overdue on your account or give a single deadline for them; use the due dates shown in Workday to confirm.",
+        "citedArticles": [
+          "Completing your required training in Workday"
+        ],
+        "gapReason": "notCovered",
+        "newGapGroup": "Checking required training and due dates"
+      },
+      "pass": false
+    },
+    {
+      "text": "How long does someone I referred have to stay before I get the bonus?",
+      "outcome": "answered",
+      "articles": [
+        "Referring a candidate for an open role in Workday"
+      ],
+      "visitorId": "test-set-run-3-q33",
+      "result": {
+        "outcome": "answered",
+        "answer": "Your referral must be hired and complete 90 days before you earn the $3,000 referral bonus.",
+        "citedArticles": [
+          "Referring a candidate for an open role in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "I've never met this person, but a friend vouched for them. Can I refer them?",
+      "outcome": "answered",
+      "articles": [
+        "Referring a candidate for an open role in Workday"
+      ],
+      "visitorId": "test-set-run-3-q34",
+      "result": {
+        "outcome": "answered",
+        "answer": "Not yet. Northwake says to refer only people you know and have spoken to about the role. Talk with them about the role first; if you then know them and have spoken with them, you can submit the referral in Workday.",
+        "citedArticles": [
+          "Referring a candidate for an open role in Workday"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "We want to talk to a startup about a partnership. What do I need before showing them our data?",
+      "outcome": "answered",
+      "articles": [
+        "Getting an NDA in place through Ironclad"
+      ],
+      "visitorId": "test-set-run-3-q35",
+      "result": {
+        "outcome": "answered",
+        "answer": "Before showing the startup your data, make sure a Northwake NDA covering the partnership purpose is fully signed. Check Ironclad for an existing NDA first. If you need a new one, select New, then Start a Workflow, then NDA. Enter the startup’s legal name, address, signer, and the partnership purpose; choose Mutual or One-way (Northwake disclosing). Use Northwake’s standard terms when possible. If the startup wants to use its own agreement or change the terms, upload its draft for Legal Operations review. Don’t share confidential data until the NDA is fully signed.",
+        "citedArticles": [
+          "Getting an NDA in place through Ironclad"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Hey, I have to send an NDA to an outside vendor before our call Friday. Can I generate it in DocuSign or is there a template somewhere?",
+      "outcome": "answered",
+      "articles": [
+        "Getting an NDA in place through Ironclad"
+      ],
+      "wrongSystem": true,
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q36",
+      "result": {
+        "outcome": "answered",
+        "answer": "Use Ironclad, not DocuSign: Northwake contracts must be signed through Ironclad. First check the repository for an existing NDA with the vendor. If none applies, select New, then Start a Workflow, then NDA; enter the vendor’s details, choose Mutual or One-way, describe the purpose, and select Create. Standard terms are sent for signature right away and usually signed within 1 day. Don’t share confidential information until the NDA is fully signed.",
+        "citedArticles": [
+          "Getting an NDA in place through Ironclad",
+          "Finding a signed contract or checking for an existing NDA in Ironclad",
+          "Who can sign a contract, and how to send one for signature in Ironclad"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "We're sending a compound to a hospital lab for testing. Can I ship it today?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting a material transfer agreement (MTA) in Ironclad"
+      ],
+      "visitorId": "test-set-run-3-q37",
+      "result": {
+        "outcome": "answered",
+        "answer": "Only if the material transfer agreement (MTA) is fully signed in Ironclad. If it isn’t, don’t ship the compound today. To request one, start a Material Transfer Agreement workflow in Ironclad and enter whether Northwake is sending or receiving the material, the hospital, the scientist, the compound, and its intended use. Legal Operations reviews it and sends it for signature. If the work involves human samples or patient data, Northwake’s Privacy team also needs to review it.",
+        "citedArticles": [
+          "Requesting a material transfer agreement (MTA) in Ironclad"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Our MTA involves patient blood samples. Is there any extra review?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting a material transfer agreement (MTA) in Ironclad"
+      ],
+      "visitorId": "test-set-run-3-q38",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. MTAs involving human samples or patient data also need review by Northwake’s Privacy team; Legal Operations arranges it. Do not ship or accept materials until the MTA is fully signed in Ironclad.",
+        "citedArticles": [
+          "Requesting a material transfer agreement (MTA) in Ironclad"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Who needs to approve a consultant who will bill $150,000 this year?",
+      "outcome": "answered",
+      "articles": [
+        "Setting up a consulting agreement with a scientific advisor"
+      ],
+      "visitorId": "test-set-run-3-q39",
+      "result": {
+        "outcome": "answered",
+        "answer": "The Chief Scientific Officer needs to approve consulting fees over $100,000 per year.",
+        "citedArticles": [
+          "Setting up a consulting agreement with a scientific advisor"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Does Legal check anything about my advisor's university before the agreement goes out?",
+      "outcome": "answered",
+      "articles": [
+        "Setting up a consulting agreement with a scientific advisor"
+      ],
+      "visitorId": "test-set-run-3-q40",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. Legal Operations checks for conflicts, including rules at your advisor’s university, before sending the consulting agreement for signature.",
+        "citedArticles": [
+          "Setting up a consulting agreement with a scientific advisor"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Do I need a whole new contract for each project with a CRO we already work with?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting an MSA or SOW with a CRO or CDMO"
+      ],
+      "visitorId": "test-set-run-3-q41",
+      "result": {
+        "outcome": "answered",
+        "answer": "No. Check Ironclad’s repository for an existing MSA with the CRO. If one exists, start a separate Statement of Work workflow for each project and link it to that MSA.",
+        "citedArticles": [
+          "Requesting an MSA or SOW with a CRO or CDMO"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Our CDMO project involves clinical samples. Is there an extra review step?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting an MSA or SOW with a CRO or CDMO"
+      ],
+      "visitorId": "test-set-run-3-q42",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. Work involving clinical samples needs a Quality review, which Ironclad adds automatically to the workflow.",
+        "citedArticles": [
+          "Requesting an MSA or SOW with a CRO or CDMO"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Where can I find a signed MSA in our DocuSign account?",
+      "outcome": "answered",
+      "articles": [
+        "Finding a signed contract or checking for an existing NDA in Ironclad",
+        "Requesting an MSA or SOW with a CRO or CDMO"
+      ],
+      "wrongSystem": true,
+      "visitorId": "test-set-run-3-q43",
+      "result": {
+        "outcome": "answered",
+        "answer": "Northwake stores signed contracts in Ironclad. Open Repository, search by the provider’s name, and filter Contract Type to MSA and Status to active. Open the contract record to view its terms or download the signed PDF.",
+        "citedArticles": [
+          "Finding a signed contract or checking for an existing NDA in Ironclad"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "We have an NDA with a company, but for a different project. Can I use it?",
+      "outcome": "answered",
+      "articles": [
+        "Finding a signed contract or checking for an existing NDA in Ironclad",
+        "Getting an NDA in place through Ironclad"
+      ],
+      "visitorId": "test-set-run-3-q44",
+      "result": {
+        "outcome": "answered",
+        "answer": "No. An NDA covers only the purpose stated in it, so start a new NDA for the different project. In Ironclad, select New, then Start a Workflow, and choose NDA. Enter the other party’s details and describe the new project’s purpose. Don’t share confidential information until the new NDA is fully signed.",
+        "citedArticles": [
+          "Finding a signed contract or checking for an existing NDA in Ironclad",
+          "Getting an NDA in place through Ironclad"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Can a director sign a $100,000 services contract?",
+      "outcome": "answered",
+      "articles": [
+        "Who can sign a contract, and how to send one for signature in Ironclad"
+      ],
+      "visitorId": "test-set-run-3-q45",
+      "result": {
+        "outcome": "answered",
+        "answer": "No. Directors can sign NDAs and MTAs on Northwake templates, but a $100,000 services contract falls within the VP signing authority limit of contracts up to $250,000. Complete the contract workflow and approvals in Ironclad, then send it for signature so Ironclad routes it to the authorized signer.",
+        "citedArticles": [
+          "Who can sign a contract, and how to send one for signature in Ironclad"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "How do I check whether the other side has signed yet?",
+      "outcome": "answered",
+      "articles": [
+        "Who can sign a contract, and how to send one for signature in Ironclad"
+      ],
+      "visitorId": "test-set-run-3-q46",
+      "result": {
+        "outcome": "answered",
+        "answer": "In Ironclad, open the contract workflow page to track its signature status. The workflow shows progress for the other party’s signature.",
+        "citedArticles": [
+          "Who can sign a contract, and how to send one for signature in Ironclad"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "How do I mark a broken shaker so nobody uses it?",
+      "outcome": "answered",
+      "articles": [
+        "Reporting broken lab equipment or a freezer alarm"
+      ],
+      "visitorId": "test-set-run-3-q47",
+      "result": {
+        "outcome": "answered",
+        "answer": "Attach a red Out of Service tag to the shaker so no one else uses it. Also report it in ServiceNow: open Employee Center, select Report a Problem, then Lab Equipment; enter the asset tag and location, describe the problem, and submit.",
+        "citedArticles": [
+          "Reporting broken lab equipment or a freezer alarm"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "The -80 freezer on the 3rd floor of the Cambridge lab is beeping and the display says the temp is climbing. Who do I call right now??",
+      "outcome": "answered",
+      "articles": [
+        "Reporting broken lab equipment or a freezer alarm"
+      ],
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q48",
+      "result": {
+        "outcome": "gap",
+        "answer": "Call the Workplace & EHS on-call line shown on the freezer’s label now, then file a ServiceNow Lab Equipment problem report. The article doesn’t provide the phone number. If the freezer rises above -60°C, move the samples to the backup freezer listed on the unit’s label.",
+        "citedArticles": [
+          "Reporting broken lab equipment or a freezer alarm"
+        ],
+        "gapReason": "notCovered",
+        "newGapGroup": "Responding to an ultra-low-temperature freezer alarm"
+      },
+      "pass": false
+    },
+    {
+      "text": "How long after my manager approves does badge access take?",
+      "outcome": "answered",
+      "articles": [
+        "Getting badge access to a lab suite"
+      ],
+      "visitorId": "test-set-run-3-q49",
+      "result": {
+        "outcome": "answered",
+        "answer": "Workplace & EHS adds badge access within 1 business day after your manager approves the request.",
+        "citedArticles": [
+          "Getting badge access to a lab suite"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "What does a replacement badge cost if I've lost one before?",
+      "outcome": "answered",
+      "articles": [
+        "Getting badge access to a lab suite"
+      ],
+      "visitorId": "test-set-run-3-q50",
+      "result": {
+        "outcome": "answered",
+        "answer": "A replacement badge after your first replacement costs $25.",
+        "citedArticles": [
+          "Getting badge access to a lab suite"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "A job candidate is interviewing in Cambridge on Thursday. What do I need to do?",
+      "outcome": "answered",
+      "articles": [
+        "Registering a guest at Cambridge or Durham"
+      ],
+      "visitorId": "test-set-run-3-q51",
+      "result": {
+        "outcome": "answered",
+        "answer": "Register the candidate in ServiceNow at least 1 business day before the interview: open Employee Center > Register a Guest, choose Cambridge and the visit date and time, enter their name, company, and email, and indicate whether they’ll enter a lab or manufacturing floor. Submit the registration. Escort them throughout the visit; if they enter a lab, they need safety glasses and a lab coat from the front desk. If they’ll discuss confidential work, make sure an NDA is signed before the visit.",
+        "citedArticles": [
+          "Registering a guest at Cambridge or Durham"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "My collaborator from MIT is coming to the Durham site next Tuesday for a meeting. How do I register her so she can get in at the front desk?",
+      "outcome": "answered",
+      "articles": [
+        "Registering a guest at Cambridge or Durham"
+      ],
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q52",
+      "result": {
+        "outcome": "answered",
+        "answer": "In ServiceNow, open Employee Center and select Register a Guest. Choose Durham and the visit date and time, enter her name, MIT, and email, and indicate whether she’ll enter a lab or the manufacturing floor. Submit the registration; ServiceNow will email her check-in instructions, and the front desk will message you on Teams when she checks in. Register her at least 1 business day ahead. If she’ll discuss confidential work, make sure there’s a signed NDA in Ironclad before the visit.",
+        "citedArticles": [
+          "Registering a guest at Cambridge or Durham"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "How do I put in a Zendesk ticket to get our full sharps containers taken away?",
+      "outcome": "answered",
+      "articles": [
+        "Arranging hazardous waste pickup"
+      ],
+      "wrongSystem": true,
+      "visitorId": "test-set-run-3-q53",
+      "result": {
+        "outcome": "answered",
+        "answer": "Use ServiceNow, not Zendesk. Put sharps in a sharps container. In ServiceNow, select Request a Service, then Hazardous Waste Pickup. Enter your lab, select the waste type, and provide the number and size of containers. Submit the request; Workplace & EHS picks it up within 2 business days.",
+        "citedArticles": [
+          "Arranging hazardous waste pickup"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Our waste bottle is getting full. When should I request a pickup?",
+      "outcome": "answered",
+      "articles": [
+        "Arranging hazardous waste pickup"
+      ],
+      "visitorId": "test-set-run-3-q54",
+      "result": {
+        "outcome": "answered",
+        "answer": "Request a pickup when the chemical waste bottle is three-quarters full. In ServiceNow, select Request a Service, then Hazardous Waste Pickup, and enter your lab, waste type, and the number and size of containers.",
+        "citedArticles": [
+          "Arranging hazardous waste pickup"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "My back hurts from my desk chair. What can I get?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting a desk, chair, or workspace change"
+      ],
+      "visitorId": "test-set-run-3-q55",
+      "result": {
+        "outcome": "answered",
+        "answer": "You can request a free ergonomic assessment. If it recommends equipment, such as a different chair or a sit-stand converter, it’s provided at no cost. In ServiceNow, open Employee Center, select Request a Service, then Workspace, choose Ergonomic Assessment, enter your site, floor, and desk number, describe what you need, and submit.",
+        "citedArticles": [
+          "Requesting a desk, chair, or workspace change"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "What day of the week do desk moves happen?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting a desk, chair, or workspace change"
+      ],
+      "visitorId": "test-set-run-3-q56",
+      "result": {
+        "outcome": "answered",
+        "answer": "Desk moves happen on Fridays after 3 p.m.",
+        "citedArticles": [
+          "Requesting a desk, chair, or workspace change"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Can I just email the team about my open request instead of using ServiceNow?",
+      "outcome": "answered",
+      "articles": [
+        "Checking the status of a ServiceNow request"
+      ],
+      "visitorId": "test-set-run-3-q57",
+      "result": {
+        "outcome": "answered",
+        "answer": "No. Reply or ask for an update in the request’s ServiceNow activity stream so the request history stays in one place and the assigned team is notified.",
+        "citedArticles": [
+          "Checking the status of a ServiceNow request"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "I put in a request for a new monitor two weeks ago and haven't heard anything. How can I check the status in Jira?",
+      "outcome": "answered",
+      "articles": [
+        "Checking the status of a ServiceNow request"
+      ],
+      "wrongSystem": true,
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q58",
+      "result": {
+        "outcome": "answered",
+        "answer": "Check the request in ServiceNow: open Employee Center, select My Requests, then find it by its request number or title. Open it to see the status and the team handling it. If it’s Awaiting Info, reply in the request’s activity stream. Jira isn’t listed as a Northwake system.",
+        "citedArticles": [
+          "Checking the status of a ServiceNow request"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Do I need a different password for Coupa and Workday?",
+      "outcome": "answered",
+      "articles": [
+        "Resetting your Microsoft 365 password"
+      ],
+      "visitorId": "test-set-run-3-q59",
+      "result": {
+        "outcome": "answered",
+        "answer": "No. Your Microsoft 365 password also signs you in to Coupa and Workday, so you don’t need separate passwords for them.",
+        "citedArticles": [
+          "Resetting your Microsoft 365 password"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "my password expires in 3 days and I'm traveling, can I change it remotely or do I have to be on the VPN?",
+      "outcome": "answered",
+      "articles": [
+        "Resetting your Microsoft 365 password"
+      ],
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q60",
+      "result": {
+        "outcome": "gap",
+        "answer": "You can start a password reset from the Microsoft sign-in page using “Forgot my password” or “Can’t access your account,” then complete verification and choose a new password. The article doesn’t say whether the reset itself can be completed remotely without VPN. After resetting, connect your laptop to the office network or VPN before signing in so it picks up the new password.",
+        "citedArticles": [
+          "Resetting your Microsoft 365 password"
+        ],
+        "gapReason": "notCovered",
+        "newGapGroup": "Changing a password while traveling"
+      },
+      "pass": false
+    },
+    {
+      "text": "My old phone broke and I can't get my sign-in code. What now?",
+      "outcome": "answered",
+      "articles": [
+        "Moving MFA to a new phone"
+      ],
+      "visitorId": "test-set-run-3-q61",
+      "result": {
+        "outcome": "answered",
+        "answer": "Contact the IT Service Desk to have your MFA reset. After you regain access, add your current phone under My Sign-Ins > Security info and keep at least one working phone number on your account.",
+        "citedArticles": [
+          "Moving MFA to a new phone"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Can I use my desk landline for MFA?",
+      "outcome": "answered",
+      "articles": [
+        "Moving MFA to a new phone"
+      ],
+      "visitorId": "test-set-run-3-q62",
+      "result": {
+        "outcome": "answered",
+        "answer": "No. Northwake requires a mobile number you control for MFA; landlines and shared phones aren't allowed.",
+        "citedArticles": [
+          "Moving MFA to a new phone"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Why do I have to reconfirm my access to HR data every few months?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting access to an app or SharePoint site"
+      ],
+      "visitorId": "test-set-run-3-q63",
+      "result": {
+        "outcome": "gap",
+        "answer": "Access to sensitive systems such as HR data is reviewed every quarter. The article doesn’t explain why the review is required. For access requests, request only the access your work needs.",
+        "citedArticles": [
+          "Requesting access to an app or SharePoint site"
+        ],
+        "gapReason": "notCovered",
+        "newGapGroup": "Reconfirming access to HR data"
+      },
+      "pass": false
+    },
+    {
+      "text": "I just joined the Clinical Ops team and can't open their SharePoint site, it says I need permission. How do I request access?",
+      "outcome": "answered",
+      "articles": [
+        "Requesting access to an app or SharePoint site"
+      ],
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q64",
+      "result": {
+        "outcome": "answered",
+        "answer": "On the SharePoint page that says you need permission, select Request access and submit your request to the site owner. Or, in ServiceNow, open the Employee Center and select Request Access. Search for the Clinical Ops site, choose the access level you need (such as Read or Edit), explain why you need it, and submit. The request goes to your manager first and then the site owner. ServiceNow emails you when access is granted; sign out and back in if you still don't see the site.",
+        "citedArticles": [
+          "Requesting access to an app or SharePoint site"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "How do I make a Box link to our slides expire after a month?",
+      "outcome": "answered",
+      "articles": [
+        "Sharing files with people outside Northwake"
+      ],
+      "wrongSystem": true,
+      "visitorId": "test-set-run-3-q65",
+      "result": {
+        "outcome": "answered",
+        "answer": "Northwake’s sharing instructions use OneDrive or SharePoint. Select the slides, choose Share, set the link to Specific people, enter the recipients’ email addresses, choose their access level, and set the expiration date to one month from now. Then select Send. External links can last no more than 90 days.",
+        "citedArticles": [
+          "Sharing files with people outside Northwake"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Our collaborator says the link I shared asks for a code. Is that normal?",
+      "outcome": "answered",
+      "articles": [
+        "Sharing files with people outside Northwake"
+      ],
+      "visitorId": "test-set-run-3-q66",
+      "result": {
+        "outcome": "answered",
+        "answer": "Yes. When you share a file with an outside collaborator using a Specific people link, they receive a code by email to open it.",
+        "citedArticles": [
+          "Sharing files with people outside Northwake"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "How do I get added to the lab's group inbox in Gmail?",
+      "outcome": "answered",
+      "articles": [
+        "Setting up an out-of-office reply or shared mailbox in Outlook"
+      ],
+      "wrongSystem": true,
+      "visitorId": "test-set-run-3-q67",
+      "result": {
+        "outcome": "answered",
+        "answer": "Northwake uses Outlook shared mailboxes rather than Gmail. In ServiceNow, select Request Access and search for Shared Mailbox. Enter the lab inbox’s email address and submit the request; the mailbox owner must approve it. Once approved, it should appear in Outlook within a few hours. Restart Outlook if it doesn’t appear.",
+        "citedArticles": [
+          "Setting up an out-of-office reply or shared mailbox in Outlook"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Who approves adding me to a shared mailbox?",
+      "outcome": "answered",
+      "articles": [
+        "Setting up an out-of-office reply or shared mailbox in Outlook"
+      ],
+      "visitorId": "test-set-run-3-q68",
+      "result": {
+        "outcome": "answered",
+        "answer": "The shared mailbox owner approves your access request.",
+        "citedArticles": [
+          "Setting up an out-of-office reply or shared mailbox in Outlook"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Should I join a meeting from my laptop or the room's touch panel?",
+      "outcome": "answered",
+      "articles": [
+        "Fixing a conference room that won't connect to Teams"
+      ],
+      "visitorId": "test-set-run-3-q69",
+      "result": {
+        "outcome": "answered",
+        "answer": "Join from the room’s touch panel, not your laptop. If you also join from your laptop, mute it and turn off its speaker to prevent echo.",
+        "citedArticles": [
+          "Fixing a conference room that won't connect to Teams"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "the conference room in Building 2 won't connect to the display and I have a Zoom call with a client in 10 minutes. what do I do",
+      "outcome": "answered",
+      "articles": [
+        "Fixing a conference room that won't connect to Teams"
+      ],
+      "wrongSystem": true,
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q70",
+      "result": {
+        "outcome": "gap",
+        "answer": "The room article covers Microsoft Teams Rooms, but it doesn’t say whether Building 2’s display supports Zoom or how to connect a Zoom call. If the display is blank, try pressing the remote’s power button and checking that the screen input is set to the Teams Room. Don’t unplug cables behind the screen. If it still won’t work, contact the IT Service Desk and give them the room name. The article doesn’t specify a faster option for your 10-minute deadline.",
+        "citedArticles": [
+          "Fixing a conference room that won't connect to Teams"
+        ],
+        "gapReason": "notCovered",
+        "newGapGroup": "Connecting to conference room displays for Zoom calls"
+      },
+      "pass": false
+    },
+    {
+      "text": "My laptop battery dies after an hour. Can I get a new one?",
+      "outcome": "answered",
+      "articles": [
+        "Getting your laptop repaired or replaced"
+      ],
+      "visitorId": "test-set-run-3-q71",
+      "result": {
+        "outcome": "answered",
+        "answer": "You can request a repair or replacement, but a new laptop isn’t guaranteed. Laptops are normally replaced every 4 years; an earlier replacement requires the IT Service Desk to decide that a repair isn’t worthwhile. In ServiceNow, open Employee Center, select Report a Problem, then Laptop, describe the battery issue, and include the asset tag from the sticker on the bottom. The IT Service Desk will contact you to troubleshoot or arrange a swap.",
+        "citedArticles": [
+          "Getting your laptop repaired or replaced"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Is there a way to get my files back if my laptop dies and I only saved them on the laptop?",
+      "outcome": "answered",
+      "articles": [
+        "Getting your laptop repaired or replaced"
+      ],
+      "visitorId": "test-set-run-3-q72",
+      "result": {
+        "outcome": "answered",
+        "answer": "The article says IT can't recover files saved only on a broken laptop, so it doesn't describe a way to get those files back. To protect files going forward, save them to OneDrive; they sync back when you sign in on a replacement laptop.",
+        "citedArticles": [
+          "Getting your laptop repaired or replaced"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "Our contractor starts in three days. Is it too late to get them a laptop?",
+      "outcome": "answered",
+      "articles": [
+        "Getting a laptop for a consultant or contractor"
+      ],
+      "visitorId": "test-set-run-3-q73",
+      "result": {
+        "outcome": "gap",
+        "answer": "The article says to submit a contractor laptop request at least 5 business days before the start date, so three days is shorter than the stated lead time. It doesn't say whether IT can expedite a late request or provide an exception. Contact the IT Service Desk to ask; the hiring manager submits the request in ServiceNow under Employee Center > Request a Service > Contractor laptop.",
+        "citedArticles": [
+          "Getting a laptop for a consultant or contractor"
+        ],
+        "gapReason": "notCovered",
+        "newGapGroup": "Expediting a late contractor laptop request"
+      },
+      "pass": false
+    },
+    {
+      "text": "A contractor will be with us for 4 months. What do I do so they have a computer on day one?",
+      "outcome": "answered",
+      "articles": [
+        "Getting a laptop for a consultant or contractor"
+      ],
+      "visitorId": "test-set-run-3-q74",
+      "result": {
+        "outcome": "answered",
+        "answer": "A 4-month contract qualifies for a Northwake laptop. As the hiring manager, submit a ServiceNow request at least 5 business days before the contractor’s start date: open Employee Center, select Request a Service, then Contractor laptop. Enter the contractor’s name, start date, contract end date, and needed apps. The IT Service Desk will prepare it and let you know when it’s ready.",
+        "citedArticles": [
+          "Getting a laptop for a consultant or contractor"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "text": "What days can I get something from our Cambridge lab down to Durham?",
+      "outcome": "gap",
+      "knownGap": "Shipping samples between sites",
+      "visitorId": "test-set-run-3-shipping-samples-between-sites",
+      "result": {
+        "outcome": "gap",
+        "answer": "The articles don’t say which days materials can be transported from Cambridge to Durham or how to arrange that transfer. Check with Workplace & EHS or your lab’s operations contact for the schedule.",
+        "citedArticles": [
+          "Requesting a material transfer agreement (MTA) in Ironclad"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Sending samples between Cambridge and Durham"
+      },
+      "pass": true
+    },
+    {
+      "text": "I need to get a box of tissue samples to our North Carolina site. How do I book that?",
+      "outcome": "gap",
+      "knownGap": "Shipping samples between sites",
+      "visitorId": "test-set-run-3-shipping-samples-between-sites",
+      "result": {
+        "outcome": "gap",
+        "answer": "The available guidance does not explain how to book an internal shipment of tissue samples to North Carolina. The MTA article covers agreements for transferring research materials between Northwake and an outside organization, not shipping between Northwake sites. Contact Workplace & EHS or your site’s shipping contact for the booking process.",
+        "citedArticles": [
+          "Requesting a material transfer agreement (MTA) in Ironclad"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Sending samples between Cambridge and Durham"
+      },
+      "pass": true
+    },
+    {
+      "text": "We need to send a box of frozen aliquots from Cambridge to the Durham site. What's the process for shipping samples between our sites, and do they need dry ice?",
+      "outcome": "gap",
+      "knownGap": "Shipping samples between sites",
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-shipping-samples-between-sites",
+      "result": {
+        "outcome": "gap",
+        "answer": "The available articles don’t explain how to ship frozen aliquots between Cambridge and Durham or whether dry ice is required. The MTA article covers transfers of research materials with outside organizations, not shipments between Northwake sites.",
+        "citedArticles": [
+          "Requesting a material transfer agreement (MTA) in Ironclad"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Sending samples between Cambridge and Durham"
+      },
+      "pass": true
+    },
+    {
+      "text": "Is it okay to upload a draft protocol to Claude to help me edit it?",
+      "outcome": "gap",
+      "knownGap": "AI tools with company files",
+      "visitorId": "test-set-run-3-ai-tools-with-company-files",
+      "result": {
+        "outcome": "gap",
+        "answer": "The articles don't say whether Claude is approved or whether uploading drafts there is allowed. They do say not to share confidential information, including unpublished data or plans, before an NDA is fully signed, and that confidential files shared externally require a signed NDA. They don't establish that an NDA or these sharing rules authorize uploading to Claude, so the articles can't confirm this is okay. Check with the appropriate Northwake team before uploading the draft.",
+        "citedArticles": [
+          "Sharing files with people outside Northwake",
+          "Getting an NDA in place through Ironclad"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Using AI tools with company files"
+      },
+      "pass": true
+    },
+    {
+      "text": "Which AI assistant are we allowed to use with work documents?",
+      "outcome": "gap",
+      "knownGap": "AI tools with company files",
+      "visitorId": "test-set-run-3-ai-tools-with-company-files",
+      "result": {
+        "outcome": "gap",
+        "answer": "The available guidance doesn’t say which AI assistants are allowed for work documents. It does say confidential information may be shared with outside organizations only if there is a signed NDA in Ironclad; that doesn’t establish whether an AI assistant is approved. Check with IT before entering work documents into an AI tool.",
+        "citedArticles": [
+          "Sharing files with people outside Northwake"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Using AI tools with company files"
+      },
+      "pass": true
+    },
+    {
+      "text": "Is it okay to paste a draft protocol into ChatGPT to help me clean up the wording? Or should I use Copilot for work documents instead?",
+      "outcome": "gap",
+      "knownGap": "AI tools with company files",
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-ai-tools-with-company-files",
+      "result": {
+        "outcome": "gap",
+        "answer": "The articles don’t say whether you may paste a draft protocol into ChatGPT or whether Copilot is required or approved for work documents, so I can’t confirm which to use. The closest guidance covers sharing files with outside collaborators and confidential information, but it doesn’t address AI tools. The AI-use rule is not covered.",
+        "citedArticles": [
+          "Sharing files with people outside Northwake"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Using AI tools with company files"
+      },
+      "pass": true
+    },
+    {
+      "text": "I drive to the Durham site. Is parking free?",
+      "outcome": "gap",
+      "knownGap": "Durham parking",
+      "visitorId": "test-set-run-3-durham-parking",
+      "result": {
+        "outcome": "gap",
+        "answer": "The articles don't say whether parking at the Durham site is free. The closest related article covers workspace requests, not parking; check with Workplace & EHS for the parking policy.",
+        "citedArticles": [
+          "Requesting a desk, chair, or workspace change"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Parking at the Durham site"
+      },
+      "pass": true
+    },
+    {
+      "text": "I'm driving down to Durham for a site visit. Where should I leave my car?",
+      "outcome": "gap",
+      "knownGap": "Durham parking",
+      "visitorId": "test-set-run-3-durham-parking",
+      "result": {
+        "outcome": "gap",
+        "answer": "The available articles don't say where employees should park at the Durham site. They cover registering guests for a Durham visit, but don't provide parking instructions. Ask Workplace & EHS for site parking guidance.",
+        "citedArticles": [
+          "Registering a guest at Cambridge or Durham"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Parking at the Durham site"
+      },
+      "pass": true
+    },
+    {
+      "text": "I'm starting at the Durham site next month and drive in. Where do I park and do I need a permit or pass?",
+      "outcome": "gap",
+      "knownGap": "Durham parking",
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-durham-parking",
+      "result": {
+        "outcome": "gap",
+        "answer": "The available articles don't say where employees park at Durham or whether you need a parking permit or pass. They cover registering site guests, but not employee parking. Check with Workplace & EHS for the parking instructions.",
+        "citedArticles": [
+          "Registering a guest at Cambridge or Durham"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Parking at the Durham site"
+      },
+      "pass": true
+    },
+    {
+      "text": "We underspent on travel. Can I shift that money to my lab supplies cost center?",
+      "outcome": "gap",
+      "knownGap": "Budget transfers",
+      "visitorId": "test-set-run-3-budget-transfers",
+      "result": {
+        "outcome": "gap",
+        "answer": "The articles don't say whether underspent travel funds can be shifted to your lab supplies cost center or how to request a budget transfer. For a lab-supplies order, Coupa asks you to check the cost center before submitting the requisition, but this article doesn't explain how to change or transfer the budget.",
+        "citedArticles": [
+          "Ordering lab supplies through a Coupa punchout"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Getting approval for a budget transfer"
+      },
+      "pass": true
+    },
+    {
+      "text": "Is there a cutoff for moving money between cost centers before the quarter closes?",
+      "outcome": "gap",
+      "knownGap": "Budget transfers",
+      "visitorId": "test-set-run-3-budget-transfers",
+      "result": {
+        "outcome": "gap",
+        "answer": "The articles don't specify a cutoff for moving money between cost centers before quarter close. The closest related guidance says Coupa requisition approvals depend on the amount and cost center, but it doesn't cover cost-center transfers or their timing.",
+        "citedArticles": [
+          "Checking where a Coupa requisition is waiting for approval"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Getting approval for a budget transfer"
+      },
+      "pass": true
+    },
+    {
+      "text": "I'm a project manager and we have about $8k left in our cost center but need it in a different one for a new study. How do I move budget between cost centers?",
+      "outcome": "gap",
+      "knownGap": "Budget transfers",
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-budget-transfers",
+      "result": {
+        "outcome": "gap",
+        "answer": "The articles don't explain how to transfer budget between cost centers. They do say that a Coupa requisition should use the cost center being charged, and that a requisition charged to a cost center you don't own also needs that cost center owner's approval. The budget-transfer process is not covered.",
+        "citedArticles": [
+          "Checking where a Coupa requisition is waiting for approval"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Getting approval for a budget transfer"
+      },
+      "pass": true
+    },
+    {
+      "text": "Do I need biosafety committee sign-off before cloning a new gene into E. coli?",
+      "outcome": "gap",
+      "knownGap": "rDNA approval",
+      "visitorId": "test-set-run-3-rdna-approval",
+      "result": {
+        "outcome": "gap",
+        "answer": "The available articles do not say whether biosafety committee sign-off is required before cloning a gene into E. coli, or how to obtain it. They do state that lab staff must complete Lab Safety Basics before starting lab work; contact the appropriate biosafety or lab-safety team to confirm sign-off requirements.",
+        "citedArticles": [
+          "Completing your required training in Workday"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Getting approval for recombinant DNA work"
+      },
+      "pass": true
+    },
+    {
+      "text": "Which committee signs off on genetically modified organisms here?",
+      "outcome": "gap",
+      "knownGap": "rDNA approval",
+      "visitorId": "test-set-run-3-rdna-approval",
+      "result": {
+        "outcome": "gap",
+        "answer": "The available articles do not identify which committee reviews or signs off on genetically modified organisms. The closest related article covers required lab training, but not GMO approval; check with the appropriate Northwake team for the review process.",
+        "citedArticles": [
+          "Completing your required training in Workday"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Getting approval for recombinant DNA work"
+      },
+      "pass": true
+    },
+    {
+      "text": "Is there an approval process for starting genetic engineering work here?",
+      "outcome": "gap",
+      "knownGap": "rDNA approval",
+      "visitorId": "test-set-run-3-rdna-approval",
+      "result": {
+        "outcome": "gap",
+        "answer": "The available guidance says lab staff must complete Lab Safety Basics before starting lab work. It does not describe an approval process for starting genetic engineering work, so that process is not covered here.",
+        "citedArticles": [
+          "Completing your required training in Workday"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Getting approval for recombinant DNA work"
+      },
+      "pass": true
+    },
+    {
+      "text": "How do I request an HR letter for a visa application?",
+      "outcome": "gap",
+      "knownGap": "Employment verification letter",
+      "visitorId": "test-set-run-3-employment-verification-letter",
+      "result": {
+        "outcome": "gap",
+        "answer": "The articles don’t explain how to request an HR letter for a visa application. They do explain how to access pay stubs and tax forms in Workday, but not how to obtain a visa letter. Please contact the People Team for guidance.",
+        "citedArticles": [
+          "Viewing pay stubs, tax forms, and direct deposit in Workday"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Requesting an employment verification letter"
+      },
+      "pass": true
+    },
+    {
+      "text": "My bank wants written confirmation of my job title and start date. Who provides that?",
+      "outcome": "gap",
+      "knownGap": "Employment verification letter",
+      "visitorId": "test-set-run-3-employment-verification-letter",
+      "result": {
+        "outcome": "gap",
+        "answer": "The help articles don’t say who provides written confirmation of your job title and start date. The closest related article covers payslips and tax forms in Workday, not employment verification. Ask the People Team who handles this request.",
+        "citedArticles": [
+          "Viewing pay stubs, tax forms, and direct deposit in Workday"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Requesting an employment verification letter"
+      },
+      "pass": true
+    },
+    {
+      "text": "Who handles employment verification calls from lenders?",
+      "outcome": "gap",
+      "knownGap": "Employment verification letter",
+      "visitorId": "test-set-run-3-employment-verification-letter",
+      "result": {
+        "outcome": "gap",
+        "answer": "The help articles don't specify who handles employment verification calls from lenders. The closest listed HR contact is the People Team for pay or tax-form questions, but the articles don't say they handle verification calls.",
+        "citedArticles": [
+          "Viewing pay stubs, tax forms, and direct deposit in Workday"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Requesting an employment verification letter"
+      },
+      "pass": true
+    },
+    {
+      "text": "Finance asked me for an accrual estimate on our CRO study. How do I submit it?",
+      "outcome": "gap",
+      "knownGap": "CRO accruals",
+      "visitorId": "test-set-run-3-cro-accruals",
+      "result": {
+        "outcome": "gap",
+        "answer": "The articles do not explain how or where to submit a CRO study accrual estimate. They do say that CRO project work uses an SOW workflow in Ironclad, with the provider’s proposal and budget uploaded, and that a Coupa requisition is created after the SOW is signed. Ask Finance for the accrual submission process.",
+        "citedArticles": [
+          "Requesting an MSA or SOW with a CRO or CDMO"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Reporting clinical study accruals at month end"
+      },
+      "pass": true
+    },
+    {
+      "text": "How do I record CRO costs for work done in September that won't be billed until November?",
+      "outcome": "gap",
+      "knownGap": "CRO accruals",
+      "visitorId": "test-set-run-3-cro-accruals",
+      "result": {
+        "outcome": "gap",
+        "answer": "For CRO work, the SOW should be signed in Ironclad, then a Coupa requisition is created for its amount. In Coupa, service orders are received when the work is complete. The articles don’t explain how to accrue or otherwise record September costs before the November bill arrives, so they don’t specify the month-end accounting treatment.",
+        "citedArticles": [
+          "Requesting an MSA or SOW with a CRO or CDMO",
+          "Receiving an order in Coupa"
+        ],
+        "gapReason": "notCovered",
+        "gapGroup": "Reporting clinical study accruals at month end"
+      },
+      "pass": true
+    },
+    {
+      "text": "Who do I give month-end estimates of unbilled vendor work to?",
+      "outcome": "gap",
+      "knownGap": "CRO accruals",
+      "visitorId": "test-set-run-3-cro-accruals",
+      "result": {
+        "outcome": "gap",
+        "answer": "The articles don't specify who should receive month-end estimates of unbilled vendor work. They explain how to request items or services that aren't in a Coupa catalog, but not where to send these estimates.",
+        "citedArticles": [
+          "Requesting something that isn't in a Coupa catalog"
+        ],
+        "gapReason": "noMatch",
+        "newGapGroup": "Reporting unbilled vendor work at month end"
+      },
+      "pass": true
+    },
+    {
+      "text": "Our Durham team needs some of our plasmids. Does that go through Ironclad?",
+      "outcome": "gap",
+      "knownGap": "MTA to Northwake's own site",
+      "visitorId": "test-set-run-3-mta-to-northwake-s-own-site",
+      "result": {
+        "outcome": "gap",
+        "answer": "The Ironclad MTA workflow is for transfers between Northwake and an outside organization. The articles don’t say whether an internal transfer to the Durham team needs Ironclad or how to arrange it.",
+        "citedArticles": [
+          "Requesting a material transfer agreement (MTA) in Ironclad"
+        ],
+        "gapReason": "notCovered",
+        "gapGroup": "Sending samples between Cambridge and Durham"
+      },
+      "pass": true
+    },
+    {
+      "text": "Can I use the Ironclad MTA workflow when the receiving lab is our own Durham site?",
+      "outcome": "gap",
+      "knownGap": "MTA to Northwake's own site",
+      "visitorId": "test-set-run-3-mta-to-northwake-s-own-site",
+      "result": {
+        "outcome": "gap",
+        "answer": "The MTA article covers transfers between Northwake and an outside organization, but it doesn’t say whether the workflow applies when the receiving lab is Northwake’s own Durham site. Check with Legal Operations before proceeding.",
+        "citedArticles": [
+          "Requesting a material transfer agreement (MTA) in Ironclad"
+        ],
+        "gapReason": "notCovered",
+        "newGapGroup": "Using the MTA workflow for internal lab transfers"
+      },
+      "pass": true
+    },
+    {
+      "text": "Our Durham colleagues asked for antibodies we make in Cambridge. What agreement do we need?",
+      "outcome": "gap",
+      "knownGap": "MTA to Northwake's own site",
+      "visitorId": "test-set-run-3-mta-to-northwake-s-own-site",
+      "result": {
+        "outcome": "gap",
+        "answer": "The MTA article covers transfers between Northwake and an outside organization, not transfers between Cambridge and Durham. The articles don’t say what agreement, if any, is needed for an internal transfer of antibodies; check with Legal Operations before shipping them.",
+        "citedArticles": [
+          "Requesting a material transfer agreement (MTA) in Ironclad"
+        ],
+        "gapReason": "noMatch",
+        "newGapGroup": "Using the MTA workflow for internal lab transfers"
+      },
+      "pass": true
+    },
+    {
+      "text": "I have 60 hours of vacation left in December. What happens to them?",
+      "outcome": "gap",
+      "knownGap": "Carrying over time off",
+      "visitorId": "test-set-run-3-carrying-over-time-off",
+      "result": {
+        "outcome": "gap",
+        "answer": "You can check your vacation balance in Workday under Time Off and Leave > Time Off Balance. Northwake grants full-time employees 15 vacation days per year, accrued each pay period, but the available articles don't say whether unused vacation carries over, is paid out, or expires at year-end. Contact the People Team to confirm what happens to your 60 hours.",
+        "citedArticles": [
+          "Requesting time off in Workday"
+        ],
+        "gapReason": "notCovered",
+        "gapGroup": "Carrying over unused time off"
+      },
+      "pass": true
+    },
+    {
+      "text": "I'm saving vacation for a long trip next spring. Can I bank days from this year?",
+      "outcome": "gap",
+      "knownGap": "Carrying over time off",
+      "visitorId": "test-set-run-3-carrying-over-time-off",
+      "result": {
+        "outcome": "gap",
+        "answer": "Full-time employees earn 15 vacation days a year, accrued each pay period. You can check your current balance in Workday under Time Off and Leave > Time Off Balance. The available information doesn’t say whether unused vacation days carry over or can be banked for next year; contact the People Team to confirm.",
+        "citedArticles": [
+          "Requesting time off in Workday"
+        ],
+        "gapReason": "notCovered",
+        "gapGroup": "Carrying over unused time off"
+      },
+      "pass": true
+    },
+    {
+      "text": "I have about 6 vacation days left and probably won't use them all by December. Can I carry them over into next year, and is there a cap?",
+      "outcome": "gap",
+      "knownGap": "Carrying over time off",
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-carrying-over-time-off",
+      "result": {
+        "outcome": "gap",
+        "answer": "The Workday Time Off and Leave app shows your balance, including approved requests you haven’t taken. The available article doesn’t say whether unused vacation days carry over into next year or whether there’s a cap; check with the People Team.",
+        "citedArticles": [
+          "Requesting time off in Workday"
+        ],
+        "gapReason": "notCovered",
+        "gapGroup": "Carrying over unused time off"
+      },
+      "pass": true
+    },
+    {
+      "text": "Our CDMO needs 2 TB of raw sequencing data, which is too much for a OneDrive link. What do we use to send it?",
+      "outcome": "gap",
+      "knownGap": "Large files for a CRO",
+      "visitorId": "test-set-run-3-large-files-for-a-cro",
+      "result": {
+        "outcome": "gap",
+        "answer": "The guidance says to share external files from OneDrive or SharePoint using a Specific people link, with an expiration date; confidential information may be shared only with an organization that has a signed NDA. It doesn’t say what to use for a 2 TB transfer or identify an alternative large-file transfer method. Ask the IT Service Desk which method to use.",
+        "citedArticles": [
+          "Sharing files with people outside Northwake"
+        ],
+        "gapReason": "notCovered",
+        "gapGroup": "Sharing large files with external partners"
+      },
+      "pass": true
+    },
+    {
+      "text": "What's the size limit on sharing a file outside Northwake?",
+      "outcome": "gap",
+      "knownGap": "Large files for a CRO",
+      "visitorId": "test-set-run-3-large-files-for-a-cro",
+      "result": {
+        "outcome": "gap",
+        "answer": "The article explains how to share a file with specific people from OneDrive or SharePoint, but it doesn’t specify a file-size limit. Select the file, choose Share, set the link to Specific people, enter the collaborator’s email, choose Can view or Can edit, set an expiration date, and send. For confidential information, make sure the organization has a signed NDA in Ironclad.",
+        "citedArticles": [
+          "Sharing files with people outside Northwake"
+        ],
+        "gapReason": "notCovered",
+        "gapGroup": "Sharing large files with external partners"
+      },
+      "pass": true
+    },
+    {
+      "text": "Our imaging files are about 400 GB each, too big to share from SharePoint. How do I get them to our CRO?",
+      "outcome": "gap",
+      "knownGap": "Large files for a CRO",
+      "visitorId": "test-set-run-3-large-files-for-a-cro",
+      "result": {
+        "outcome": "gap",
+        "answer": "The available guidance says to share external files from OneDrive or SharePoint using a Specific people link, choose view or edit access, and set an expiration date of no more than 90 days. Confidential information may be shared only with organizations that have a signed NDA in Ironclad. It doesn’t explain how to transfer files that are too large to share this way or provide another transfer method; ask the IT Service Desk for guidance.",
+        "citedArticles": [
+          "Sharing files with people outside Northwake"
+        ],
+        "gapReason": "notCovered",
+        "gapGroup": "Sharing large files with external partners"
+      },
+      "pass": true
+    },
+    {
+      "text": "I found a Back Bay hotel for $380 a night. Is that within policy?",
+      "outcome": "gap",
+      "knownGap": "Boston hotel rate",
+      "visitorId": "test-set-run-3-boston-hotel-rate",
+      "result": {
+        "outcome": "gap",
+        "answer": "The articles don't specify a permitted nightly hotel rate, so I can't determine whether $380 is within policy. For reimbursement, itemize the hotel bill night by night, attach the itemized folio, and book Northwake travel through Concur Travel.",
+        "citedArticles": [
+          "Itemizing a hotel bill in Concur"
+        ],
+        "gapReason": "notCovered",
+        "gapGroup": "Maximum hotel rates by city"
+      },
+      "pass": true
+    },
+    {
+      "text": "What do I do if the only hotel near my Boston meeting costs more than the limit?",
+      "outcome": "gap",
+      "knownGap": "Boston hotel rate",
+      "visitorId": "test-set-run-3-boston-hotel-rate",
+      "result": {
+        "outcome": "gap",
+        "answer": "The guidance says to book hotels for Northwake travel through Concur Travel so the stay is covered by Northwake’s travel insurance. It doesn’t explain what to do when the only nearby hotel exceeds the limit or how to request an exception. Contact Procurement & AP for guidance before booking.",
+        "citedArticles": [
+          "Itemizing a hotel bill in Concur"
+        ],
+        "gapReason": "notCovered",
+        "gapGroup": "Maximum hotel rates by city"
+      },
+      "pass": true
+    },
+    {
+      "text": "Does the travel policy set a different hotel budget for Boston than for other cities?",
+      "outcome": "gap",
+      "knownGap": "Boston hotel rate",
+      "visitorId": "test-set-run-3-boston-hotel-rate",
+      "result": {
+        "outcome": "gap",
+        "answer": "The articles don’t specify whether Boston has a different hotel budget. They do say to book Northwake travel hotels through Concur Travel so the stay is covered by Northwake’s travel insurance.",
+        "citedArticles": [
+          "Itemizing a hotel bill in Concur"
+        ],
+        "gapReason": "noMatch",
+        "gapGroup": "Maximum hotel rates by city"
+      },
+      "pass": true
+    },
+    {
+      "text": "What's the best way to quantify protein with a BCA assay?",
+      "outcome": "offTopic",
+      "visitorId": "test-set-run-3-q108",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    },
+    {
+      "text": "How do I calculate molarity from a mass and a volume?",
+      "outcome": "offTopic",
+      "visitorId": "test-set-run-3-q109",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    },
+    {
+      "text": "Why are my cells detaching from the flask?",
+      "outcome": "offTopic",
+      "visitorId": "test-set-run-3-q110",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    },
+    {
+      "text": "Can you explain what an IC50 is?",
+      "outcome": "offTopic",
+      "visitorId": "test-set-run-3-q111",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    },
+    {
+      "text": "Who's the CEO of Moderna?",
+      "outcome": "offTopic",
+      "visitorId": "test-set-run-3-q112",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    },
+    {
+      "text": "What should I name my new puppy?",
+      "outcome": "offTopic",
+      "visitorId": "test-set-run-3-q113",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    },
+    {
+      "text": "What's a good antibody dilution for immunofluorescence?",
+      "outcome": "offTopic",
+      "visitorId": "test-set-run-3-q114",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    },
+    {
+      "text": "Give me a recipe for banana bread.",
+      "outcome": "offTopic",
+      "visitorId": "test-set-run-3-q115",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    },
+    {
+      "text": "How do I stain a gel with SYBR Safe?",
+      "outcome": "offTopic",
+      "visitorId": "test-set-run-3-q116",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    },
+    {
+      "text": "Is coffee bad for you?",
+      "outcome": "offTopic",
+      "visitorId": "test-set-run-3-q117",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    },
+    {
+      "text": "What's the best way to reduce background in a Western blot when I'm using a phospho-specific antibody?",
+      "outcome": "offTopic",
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q118",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    },
+    {
+      "text": "how's your day going? do you ever get tired of answering questions lol",
+      "outcome": "offTopic",
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q119",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    },
+    {
+      "text": "Can you recommend a good Italian restaurant near Kendall Square for a birthday dinner?",
+      "outcome": "offTopic",
+      "writtenBlind": true,
+      "visitorId": "test-set-run-3-q120",
+      "result": {
+        "outcome": "offTopic",
+        "answer": "Sorry, I can only help with getting things done in Northwake's business systems.",
+        "citedArticles": []
+      },
+      "pass": true
+    }
+  ],
+  "fillChecks": [
+    {
+      "knownGap": "Shipping samples between sites",
+      "filled": [
+        "the Sample Transfer Form attached to the ServiceNow shipment request",
+        "the internal courier, booked through a ServiceNow “Inter-site sample shipment” request by noon the day before; it runs Tuesdays and Thursdays",
+        "Workplace & EHS, for shipments on dry ice or with hazardous materials"
+      ],
+      "placeholdersLeft": 0,
+      "visitorId": "test-set-run-3-shipping-samples-between-sites",
+      "pass": false
+    },
+    {
+      "knownGap": "AI tools with company files",
+      "filled": [
+        "Microsoft 365 Copilot is the only AI tool approved for Northwake files",
+        "Use your Northwake account with Microsoft 365 Copilot so prompts and files stay inside Northwake’s Microsoft 365",
+        "Copilot licenses are assigned on request through a ServiceNow “Software request” for Microsoft 365 Copilot, with manager approval"
+      ],
+      "placeholdersLeft": 0,
+      "visitorId": "test-set-run-3-ai-tools-with-company-files",
+      "pass": false
+    },
+    {
+      "knownGap": "Durham parking",
+      "filled": [
+        "Employees park in Lot B, behind the manufacturing building.",
+        "Employee parking is free.",
+        "Employees should pick up a parking hang tag at the Durham front desk on their first day.",
+        "Guests park in the marked guest spaces by the main entrance and do not need a tag.",
+        "Lot B is behind the manufacturing building.",
+        "Lot A is reserved for shift workers on the manufacturing floor."
+      ],
+      "placeholdersLeft": 1,
+      "visitorId": "test-set-run-3-durham-parking",
+      "pass": false
+    },
+    {
+      "knownGap": "Budget transfers",
+      "filled": [
+        "Submit the Budget Transfer form on the Finance SharePoint site.",
+        "Both cost center owners approve the transfer.",
+        "FP&A does not accept transfers in the last 5 business days of a quarter."
+      ],
+      "placeholdersLeft": 2,
+      "visitorId": "test-set-run-3-budget-transfers",
+      "pass": false
+    },
+    {
+      "knownGap": "rDNA approval",
+      "filled": [],
+      "placeholdersLeft": 4,
+      "visitorId": "test-set-run-3-rdna-approval",
+      "pass": true
+    },
+    {
+      "knownGap": "Employment verification letter",
+      "filled": [
+        "through a ServiceNow \"HR letter request\"",
+        "Salary is included only if the employee asks for it in the request.",
+        "Lenders and landlords who call are directed to The Work Number.",
+        "within 3 business days"
+      ],
+      "placeholdersLeft": 0,
+      "visitorId": "test-set-run-3-employment-verification-letter",
+      "pass": false
+    },
+    {
+      "knownGap": "CRO accruals",
+      "filled": [],
+      "placeholdersLeft": 4,
+      "visitorId": "test-set-run-3-cro-accruals",
+      "pass": true
+    },
+    {
+      "knownGap": "MTA to Northwake's own site",
+      "filled": [
+        "Attach the Sample Transfer Form to the ServiceNow shipment request, listing each sample and its storage temperature.",
+        "The internal courier runs Tuesdays and Thursdays. Book a spot with a ServiceNow “Inter-site sample shipment” request by noon the day before.",
+        "Workplace & EHS packs inter-site shipments on dry ice. The shipper must have completed the Dangerous Goods Shipping course in Workday within the last 2 years."
+      ],
+      "placeholdersLeft": 2,
+      "visitorId": "test-set-run-3-mta-to-northwake-s-own-site",
+      "pass": false
+    },
+    {
+      "knownGap": "Carrying over time off",
+      "filled": [
+        "40 hours",
+        "January 1",
+        "March 31"
+      ],
+      "placeholdersLeft": 0,
+      "visitorId": "test-set-run-3-carrying-over-time-off",
+      "pass": true
+    },
+    {
+      "knownGap": "Large files for a CRO",
+      "filled": [
+        "10 GB; OneDrive and SharePoint sharing links fail for files over that size",
+        "the Partner Exchange SharePoint site, requested through a ServiceNow “External data share” request"
+      ],
+      "placeholdersLeft": 0,
+      "visitorId": "test-set-run-3-large-files-for-a-cro",
+      "pass": false
+    },
+    {
+      "knownGap": "Boston hotel rate",
+      "filled": [
+        "$200 per night before taxes",
+        "$325 per night before taxes",
+        "The limit is before taxes.",
+        "Hotels above the cap need VP approval before booking; attach the approval email to the hotel expense in Concur."
+      ],
+      "placeholdersLeft": 1,
+      "visitorId": "test-set-run-3-boston-hotel-rate",
+      "pass": false
+    }
+  ]
+}

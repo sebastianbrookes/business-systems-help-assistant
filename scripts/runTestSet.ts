@@ -10,7 +10,7 @@
 //
 //   pnpm exec tsx scripts/runTestSet.ts
 //
-// The summary keeps each measure's worst score and Sebastian's notes already in it.
+// The summary keeps each measure's worst score and the notes already under Checks.
 
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -42,7 +42,7 @@ import {
 const DEPLOYMENT = "dev/test-set";
 const RESULTS = "results";
 const RUNS = [1, 2, 3];
-const NOTES = "## Sebastian's checks";
+const NOTES = "## Checks";
 
 type RunFile = {
   run: number;
@@ -237,8 +237,8 @@ The first two are the resume numbers. Scoring uses no AI grading.
 - **Correct Gap reason:** a flagged Known gap question gets its hole's reason, No match or Not covered.
 - **False alarms:** an answerable question logs a Gap. Lower is better.
 - **Off topic declined:** an Off topic question is declined.
-- **Gaps grouped correctly:** all 3 phrasings of a Known gap join its Gap group from the history. The MTA hole's group is the samples group, where the history files it.
-- **Fill from IT notes:** each Known gap's Visitor drafts its group, if it's Open, and fills it from the IT team notes. It passes when one note has every number and word of each filled value, and nothing is filled for rDNA approval or CRO accruals, which the notes don't cover. A reworded fact fails.
+- **Gaps grouped correctly:** all 3 phrasings of a Known gap join its starting Gap group from the history, not a new group, even one with the same title. The MTA hole's group is the samples group, where the history files it.
+- **Fill from IT notes:** each Known gap's Visitor drafts its starting group, if it's Open, and fills it from the IT team notes. A hole the notes cover passes when something is filled and one note has every number and content word of each filled value. Function words such as "they" or "which" are ignored. rDNA approval and CRO accruals, which the notes don't cover, pass when nothing is filled and placeholders are left. A fact reworded beyond function words fails.
 
 ${NOTES}
 
