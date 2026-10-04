@@ -39,3 +39,5 @@ Decisions to know before 06, 08, and 09:
 - Approval now stores `articleId` on the draft. A Resolved group's "answered after" list is the visible answered questions citing that article.
 - `questions.askSuggested` is a mutation, so it can't make an AI call. There are no limits yet. The test asks 20 times, more than the per-Visitor limit of 15, so ticket 06 inherits a guard. Asking the same Suggested question again adds another question.
 - `setup()` in the tests still loads only articles and notes. `setupWithHistory()` loads everything.
+
+**2026-10-04, review fixes:** "Approved …" on a Resolved group now uses the approval time for a Visitor's own approval, not the drafting time. The Off topic hint says "business system", matching the glossary. The cached replies show the grouping call put the MTA Suggested question in Sending samples by itself. Two things for later tickets: Didn't help rows keep no `gapReason`, so the Dashboard (08) must count `didntHelp` as Gaps the way `gapView` does. Also, five history Gaps came back with no department or system tag, so they won't show in by-system counts.

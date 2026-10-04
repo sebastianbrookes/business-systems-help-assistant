@@ -66,7 +66,7 @@ const suggested: { text: string; hint: string; expected: Expected }[] = [
   },
   {
     text: "What's a good blocking buffer for a Western blot?",
-    hint: "Not about work systems, so it's politely declined",
+    hint: "Not about a business system, so it's politely declined",
     expected: "offTopic",
   },
 ];

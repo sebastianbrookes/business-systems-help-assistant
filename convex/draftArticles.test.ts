@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
 import { api } from "./_generated/api";
 import type { Id } from "./_generated/dataModel";
 import { fakeModelReply, promptOf, setup, useTestEnv } from "./test.helpers";
@@ -196,6 +196,31 @@ test("a Didn't help group's draft revises the article that didn't help, replacin
   expect(
     await t.query(api.questions.list, { visitorId: "visitor-2" }),
   ).toMatchObject([{ citedArticles: [{ _id: mfa }] }]);
+});
+
+test("a Resolved group shows when the Visitor approved its draft, not when it was drafted", async () => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date("2026-10-01T12:00:00Z"));
+  const { t, gapGroupId } = await setupSamplesGroup();
+  fakeModelReply(samplesDraft);
+  await t.action(api.draftArticles.draft, { visitorId, gapGroupId });
+
+  const approvedAt = new Date("2026-10-03T12:00:00Z").getTime();
+  vi.setSystemTime(approvedAt);
+  await t.mutation(api.draftArticles.save, {
+    visitorId,
+    gapGroupId,
+    title: samplesDraft.title,
+    body: filledSamplesBody,
+  });
+  await t.mutation(api.draftArticles.approve, { visitorId, gapGroupId });
+
+  expect(
+    await t.query(api.gapGroups.get, { visitorId, gapGroupId }),
+  ).toMatchObject({
+    state: "resolved",
+    approvedAt: expect.closeTo(approvedAt, 0),
+  });
 });
 
 test("two Visitors see different states for the same starting group", async () => {

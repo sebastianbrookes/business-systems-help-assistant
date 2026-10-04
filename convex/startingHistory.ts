@@ -3315,7 +3315,7 @@ export const suggestedQuestions: SuggestedQuestion[] = [
   },
   {
     "text": "What's a good blocking buffer for a Western blot?",
-    "hint": "Not about work systems, so it's politely declined",
+    "hint": "Not about a business system, so it's politely declined",
     "outcome": "offTopic",
     "cited": [],
     "answer": "Sorry, I can only help with getting things done in Northwake's business systems."

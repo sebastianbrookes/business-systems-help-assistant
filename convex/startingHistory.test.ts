@@ -35,7 +35,9 @@ test("the starting data loads with no AI call", async () => {
     "Parking at the Durham site",
   ]);
   expect(open[0].questionCount).toBe(4);
-  for (const g of open.slice(0, 4)) expect(g.questionCount).toBeGreaterThanOrEqual(4);
+  for (const g of open.slice(0, 4)) {
+    expect(g.questionCount).toBeGreaterThanOrEqual(4);
+  }
   // The remaining holes form small Open groups below the four main ones.
   expect(open.length).toBeGreaterThan(4);
   for (const g of open.slice(4)) expect(g.questionCount).toBeLessThanOrEqual(3);
@@ -70,13 +72,13 @@ test.each([
 ])(
   "the Resolved group %s shows Gaps before its approval and answered questions after",
   async (title, approvedDaysAgo) => {
+    vi.useFakeTimers({ toFake: ["Date"] });
     const t = await setupWithHistory();
-    const now = Date.now();
 
     const group = await groupNamed(t, title);
 
     expect(group.state).toBe("resolved");
-    expect(group.approvedAt).toBeCloseTo(now - approvedDaysAgo * DAY, -5);
+    expect(group.approvedAt).toBe(Date.now() - approvedDaysAgo * DAY);
     expect(group.questions.length).toBeGreaterThan(0);
     for (const q of group.questions) {
       expect(q.askedAt).toBeLessThan(group.approvedAt!);

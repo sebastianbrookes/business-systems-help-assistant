@@ -106,6 +106,7 @@ export const get = query({
     const questions = await visibleQuestions(ctx, visitorId, gapGroupId);
     const { state, draft } = await groupDraft(ctx, visitorId, gapGroupId);
     const articleId = state === "resolved" ? draft?.articleId : undefined;
+    const article = articleId ? await ctx.db.get(articleId) : null;
     const answeredAfter = articleId
       ? (await startingAndOwnQuestions(ctx, visitorId)).filter(
           (q) => q.outcome === "answered" && q.citedArticleIds.includes(articleId),
@@ -124,7 +125,10 @@ export const get = query({
         : null,
       state,
       draft,
-      approvedAt: articleId ? happenedAt(draft!) : null,
+      approvedAt: article
+        ? // A starting draft stores when it was approved. A Visitor's approval made the article.
+          happenedAt({ daysAgo: draft!.daysAgo, _creationTime: article._creationTime })
+        : null,
       answeredAfter: answeredAfter.map((q) => ({
         _id: q._id,
         text: q.text,
