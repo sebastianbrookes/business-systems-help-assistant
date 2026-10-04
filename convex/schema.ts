@@ -12,9 +12,7 @@ export const SYSTEMS = [
 ] as const;
 
 export const OUTCOMES = ["answered", "gap", "offTopic"] as const;
-/** The Gap reasons the answer call can give. */
-export const MODEL_GAP_REASONS = ["noMatch", "notCovered"] as const;
-export const GAP_REASONS = [...MODEL_GAP_REASONS, "didntHelp"] as const;
+export const GAP_REASONS = ["noMatch", "notCovered"] as const;
 
 const literals = <T extends string>(values: readonly [T, T, ...T[]]) =>
   v.union(...values.map((value) => v.literal(value)));
@@ -44,6 +42,8 @@ export default defineSchema({
     department: v.optional(department),
     system: v.optional(system),
     gapGroupId: v.optional(v.id("gapGroups")),
+    // Set when the Employee clicks Didn't help. The outcome stays answered.
+    didntHelp: v.optional(v.boolean()),
   })
     .index("by_visitor", ["visitorId"])
     .index("by_gap_group", ["gapGroupId"]),

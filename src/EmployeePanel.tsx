@@ -52,9 +52,7 @@ export function EmployeePanel() {
             <p className="asked">{q.text}</p>
             {q.outcome === "gap" && (
               <p className="sent">
-                {q.gapReason === "didntHelp"
-                  ? "Thanks. We sent this to the IT team so they can fix the article."
-                  : "The Help articles don't fully cover this, so your question went to the IT team."}
+                The Help articles don't fully cover this, so your question went to the IT team.
               </p>
             )}
             <p className="answer">{q.answer}</p>
@@ -72,7 +70,10 @@ export function EmployeePanel() {
                 <li>Contact the IT Service Desk</li>
               </ul>
             )}
-            {q.outcome === "answered" && (
+            {q.didntHelp && (
+              <p className="sent">Thanks. We sent this answer to the IT team to review.</p>
+            )}
+            {q.outcome === "answered" && !q.didntHelp && (
               <button
                 className="didnt-help"
                 disabled={markingId !== null}

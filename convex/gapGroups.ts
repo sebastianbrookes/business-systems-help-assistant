@@ -48,7 +48,7 @@ export const list = query({
   },
 });
 
-/** One Gap group with its questions and their Gap reasons. */
+/** One Gap group with its questions and their Gap reasons. A Didn't help question includes the answer it got. */
 export const get = query({
   args: { visitorId: v.string(), gapGroupId: v.id("gapGroups") },
   handler: async (ctx, { visitorId, gapGroupId }) => {
@@ -63,7 +63,8 @@ export const get = query({
       questions: questions.map((q) => ({
         _id: q._id,
         text: q.text,
-        gapReason: q.gapReason,
+        gapReason: q.didntHelp ? ("didntHelp" as const) : q.gapReason,
+        answer: q.didntHelp ? q.answer : undefined,
       })),
     };
   },

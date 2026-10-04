@@ -59,7 +59,7 @@ export const didntHelp = action({
     );
     const grouping = await groupVisitorGap(ctx, visitorId, {
       ...question,
-      gapReason: "didntHelp",
+      didntHelp: true,
     });
     await ctx.runMutation(internal.questions.markDidntHelp, {
       visitorId,
@@ -115,7 +115,11 @@ export const ownAnsweredQuestion = internalQuery({
   args: { visitorId: v.string(), questionId: v.id("questions") },
   handler: async (ctx, { visitorId, questionId }) => {
     const question = await ctx.db.get(questionId);
-    if (question?.visitorId !== visitorId || question.outcome !== "answered") {
+    if (
+      question?.visitorId !== visitorId ||
+      question.outcome !== "answered" ||
+      question.didntHelp
+    ) {
       throw new ConvexError("Only your own answered questions can be marked.");
     }
     return question;
@@ -130,10 +134,9 @@ export const markDidntHelp = internalMutation({
   },
   handler: async (ctx, { visitorId, questionId, grouping }) => {
     // A second click that raced the first changes nothing.
-    if ((await ctx.db.get(questionId))?.outcome !== "answered") return;
+    if ((await ctx.db.get(questionId))?.didntHelp) return;
     await ctx.db.patch(questionId, {
-      outcome: "gap",
-      gapReason: "didntHelp",
+      didntHelp: true,
       gapGroupId: await placeInGroup(ctx, visitorId, grouping),
     });
   },

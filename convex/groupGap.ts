@@ -26,7 +26,7 @@ export type Grouping = Infer<typeof groupingValidator>;
 
 /** Runs the grouping AI call, which places a Gap in one of `groups` or names a new one. */
 export async function groupGap(
-  gap: Pick<Doc<"questions">, "text" | "answer" | "gapReason">,
+  gap: Pick<Doc<"questions">, "text" | "answer" | "gapReason" | "didntHelp">,
   groups: Doc<"gapGroups">[],
 ): Promise<Grouping> {
   const reply = await askModelForJson(
@@ -40,7 +40,7 @@ export async function groupGap(
           gap: {
             question: gap.text,
             assistantAnswer: gap.answer,
-            gapReason: gap.gapReason,
+            gapReason: gap.didntHelp ? "didntHelp" : gap.gapReason,
           },
         }),
       },

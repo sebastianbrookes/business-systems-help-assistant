@@ -303,7 +303,7 @@ test("a Gap joins an existing Gap group, whose count includes the Visitor's ques
   expect(group.questions).toHaveLength(3);
 });
 
-test("Didn't help turns an answer into a Gap with the reason Didn't help and groups it", async () => {
+test("Didn't help flags an answer, logs a Gap with that reason, and shows the IT team the answer", async () => {
   const { t, articleId } = await setup();
   const mfa = await articleId("Moving MFA to a new phone");
   fakeModelReply(
@@ -326,8 +326,8 @@ test("Didn't help turns an answer into a Gap with the reason Didn't help and gro
 
   const [question] = await t.query(api.questions.list, { visitorId });
   expect(question).toMatchObject({
-    outcome: "gap",
-    gapReason: "didntHelp",
+    outcome: "answered",
+    didntHelp: true,
     answer: "Text the code sent by SMS to your new number.",
     citedArticles: [{ title: "Moving MFA to a new phone" }],
   });
@@ -340,7 +340,11 @@ test("Didn't help turns an answer into a Gap with the reason Didn't help and gro
     await t.query(api.gapGroups.get, { visitorId, gapGroupId: group._id }),
   ).toMatchObject({
     questions: [
-      { text: "How do I set up MFA on my new phone?", gapReason: "didntHelp" },
+      {
+        text: "How do I set up MFA on my new phone?",
+        gapReason: "didntHelp",
+        answer: "Text the code sent by SMS to your new number.",
+      },
     ],
   });
 });

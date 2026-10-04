@@ -43,6 +43,7 @@ function GroupQuestions({ gapGroupId }: { gapGroupId: Id<"gapGroups"> }) {
         <li key={q._id}>
           {q.text}
           {q.gapReason && <span className="reason">{GAP_REASON_LABELS[q.gapReason]}</span>}
+          {q.answer && <p className="given-answer">Answer given: {q.answer}</p>}
         </li>
       ))}
     </ul>

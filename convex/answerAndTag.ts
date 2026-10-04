@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { Doc, Id } from "./_generated/dataModel";
 import { askModelForJson } from "./openrouter";
-import { DEPARTMENTS, MODEL_GAP_REASONS, OUTCOMES, SYSTEMS } from "./schema";
+import { DEPARTMENTS, GAP_REASONS, OUTCOMES, SYSTEMS } from "./schema";
 
 const OFF_TOPIC_DECLINE =
   "Sorry, I can only help with getting things done in Northwake's business systems.";
@@ -23,7 +23,7 @@ function replySchema(articleIds: string[]) {
       outcome: z.enum(OUTCOMES),
       answer: z.string(),
       citedArticleIds: z.array(z.enum(articleIds)),
-      gapReason: z.enum(MODEL_GAP_REASONS).nullable(),
+      gapReason: z.enum(GAP_REASONS).nullable(),
       department: z.enum(DEPARTMENTS).nullable(),
       system: z.enum(SYSTEMS).nullable(),
     })

@@ -20,7 +20,7 @@
 **2026-10-03, implementation:** All boxes are met in code. `convex/questions.test.ts` covers each Gap reason, a partly covered question, Didn't help, grouping into a new or existing group, and privacy between two Visitors. The grouping call is in `convex/groupGap.ts`, and the Gap group queries are in `convex/gapGroups.ts`. The IT team panel is the right half of a split screen, and it stacks below the Employee panel on narrow screens until ticket 09 adds tabs.
 
 Decisions to know before 04, 06, 07, and 08:
-- **Didn't help** changes the question's outcome from answered to Gap, with the Gap reason Didn't help. The answer and cited articles are kept, so 04 can find the article that didn't help. The spec's separate Didn't help flag is that reason, not its own field. A question that got Didn't help no longer counts as answered on the Dashboard.
+- **Didn't help** sets the question's Didn't help flag and puts it in a Gap group. The outcome stays answered, and the IT team sees the reason Didn't help. The answer and cited articles are kept, so 04 can find the article that didn't help. (Changed on 2026-10-04 at Sebastian's request; see below.)
 - The button shows only on answered questions. A Gap has already gone to the IT team.
 - Gap groups don't store the article being revised yet. 04 can add it or work it out from the group's Didn't help questions.
 - The answer and its grouping are saved together after both calls succeed. If either reply is malformed, nothing is saved. 06 will need to save the question first so it can mark it paused.
@@ -28,3 +28,5 @@ Decisions to know before 04, 06, 07, and 08:
 - A Gap may cite no article, as the spec allows. The Employee is then told to contact the IT Service Desk.
 
 Checked on the dev deployment against `openai/gpt-6-luna`. Two phrasings of the Cambridge-to-Durham samples hole joined one group, the Durham parking question started its own, Didn't help on the MFA answer started "Setting up MFA on a new phone", and another Visitor saw none of these groups. The cell-line phrasing came back Not covered rather than No match. That's answer-call tuning for later, and any Gap reason still flags a known gap.
+
+**2026-10-04, Didn't help flag:** Sebastian pointed out that a Didn't help click can mean the AI worded a good article badly rather than a real gap in knowledge. Didn't help now sets a separate flag and leaves the outcome as answered, which matches the spec's data model. The click still joins a Gap group, since the out-of-date MFA and badge access articles can only be found that way. When the IT team opens a group, each Didn't help question shows the answer it got, so they can tell bad wording from missing or stale knowledge before drafting. A review step before grouping was considered and turned down: it would hide the two out-of-date holes behind an extra click and add a review queue to the core loop. Three old Didn't help rows on the dev deployment were migrated to the flag.
