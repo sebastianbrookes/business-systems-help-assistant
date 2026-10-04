@@ -9,6 +9,7 @@
  */
 
 import type * as answerAndTag from "../answerAndTag.js";
+import type * as draftArticles from "../draftArticles.js";
 import type * as gapGroups from "../gapGroups.js";
 import type * as groupGap from "../groupGap.js";
 import type * as openrouter from "../openrouter.js";
@@ -16,6 +17,8 @@ import type * as questions from "../questions.js";
 import type * as seed from "../seed.js";
 import type * as startingArticles from "../startingArticles.js";
 import type * as startingItTeamNotes from "../startingItTeamNotes.js";
+import type * as visibility from "../visibility.js";
+import type * as writeDraft from "../writeDraft.js";
 
 import type {
   ApiFromModules,
@@ -25,6 +28,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   answerAndTag: typeof answerAndTag;
+  draftArticles: typeof draftArticles;
   gapGroups: typeof gapGroups;
   groupGap: typeof groupGap;
   openrouter: typeof openrouter;
@@ -32,6 +36,8 @@ declare const fullApi: ApiFromModules<{
   seed: typeof seed;
   startingArticles: typeof startingArticles;
   startingItTeamNotes: typeof startingItTeamNotes;
+  visibility: typeof visibility;
+  writeDraft: typeof writeDraft;
 }>;
 
 /**

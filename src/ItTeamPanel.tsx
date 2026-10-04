@@ -1,9 +1,12 @@
-import { useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 import { api } from "../convex/_generated/api";
-import type { Id } from "../convex/_generated/dataModel";
+import type { Doc, Id } from "../convex/_generated/dataModel";
+import { errorMessage } from "./errorMessage";
 import { GAP_REASON_LABELS } from "./gapReasons";
 import { visitorId } from "./visitorId";
+
+const STATE_LABELS = { open: "Open", drafted: "Drafted", resolved: "Resolved" } as const;
 
 export function ItTeamPanel() {
   const groups = useQuery(api.gapGroups.list, { visitorId });
@@ -24,10 +27,11 @@ export function ItTeamPanel() {
             >
               <span>{g.title}</span>
               <span className="count">
+                <span className={`state ${g.state}`}>{STATE_LABELS[g.state]}</span>
                 {g.questionCount} {g.questionCount === 1 ? "question" : "questions"}
               </span>
             </button>
-            {openId === g._id && <GroupQuestions gapGroupId={g._id} />}
+            {openId === g._id && <GroupDetail gapGroupId={g._id} />}
           </li>
         ))}
       </ul>
@@ -35,17 +39,140 @@ export function ItTeamPanel() {
   );
 }
 
-function GroupQuestions({ gapGroupId }: { gapGroupId: Id<"gapGroups"> }) {
+function GroupDetail({ gapGroupId }: { gapGroupId: Id<"gapGroups"> }) {
   const group = useQuery(api.gapGroups.get, { visitorId, gapGroupId });
+  if (!group) return null;
   return (
-    <ul className="group-questions">
-      {group?.questions.map((q) => (
-        <li key={q._id}>
-          {q.text}
-          {q.gapReason && <span className="reason">{GAP_REASON_LABELS[q.gapReason]}</span>}
-          {q.answer && <p className="given-answer">Answer given: {q.answer}</p>}
-        </li>
-      ))}
-    </ul>
+    <div className="group-detail">
+      <ul className="group-questions">
+        {group.questions.map((q) => (
+          <li key={q._id}>
+            {q.text}
+            {q.gapReason && <span className="reason">{GAP_REASON_LABELS[q.gapReason]}</span>}
+            {q.answer && <p className="given-answer">Answer given: {q.answer}</p>}
+          </li>
+        ))}
+      </ul>
+      {group.revisesArticle && (
+        <p className="muted revises">Revises: {group.revisesArticle.title}</p>
+      )}
+      {group.state === "open" && <DraftButton gapGroupId={gapGroupId} />}
+      {group.state === "drafted" && group.draft && (
+        <DraftEditor gapGroupId={gapGroupId} draft={group.draft} />
+      )}
+      {group.state === "resolved" && group.draft && (
+        <div className="draft">
+          <p className="approved">Approved. Employees now get answers from this article.</p>
+          <h3>{group.draft.title}</h3>
+          <p className="answer">{group.draft.body}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DraftButton({ gapGroupId }: { gapGroupId: Id<"gapGroups"> }) {
+  const draft = useAction(api.draftArticles.draft);
+  const [drafting, setDrafting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function onDraft() {
+    setDrafting(true);
+    setError(null);
+    try {
+      await draft({ visitorId, gapGroupId });
+    } catch (e) {
+      setError(errorMessage(e));
+    }
+    setDrafting(false);
+  }
+
+  return (
+    <div className="draft-actions">
+      <button disabled={drafting} onClick={onDraft}>
+        {drafting ? "Drafting…" : "Draft article"}
+      </button>
+      {error && <p className="error">{error}</p>}
+    </div>
+  );
+}
+
+/** Every [Check: …] placeholder left in the text. Any "[Check:" blocks approval on the server. */
+const placeholdersIn = (text: string) => text.match(/\[Check:[^\]]*\]?/gi) ?? [];
+
+function DraftEditor({
+  gapGroupId,
+  draft,
+}: {
+  gapGroupId: Id<"gapGroups">;
+  draft: Doc<"draftArticles">;
+}) {
+  const save = useMutation(api.draftArticles.save);
+  const approve = useMutation(api.draftArticles.approve);
+  const [title, setTitle] = useState(draft.title);
+  const [body, setBody] = useState(draft.body);
+  const [approving, setApproving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const placeholders = placeholdersIn(`${title}\n${body}`);
+
+  /** Saves the edits if they changed. Returns whether the draft is saved. */
+  async function saveEdits() {
+    if (title === draft.title && body === draft.body) return true;
+    setError(null);
+    try {
+      await save({ visitorId, gapGroupId, title, body });
+      return true;
+    } catch (e) {
+      setError(errorMessage(e));
+      return false;
+    }
+  }
+
+  async function onApprove() {
+    setApproving(true);
+    if (await saveEdits()) {
+      try {
+        await approve({ visitorId, gapGroupId });
+      } catch (e) {
+        setError(errorMessage(e));
+      }
+    }
+    setApproving(false);
+  }
+
+  return (
+    <div className="draft">
+      <label>
+        Title
+        <input value={title} onChange={(e) => setTitle(e.target.value)} onBlur={saveEdits} />
+      </label>
+      <label>
+        Article
+        <textarea
+          value={body}
+          rows={14}
+          onChange={(e) => setBody(e.target.value)}
+          onBlur={saveEdits}
+        />
+      </label>
+      {placeholders.length > 0 ? (
+        <div className="placeholders">
+          Replace {placeholders.length === 1 ? "this placeholder" : `these ${placeholders.length} placeholders`} with the real fact before approving:
+          <ul>
+            {placeholders.map((p, i) => (
+              <li key={i}>{p}</li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <p className="muted">No placeholders left.</p>
+      )}
+      <div className="draft-actions">
+        <button disabled={approving || placeholders.length > 0} onClick={onApprove}>
+          {approving ? "Approving…" : "Approve"}
+        </button>
+      </div>
+      {error && <p className="error">{error}</p>}
+    </div>
   );
 }

@@ -12,16 +12,17 @@ import { answerAndTag } from "./answerAndTag";
 import { placeInGroup } from "./gapGroups";
 import { groupGap, groupingValidator } from "./groupGap";
 import schema from "./schema";
+import { visibleArticles } from "./visibility";
 
 const MAX_QUESTION_LENGTH = 500;
 
-/** Runs the grouping call against the Gap groups the Visitor can see. */
+/** Runs the grouping call against the Gap groups the Visitor can see, except Resolved ones. */
 async function groupVisitorGap(
   ctx: ActionCtx,
   visitorId: string,
   gap: Parameters<typeof groupGap>[0],
 ) {
-  const groups = await ctx.runQuery(internal.gapGroups.visible, { visitorId });
+  const groups = await ctx.runQuery(internal.gapGroups.joinable, { visitorId });
   return groupGap(gap, groups);
 }
 
@@ -35,7 +36,9 @@ export const ask = action({
         `Questions must be 1–${MAX_QUESTION_LENGTH} characters.`,
       );
     }
-    const articles = await ctx.runQuery(internal.questions.visibleArticles);
+    const articles = await ctx.runQuery(internal.questions.articlesFor, {
+      visitorId,
+    });
     const result = await answerAndTag(text, articles);
     // A Gap's grouping call is part of the same question.
     const grouping =
@@ -90,9 +93,9 @@ export const list = query({
   },
 });
 
-export const visibleArticles = internalQuery({
-  args: {},
-  handler: (ctx) => ctx.db.query("helpArticles").collect(),
+export const articlesFor = internalQuery({
+  args: { visitorId: v.string() },
+  handler: (ctx, { visitorId }) => visibleArticles(ctx, visitorId),
 });
 
 const { gapGroupId: _, ...questionFields } =
@@ -133,11 +136,17 @@ export const markDidntHelp = internalMutation({
     grouping: groupingValidator,
   },
   handler: async (ctx, { visitorId, questionId, grouping }) => {
+    const question = (await ctx.db.get(questionId))!;
     // A second click that raced the first changes nothing.
-    if ((await ctx.db.get(questionId))?.didntHelp) return;
+    if (question.didntHelp) return;
     await ctx.db.patch(questionId, {
       didntHelp: true,
-      gapGroupId: await placeInGroup(ctx, visitorId, grouping),
+      gapGroupId: await placeInGroup(
+        ctx,
+        visitorId,
+        grouping,
+        question.citedArticleIds[0],
+      ),
     });
   },
 });

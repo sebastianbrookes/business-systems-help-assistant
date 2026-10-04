@@ -7,21 +7,21 @@ import {
   type QueryCtx,
 } from "./_generated/server";
 import type { Grouping } from "./groupGap";
+import { isVisible, visibleGroups } from "./visibility";
 
-/** Whether a row is starting data or the Visitor's own. */
-const isVisible = (row: { visitorId?: string }, visitorId: string) =>
-  row.visitorId === undefined || row.visitorId === visitorId;
-
-async function visibleGroups(ctx: QueryCtx, visitorId: string) {
-  const byVisitor = (id: string | undefined) =>
-    ctx.db
-      .query("gapGroups")
-      .withIndex("by_visitor", (q) => q.eq("visitorId", id))
-      .collect();
-  return [...(await byVisitor(undefined)), ...(await byVisitor(visitorId))];
+export async function visibleGroup(
+  ctx: QueryCtx,
+  visitorId: string,
+  gapGroupId: Id<"gapGroups">,
+) {
+  const group = await ctx.db.get(gapGroupId);
+  if (!group || !isVisible(group, visitorId)) {
+    throw new ConvexError("Gap group not found.");
+  }
+  return group;
 }
 
-async function visibleQuestions(
+export async function visibleQuestions(
   ctx: QueryCtx,
   visitorId: string,
   gapGroupId: Id<"gapGroups">,
@@ -33,6 +33,37 @@ async function visibleQuestions(
   return questions.filter((q) => isVisible(q, visitorId));
 }
 
+/** A Gap shown to the IT team. A Didn't help question includes the answer it got. */
+export const gapView = (q: Doc<"questions">) => ({
+  text: q.text,
+  gapReason: q.didntHelp ? ("didntHelp" as const) : q.gapReason,
+  answer: q.didntHelp ? q.answer : undefined,
+});
+
+/**
+ * The group's state for the Visitor, and the draft they see: their own if they
+ * have one, or else a starting draft.
+ */
+export async function groupDraft(
+  ctx: QueryCtx,
+  visitorId: string,
+  gapGroupId: Id<"gapGroups">,
+) {
+  const drafts = (
+    await ctx.db
+      .query("draftArticles")
+      .withIndex("by_gap_group", (q) => q.eq("gapGroupId", gapGroupId))
+      .collect()
+  ).filter((d) => isVisible(d, visitorId));
+  const state = drafts.some((d) => d.status === "approved")
+    ? ("resolved" as const)
+    : drafts.length
+      ? ("drafted" as const)
+      : ("open" as const);
+  const draft = drafts.find((d) => d.visitorId === visitorId) ?? drafts[0];
+  return { state, draft: draft ?? null };
+}
+
 /** The Visitor's Gap groups, most-asked first. Counts are starting questions plus the Visitor's own. */
 export const list = query({
   args: { visitorId: v.string() },
@@ -41,6 +72,7 @@ export const list = query({
       (await visibleGroups(ctx, visitorId)).map(async (g) => ({
         _id: g._id,
         title: g.title,
+        state: (await groupDraft(ctx, visitorId, g._id)).state,
         questionCount: (await visibleQuestions(ctx, visitorId, g._id)).length,
       })),
     );
@@ -48,43 +80,50 @@ export const list = query({
   },
 });
 
-/** One Gap group with its questions and their Gap reasons. A Didn't help question includes the answer it got. */
+/** One Gap group with its questions, their Gap reasons, its state, and the Visitor's draft. */
 export const get = query({
   args: { visitorId: v.string(), gapGroupId: v.id("gapGroups") },
   handler: async (ctx, { visitorId, gapGroupId }) => {
-    const group = await ctx.db.get(gapGroupId);
-    if (!group || !isVisible(group, visitorId)) {
-      throw new ConvexError("Gap group not found.");
-    }
+    const group = await visibleGroup(ctx, visitorId, gapGroupId);
     const questions = await visibleQuestions(ctx, visitorId, gapGroupId);
     return {
       _id: group._id,
       title: group.title,
-      questions: questions.map((q) => ({
-        _id: q._id,
-        text: q.text,
-        gapReason: q.didntHelp ? ("didntHelp" as const) : q.gapReason,
-        answer: q.didntHelp ? q.answer : undefined,
-      })),
+      questions: questions.map((q) => ({ _id: q._id, ...gapView(q) })),
+      revisesArticle: group.revisesArticleId
+        ? { title: (await ctx.db.get(group.revisesArticleId))!.title }
+        : null,
+      ...(await groupDraft(ctx, visitorId, gapGroupId)),
     };
   },
 });
 
-export const visible = internalQuery({
+/** The groups a new Gap can join: the Visitor's visible groups that aren't Resolved. */
+export const joinable = internalQuery({
   args: { visitorId: v.string() },
-  handler: (ctx, { visitorId }): Promise<Doc<"gapGroups">[]> =>
-    visibleGroups(ctx, visitorId),
+  handler: async (ctx, { visitorId }): Promise<Doc<"gapGroups">[]> => {
+    const groups = await visibleGroups(ctx, visitorId);
+    const states = await Promise.all(
+      groups.map(async (g) => (await groupDraft(ctx, visitorId, g._id)).state),
+    );
+    return groups.filter((_, i) => states[i] !== "resolved");
+  },
 });
 
-/** Returns the Gap group a grouping chose, starting it for the Visitor if it's new. */
+/**
+ * Returns the Gap group a grouping chose, starting it for the Visitor if it's
+ * new. A new group started by Didn't help revises the article that didn't help.
+ */
 export async function placeInGroup(
   ctx: MutationCtx,
   visitorId: string,
   grouping: Grouping,
+  revisesArticleId?: Id<"helpArticles">,
 ): Promise<Id<"gapGroups">> {
   if ("gapGroupId" in grouping) return grouping.gapGroupId;
   return ctx.db.insert("gapGroups", {
     visitorId,
     title: grouping.newGroupTitle,
+    revisesArticleId,
   });
 }

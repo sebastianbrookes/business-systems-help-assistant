@@ -13,6 +13,7 @@ export const SYSTEMS = [
 
 export const OUTCOMES = ["answered", "gap", "offTopic"] as const;
 export const GAP_REASONS = ["noMatch", "notCovered"] as const;
+export const DRAFT_STATUSES = ["pending", "approved"] as const;
 
 const literals = <T extends string>(values: readonly [T, T, ...T[]]) =>
   v.union(...values.map((value) => v.literal(value)));
@@ -20,18 +21,25 @@ const literals = <T extends string>(values: readonly [T, T, ...T[]]) =>
 const department = literals(DEPARTMENTS);
 const system = literals(SYSTEMS);
 
+export const articleFields = {
+  title: v.string(),
+  department,
+  system,
+  contactTeam: v.string(),
+  body: v.string(),
+};
+
+// Rows with no visitorId are starting data, seen by every Visitor.
 export default defineSchema({
   helpArticles: defineTable({
-    title: v.string(),
-    department,
-    system,
-    contactTeam: v.string(),
-    body: v.string(),
-  }),
+    visitorId: v.optional(v.string()),
+    ...articleFields,
+    // A revision replaces this article for whoever can see the revision.
+    revisesArticleId: v.optional(v.id("helpArticles")),
+  }).index("by_visitor", ["visitorId"]),
   itTeamNotes: defineTable({
     text: v.string(),
   }),
-  // Rows with no visitorId are starting data, seen by every Visitor.
   questions: defineTable({
     visitorId: v.optional(v.string()),
     text: v.string(),
@@ -50,5 +58,13 @@ export default defineSchema({
   gapGroups: defineTable({
     visitorId: v.optional(v.string()),
     title: v.string(),
+    // Set for a revision group: its Draft article revises this article.
+    revisesArticleId: v.optional(v.id("helpArticles")),
   }).index("by_visitor", ["visitorId"]),
+  draftArticles: defineTable({
+    visitorId: v.optional(v.string()),
+    gapGroupId: v.id("gapGroups"),
+    ...articleFields,
+    status: literals(DRAFT_STATUSES),
+  }).index("by_gap_group", ["gapGroupId"]),
 });

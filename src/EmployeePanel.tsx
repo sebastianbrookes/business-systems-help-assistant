@@ -1,8 +1,8 @@
 import { useAction, useQuery } from "convex/react";
-import { ConvexError } from "convex/values";
 import { useState, type FormEvent } from "react";
 import { api } from "../convex/_generated/api";
 import type { Id } from "../convex/_generated/dataModel";
+import { errorMessage } from "./errorMessage";
 import { visitorId } from "./visitorId";
 
 export function EmployeePanel() {
@@ -21,9 +21,7 @@ export function EmployeePanel() {
       await call();
       return true;
     } catch (e) {
-      setError(
-        e instanceof ConvexError ? String(e.data) : "Something went wrong. Try again.",
-      );
+      setError(errorMessage(e));
       return false;
     }
   }
