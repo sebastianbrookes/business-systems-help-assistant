@@ -18,7 +18,10 @@ input { flex: 1; padding: 10px 12px; border: 1px solid #c4cad3; border-radius: 6
 button { padding: 10px 16px; border: 0; border-radius: 6px; background: #1d5c8f; color: white; font: inherit; cursor: pointer; }
 button:disabled { opacity: 0.5; cursor: default; }
 .error { color: #b42318; }
-.split { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+.app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+.topbar { display: flex; justify-content: flex-end; padding: 6px 16px; border-bottom: 1px solid #dde1e7; background: white; }
+button.start-over { padding: 4px 10px; background: none; color: #5b6573; border: 1px solid #c4cad3; font-size: 0.85rem; }
+.split { display: grid; grid-template-columns: 1fr 1fr; }
 .split > .panel + .panel { border-left: 1px solid #dde1e7; background: #eef1f5; }
 @media (max-width: 800px) { .split { grid-template-columns: 1fr; } }
 h2 { margin: 0 0 4px; font-size: 1.2rem; }

@@ -42,6 +42,10 @@ _Avoid_: Knowledge base, internal docs, wiki
 A real person using the public demo, who plays both an Employee and the IT team.
 _Avoid_: User, recruiter, guest
 
+**Start over**:
+A Visitor drops their activity from view and sees the demo as on a first visit. Their earlier activity is kept for Sebastian's review.
+_Avoid_: Reset, clear history
+
 **Suggested question**:
 A pre-written question offered to Visitors, with a saved answer.
 _Avoid_: Example prompt, sample question, starter

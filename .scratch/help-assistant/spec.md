@@ -75,6 +75,7 @@ A case study page on Sebastian's site explains the project. It shows a static Ho
 
 40. As a Visitor, I want to see the starting data plus only my own activity, so that other Visitors' questions and drafts never show up.
 41. As a returning Visitor on the same browser, I want my earlier activity still there, so that I can pick up where I left off.
+41a. As a Visitor, I want a **Start over** button, so that I can see the demo as on a first visit. It asks me to confirm, and my earlier activity stays saved for Sebastian.
 42. As Sebastian, I want every Visitor's activity saved, so that I can review it privately in the Convex dashboard.
 43. As Sebastian, I want each Visitor limited to 15 AI calls a day, counting questions, Draft article clicks, and Fill from IT notes clicks, so that one person can't use up the budget.
 44. As Sebastian, I want the whole app limited to 250 AI calls a day, so that a bot clearing its ID can't drain the credit in a day.
