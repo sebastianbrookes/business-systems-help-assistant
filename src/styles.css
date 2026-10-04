@@ -34,6 +34,8 @@ button.start-over { margin-left: auto; padding: 4px 10px; background: none; colo
   .split > .pane + .pane { border-left: 1px solid #dde1e7; background: #eef1f5; }
 }
 @media (max-width: 800px) {
+  /* The phone tabs add a third row; keep the stretch on .split, not the tabs. */
+  .app { grid-template-rows: auto auto 1fr; }
   .split { grid-template-columns: 1fr; }
   .demo-label { order: 1; flex-basis: 100%; }
   .about { order: 2; }
