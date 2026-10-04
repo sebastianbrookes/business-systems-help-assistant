@@ -23,3 +23,5 @@ For ticket 06: count `draftArticles.fill` as one AI call, but only when it reach
 Checked against `openai/gpt-6-luna` with the real notes. The time off draft got 40 hours, January 1, and March 31. Hand-written rDNA and CRO accruals drafts, with 6 placeholders each, came back unchanged. In the browser on the dev deployment, the time off group showed "Filled 3 from the IT team notes" and Approve was enabled.
 
 **2026-10-04, review fixes:** A fill is also dropped when the fact states a number its cited note doesn't, or contains a bracket. Facts with "$", such as "$325", are now inserted as written. The placeholder pattern lives in `convex/placeholders.ts`, shared by approval, the fill, and the UI. The action returns `filledCount` for the "Filled N" message. Two small risks remain. A slow fill overwrites anything saved to the same draft from another tab in the meantime. A fill that pushes the body past 5,000 characters fails after the AI call.
+
+**2026-10-04, sign-off:** Sebastian ran the demo locally and confirmed that Fill from IT notes works on the time off draft and leaves the rDNA draft's placeholders empty.
