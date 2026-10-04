@@ -11,7 +11,7 @@ export class PausedError extends ConvexError<string> {
 }
 
 /** The one place the model is named. */
-const MODEL = "openai/gpt-6-luna";
+export const MODEL = "openai/gpt-6-luna";
 
 /**
  * Asks the model for JSON matching `schema` and returns it checked.

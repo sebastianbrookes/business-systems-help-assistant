@@ -1,5 +1,6 @@
-import type { Id } from "./_generated/dataModel";
+import type { Id, TableNames } from "./_generated/dataModel";
 import { internalMutation, type MutationCtx } from "./_generated/server";
+import schema from "./schema";
 import { startingArticles } from "./startingArticles";
 import { approvedRef, startingGapGroups } from "./startingGapGroups";
 import { startingQuestions, suggestedQuestions } from "./startingHistory";
@@ -18,6 +19,29 @@ export const load = internalMutation({
     if (!(await ctx.db.query("suggestedQuestions").first())) {
       await loadHistory(ctx);
     }
+  },
+});
+
+/**
+ * Deletes everything, every Visitor's activity included, and loads a fresh copy
+ * of the starting data, for a Test set run. It runs only on a deployment whose
+ * ALLOW_SEED_RELOAD environment variable is "true".
+ */
+export const reload = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    if (process.env.ALLOW_SEED_RELOAD !== "true") {
+      throw new Error(
+        'Reload deletes everything, so it needs ALLOW_SEED_RELOAD set to "true".',
+      );
+    }
+    for (const table of Object.keys(schema.tables) as TableNames[]) {
+      for (const { _id } of await ctx.db.query(table).collect()) {
+        await ctx.db.delete(_id);
+      }
+    }
+    await loadArticlesAndNotes(ctx);
+    await loadHistory(ctx);
   },
 });
 
