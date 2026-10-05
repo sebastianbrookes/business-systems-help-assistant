@@ -9,6 +9,7 @@ import {
 const visitorId = "visitor-1";
 const DAY = 24 * 60 * 60 * 1000;
 const SAMPLES = "Sending samples between Cambridge and Durham";
+const AI_TOOLS = "Using AI tools with company files";
 
 useTestEnv();
 
@@ -30,7 +31,7 @@ test("the starting data loads with no AI call", async () => {
   const open = groups.filter((g) => g.state === "open");
   expect(open.slice(0, 4).map((g) => g.title)).toEqual([
     SAMPLES,
-    "Using AI tools with company files",
+    AI_TOOLS,
     "Moving MFA to a new phone",
     "Parking at the Durham site",
   ]);
@@ -118,7 +119,7 @@ test("the three Suggested questions use their saved answers and grouping, with n
   expect(suggested).toMatchObject([
     { text: "How do I order lab supplies from Fisher?", outcome: "answered" },
     {
-      text: "Do I need an MTA to send samples to our Durham site?",
+      text: "Can I paste a client spreadsheet into ChatGPT?",
       outcome: "gap",
     },
     {
@@ -145,14 +146,14 @@ test("the three Suggested questions use their saved answers and grouping, with n
     { outcome: "gap", gapReason: expect.any(String) },
     { outcome: "offTopic", citedArticles: [] },
   ]);
-  const samples = await groupNamed(t, SAMPLES);
-  expect(samples.questions).toHaveLength(5);
-  expect(samples.questions.at(-1)).toMatchObject({
-    text: "Do I need an MTA to send samples to our Durham site?",
+  const aiTools = await groupNamed(t, AI_TOOLS);
+  expect(aiTools.questions).toHaveLength(5);
+  expect(aiTools.questions.at(-1)).toMatchObject({
+    text: "Can I paste a client spreadsheet into ChatGPT?",
   });
   // Other Visitors' groups don't change.
   const other = await t.query(api.gapGroups.list, { visitorId: "visitor-2" });
-  expect(other.find((g) => g.title === SAMPLES)).toMatchObject({
+  expect(other.find((g) => g.title === AI_TOOLS)).toMatchObject({
     questionCount: 4,
   });
 });

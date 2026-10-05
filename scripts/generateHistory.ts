@@ -22,7 +22,7 @@ import { historyQuestions, type Expected } from "./history/questions";
 const CACHE = "scripts/history/.cache.json";
 const OUTPUT = "convex/startingHistory.ts";
 const HISTORY_DAYS = 8 * 7;
-const SAMPLES = "Sending samples between Cambridge and Durham";
+const SUGGESTED_GAP_GROUP = "Using AI tools with company files";
 // Answers that cite these first get a Didn't help click.
 const OUT_OF_DATE = [
   "Moving MFA to a new phone",
@@ -60,7 +60,7 @@ const suggested: { text: string; hint: string; expected: Expected }[] = [
     expected: "answered",
   },
   {
-    text: "Do I need an MTA to send samples to our Durham site?",
+    text: "Can I paste a client spreadsheet into ChatGPT?",
     hint: "Not in the Help articles yet, so it goes to the IT team",
     expected: "gap",
   },
@@ -247,7 +247,7 @@ for (const s of suggested) {
   }
   if (result.outcome === "gap") {
     const title = await groupTitle({ text: s.text, ...result }, 0);
-    if (title !== SAMPLES) console.warn(`Suggested Gap grouped into "${title}"`);
+    if (title !== SUGGESTED_GAP_GROUP) console.warn(`Suggested Gap grouped into "${title}"`);
   }
   suggestedQuestions.push({
     text: s.text,
@@ -255,7 +255,7 @@ for (const s of suggested) {
     outcome: result.outcome,
     gapReason: result.gapReason,
     // The Gap one always joins the main example group.
-    gapGroup: result.outcome === "gap" ? SAMPLES : undefined,
+    gapGroup: result.outcome === "gap" ? SUGGESTED_GAP_GROUP : undefined,
     department: result.department,
     system: result.system,
     cited: result.citedArticleIds.map((id) => refOf.get(id)!),

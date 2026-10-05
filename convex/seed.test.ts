@@ -35,6 +35,28 @@ test("reload gives a fresh copy of the starting data", async () => {
   );
 });
 
+test("replacing the Suggested questions keeps the rest of the data and Visitors' activity", async () => {
+  const t = await setupWithHistory();
+  const before = await t.query(api.questions.suggested, {});
+  await askGapSuggestion(t);
+  // A deployment loaded before the Suggested questions changed.
+  await t.run(async (ctx) => {
+    await ctx.db.patch(before[1]._id, { text: "An old Suggested question" });
+  });
+
+  await t.mutation(internal.seed.replaceSuggested);
+
+  const after = await t.query(api.questions.suggested, {});
+  expect(after.map(({ _id, ...s }) => s)).toEqual(before.map(({ _id, ...s }) => s));
+  expect(await t.query(api.questions.list, { visitorId })).toHaveLength(1);
+  // The new Gap Suggested question still joins the starting group, beside the Visitor's earlier one.
+  await askGapSuggestion(t);
+  const groups = await t.query(api.gapGroups.list, { visitorId });
+  expect(groups.filter((g) => g.title === "Using AI tools with company files")).toMatchObject([
+    { questionCount: 6 },
+  ]);
+});
+
 test("reload refuses to run unless the deployment allows it", async () => {
   const t = await setupWithHistory();
   await askGapSuggestion(t);

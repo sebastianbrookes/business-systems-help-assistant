@@ -45,6 +45,21 @@ export const reload = internalMutation({
   },
 });
 
+/**
+ * Replaces the Suggested questions with the ones in startingHistory.ts and
+ * leaves everything else, for a deployment loaded before they changed. Run
+ * with `pnpm exec convex run seed:replaceSuggested`.
+ */
+export const replaceSuggested = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    for (const { _id } of await ctx.db.query("suggestedQuestions").collect()) {
+      await ctx.db.delete(_id);
+    }
+    await loadSuggested(ctx);
+  },
+});
+
 export async function loadArticlesAndNotes(ctx: MutationCtx) {
   for (const article of startingArticles) {
     await ctx.db.insert("helpArticles", article);
@@ -112,11 +127,31 @@ async function loadHistory(ctx: MutationCtx) {
       gapGroupId: await groupId(gapGroup),
     });
   }
+  await loadSuggested(ctx);
+}
+
+/** Loads the Suggested questions, which cite starting articles and join starting Gap groups. */
+async function loadSuggested(ctx: MutationCtx) {
+  const articles = await ctx.db
+    .query("helpArticles")
+    .withIndex("by_visitor", (q) => q.eq("visitorId", undefined))
+    .collect();
+  const groups = await ctx.db
+    .query("gapGroups")
+    .withIndex("by_visitor", (q) => q.eq("visitorId", undefined))
+    .collect();
+  const idOf = <T>(rows: { _id: T; title: string }[], title: string) => {
+    const row = rows.find((r) => r.title === title);
+    if (!row) throw new Error(`No starting article or Gap group for "${title}"`);
+    return row._id;
+  };
+  const originals = articles.filter((a) => !a.revisesArticleId);
+
   for (const { cited, gapGroup, ...suggested } of suggestedQuestions) {
     await ctx.db.insert("suggestedQuestions", {
       ...suggested,
-      citedArticleIds: cited.map(articleId),
-      gapGroupId: await groupId(gapGroup),
+      citedArticleIds: cited.map((title) => idOf(originals, title)),
+      gapGroupId: gapGroup === undefined ? undefined : idOf(groups, gapGroup),
     });
   }
 }

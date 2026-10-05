@@ -9,6 +9,7 @@ import {
 
 const visitorId = "visitor-1";
 const SAMPLES = "Sending samples between Cambridge and Durham";
+const AI_TOOLS = "Using AI tools with company files";
 
 useTestEnv();
 
@@ -31,12 +32,12 @@ test("the Suggested Gap question joins a starting group, which shows the Visitor
   });
 
   const groups = await t.query(api.gapGroups.list, { visitorId });
-  expect(groups.find((g) => g.title === SAMPLES)).toMatchObject({
+  expect(groups.find((g) => g.title === AI_TOOLS)).toMatchObject({
     questionCount: 5,
     includesYours: true,
     ownDraft: false,
   });
-  for (const g of groups.filter((g) => g.title !== SAMPLES)) {
+  for (const g of groups.filter((g) => g.title !== AI_TOOLS)) {
     expect(g).toMatchObject({ includesYours: false, ownDraft: false });
   }
   const other = await t.query(api.gapGroups.list, { visitorId: "visitor-2" });

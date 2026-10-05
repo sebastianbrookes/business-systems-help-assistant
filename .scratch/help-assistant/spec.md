@@ -127,7 +127,7 @@ IT team notes are never sent to the answer call.
 4. If OpenRouter returns a 402 error or any limit is hit, mark the question paused and return the paused message.
 5. Otherwise, save the result. On a Gap, run the grouping call. That call counts as part of the same question, not as a second call toward the limit.
 
-**Suggested questions.** Each of the three has a saved answer and a saved Gap group. Asking one saves a question for the Visitor with that saved result and makes no AI call. The Gap one joins **Sending samples between Cambridge and Durham**.
+**Suggested questions.** Each of the three has a saved answer and a saved Gap group. Asking one saves a question for the Visitor with that saved result and makes no AI call. The Gap one, "Can I paste a client spreadsheet into ChatGPT?", joins **Using AI tools with company files**.
 
 **Approval.** It's rejected while the draft contains any [Check: …] placeholder. On approval, the draft becomes a Help article, or replaces the article it revises, in the Visitor's view.
 

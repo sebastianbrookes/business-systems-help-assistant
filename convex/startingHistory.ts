@@ -3301,17 +3301,16 @@ export const suggestedQuestions: SuggestedQuestion[] = [
     "answer": "In Coupa, open Shop and choose the Fisher Scientific punchout tile. Search for supplies and add them to your cart, then select Return to Coupa. Check the quantities, cost center, and ship-to address, and submit the requisition. Coupa routes it for approval and sends the purchase order to Fisher when approved. Receive the order in Coupa when it arrives."
   },
   {
-    "text": "Do I need an MTA to send samples to our Durham site?",
+    "text": "Can I paste a client spreadsheet into ChatGPT?",
     "hint": "Not in the Help articles yet, so it goes to the IT team",
     "outcome": "gap",
-    "gapReason": "notCovered",
-    "gapGroup": "Sending samples between Cambridge and Durham",
-    "department": "Legal",
-    "system": "Ironclad",
+    "gapReason": "noMatch",
+    "gapGroup": "Using AI tools with company files",
+    "department": "IT",
     "cited": [
-      "Requesting a material transfer agreement (MTA) in Ironclad"
+      "Sharing files with people outside Northwake"
     ],
-    "answer": "The MTA guidance covers transfers between Northwake and an outside organization. It doesn't say whether sending samples to Northwake’s Durham site requires an MTA, so I can’t determine that from the available articles."
+    "answer": "The articles don't say whether ChatGPT is approved for client spreadsheets or how it handles submitted data. If the spreadsheet contains confidential information, the external-sharing article says it may be shared only with an organization that has a signed NDA in Ironclad. Check with the IT Service Desk before pasting it into ChatGPT."
   },
   {
     "text": "What's a good blocking buffer for a Western blot?",

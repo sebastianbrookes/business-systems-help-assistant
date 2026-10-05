@@ -41,3 +41,5 @@ Decisions to know before 06, 08, and 09:
 - `setup()` in the tests still loads only articles and notes. `setupWithHistory()` loads everything.
 
 **2026-10-04, review fixes:** "Approved …" on a Resolved group now uses the approval time for a Visitor's own approval, not the drafting time. The Off topic hint says "business system", matching the glossary. The cached replies show the grouping call put the MTA Suggested question in Sending samples by itself. Two things for later tickets: Didn't help rows keep no `gapReason`, so the Dashboard (08) must count `didntHelp` as Gaps the way `gapView` does. Also, five history Gaps came back with no department or system tag, so they won't show in by-system counts.
+
+**2026-10-05, change:** The Gap Suggested question is now "Can I paste a client spreadsheet into ChatGPT?", so Visitors outside biotech recognize it. It joins Using AI tools with company files, which then shows 5 questions. Its saved answer came from re-running `scripts/generateHistory.ts`, where the rest of the history came from the cache unchanged. A deployment loaded before the change needs `pnpm exec convex run seed:replaceSuggested`.
