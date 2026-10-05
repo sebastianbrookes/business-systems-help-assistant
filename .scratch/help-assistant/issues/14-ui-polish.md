@@ -15,3 +15,4 @@
 - [x] ~~Steps under the top bar walk a Visitor through the loop (ask a Gap question, open its group, draft, approve) and tick off as they go. On a phone only the current step shows. Replaces the "try this one" and "Next: draft the missing article" hints (2026-10-04).~~ Replaced by the Guide, ticket 15 (2026-10-05).
 - [ ] Gap groups are listed in Drafted, Open, and Resolved sections instead of by filter chips and a state badge on every row. Replaces the filters above.
 - [ ] Opening a Gap group shows it on its own in the IT team panel, with "← All Gap groups" to go back. Back focuses the group, wherever drafting or approving moved it. Replaces the scroll-and-flash after a group moves.
+- [x] A Suggested question answered instantly, which gave away the saved answer. It now shows "Thinking…" for about 2 seconds first, like a typed question (2026-10-05).

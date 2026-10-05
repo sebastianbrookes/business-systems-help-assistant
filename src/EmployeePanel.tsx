@@ -5,6 +5,9 @@ import type { Id } from "../convex/_generated/dataModel";
 import { errorMessage } from "./errorMessage";
 import { visitorId } from "./visitorId";
 
+// A Suggested question's answer is saved, so it waits about as long as a real answer takes.
+const SUGGESTED_ANSWER_DELAY_MS = 2000;
+
 /** The Employee side. The Guide's prefill puts a question in the input to ask live. */
 export function EmployeePanel({ prefill }: { prefill?: string }) {
   const questions = useQuery(api.questions.list, { visitorId });
@@ -63,6 +66,7 @@ export function EmployeePanel({ prefill }: { prefill?: string }) {
 
   async function onSuggested(suggestedQuestionId: Id<"suggestedQuestions">) {
     setAsking(true);
+    await new Promise((resolve) => setTimeout(resolve, SUGGESTED_ANSWER_DELAY_MS));
     await withErrorMessage(() => askSuggested({ visitorId, suggestedQuestionId }));
     setAsking(false);
   }
