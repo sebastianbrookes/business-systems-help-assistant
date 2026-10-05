@@ -75,10 +75,7 @@ export function EmployeePanel() {
           <li key={s._id}>
             <button disabled={asking} onClick={() => onSuggested(s._id)}>
               {s.text}
-              <span className="hint">
-                {s.hint}
-                {s.outcome === "gap" && <strong> · try this one</strong>}
-              </span>
+              <span className="hint">{s.hint}</span>
             </button>
           </li>
         ))}

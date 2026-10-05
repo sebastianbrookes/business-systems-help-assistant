@@ -69,13 +69,13 @@ export async function groupDraft(
   return { state, draft: draft ?? null };
 }
 
-const STATE_ORDER = { open: 0, drafted: 1, resolved: 2 } as const;
+const STATE_ORDER = { drafted: 0, open: 1, resolved: 2 } as const;
 
 /**
- * The Visitor's Gap groups: Open, then Drafted, then Resolved, each most-asked
- * first. Counts are starting questions plus the Visitor's own. Until the
- * Visitor drafts an article, each Open group holding one of their Gaps gets the
- * draft hint.
+ * The Visitor's Gap groups: Drafted (only approval left), then Open, then
+ * Resolved, each most-asked first. Counts are starting questions plus the
+ * Visitor's own. A group's ownDraft is whether its draft is the Visitor's: one
+ * they drafted, edited, or approved.
  */
 export const list = query({
   args: { visitorId: v.string() },
@@ -85,28 +85,20 @@ export const list = query({
         const { state, draft } = await groupDraft(ctx, visitorId, g._id);
         const questions = await visibleQuestions(ctx, visitorId, g._id);
         return {
-          group: {
-            _id: g._id,
-            title: g.title,
-            state,
-            questionCount: questions.length,
-            includesYours: questions.some((q) => q.visitorId === visitorId),
-          },
+          _id: g._id,
+          title: g.title,
+          state,
+          questionCount: questions.length,
+          includesYours: questions.some((q) => q.visitorId === visitorId),
           ownDraft: draft?.visitorId === visitorId,
         };
       }),
     );
-    const hasDrafted = groups.some((g) => g.ownDraft);
-    return groups
-      .map(({ group }) => ({
-        ...group,
-        draftHint: !hasDrafted && group.includesYours && group.state === "open",
-      }))
-      .sort(
-        (a, b) =>
-          STATE_ORDER[a.state] - STATE_ORDER[b.state] ||
-          b.questionCount - a.questionCount,
-      );
+    return groups.sort(
+      (a, b) =>
+        STATE_ORDER[a.state] - STATE_ORDER[b.state] ||
+        b.questionCount - a.questionCount,
+    );
   },
 });
 

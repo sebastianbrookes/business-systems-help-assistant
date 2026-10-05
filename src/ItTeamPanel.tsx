@@ -12,14 +12,37 @@ import { visitorId } from "./visitorId";
 
 const STATE_LABELS = { open: "Open", drafted: "Drafted", resolved: "Resolved" } as const;
 
+const questionCount = (n: number) => `${n} ${n === 1 ? "question" : "questions"}`;
+
 type GroupSummary = FunctionReturnType<typeof api.gapGroups.list>[number];
 
-export function ItTeamPanel({ flashingGroupIds }: { flashingGroupIds: Set<Id<"gapGroups">> }) {
+export function ItTeamPanel({
+  flashingGroupIds,
+  onOpenYours,
+}: {
+  flashingGroupIds: Set<Id<"gapGroups">>;
+  onOpenYours: () => void;
+}) {
   const [tab, setTab] = useState<"groups" | "dashboard">("groups");
-  // A new Gap brings the Gap groups tab back, so its group's flash is seen.
+  const [openId, setOpenId] = useState<Id<"gapGroups"> | null>(null);
+  // The group to focus when Back returns to the list, so it's found after drafting or approving moved it.
+  const [backFrom, setBackFrom] = useState<Id<"gapGroups"> | null>(null);
+  // Focus it only once. Parent effects run after the list's, so the group is focused by now.
   useEffect(() => {
-    if (flashingGroupIds.size) setTab("groups");
+    if (backFrom) setBackFrom(null);
+  }, [backFrom]);
+  // A new Gap brings back the Gap groups list, so its group's flash is seen.
+  useEffect(() => {
+    if (!flashingGroupIds.size) return;
+    setTab("groups");
+    setOpenId(null);
   }, [flashingGroupIds]);
+
+  function onOpen(g: GroupSummary) {
+    setBackFrom(null);
+    setOpenId(g._id);
+    if (g.includesYours) onOpenYours();
+  }
 
   return (
     <section className="panel">
@@ -32,53 +55,63 @@ export function ItTeamPanel({ flashingGroupIds }: { flashingGroupIds: Set<Id<"ga
           Dashboard
         </button>
       </div>
-      <div role="tabpanel">{tab === "groups" ? <GapGroups flashingGroupIds={flashingGroupIds} /> : <Dashboard />}</div>
+      <div role="tabpanel">
+        {tab === "dashboard" ? (
+          <Dashboard />
+        ) : openId ? (
+          <GroupDetail
+            gapGroupId={openId}
+            onBack={() => {
+              setBackFrom(openId);
+              setOpenId(null);
+            }}
+          />
+        ) : (
+          <GapGroups flashingGroupIds={flashingGroupIds} focusId={backFrom} onOpen={onOpen} />
+        )}
+      </div>
     </section>
   );
 }
 
-const FILTERS = ["all", "open", "drafted", "resolved"] as const;
-
-function GapGroups({ flashingGroupIds }: { flashingGroupIds: Set<Id<"gapGroups">> }) {
+function GapGroups({
+  flashingGroupIds,
+  focusId,
+  onOpen,
+}: {
+  flashingGroupIds: Set<Id<"gapGroups">>;
+  focusId: Id<"gapGroups"> | null;
+  onOpen: (g: GroupSummary) => void;
+}) {
   const groups = useQuery(api.gapGroups.list, { visitorId });
-  const [openId, setOpenId] = useState<Id<"gapGroups"> | null>(null);
-  const [filter, setFilter] = useState<(typeof FILTERS)[number]>("all");
-  // A new Gap's group must be listed for its flash to be seen.
-  useEffect(() => {
-    if (flashingGroupIds.size) setFilter("all");
-  }, [flashingGroupIds]);
-
-  const inFilter = (f: (typeof FILTERS)[number]) => groups?.filter((g) => f === "all" || g.state === f) ?? [];
-  // The open group stays listed when drafting or approving moves it out of the filter.
-  const shown = groups?.filter((g) => filter === "all" || g.state === filter || g._id === openId);
+  if (!groups) return null;
 
   return (
     <>
       <p className="muted">Questions the Help articles didn't answer.</p>
-      {groups?.length === 0 && <p className="muted">No Gaps yet.</p>}
-      {!!groups?.length && (
-        <div className="filters" role="group" aria-label="Filter by state">
-          {FILTERS.map((f) => (
-            <button key={f} aria-pressed={filter === f} onClick={() => setFilter(f)}>
-              {f === "all" ? "All" : STATE_LABELS[f]} <span className="filter-count">{inFilter(f).length}</span>
-            </button>
-          ))}
-        </div>
-      )}
-      {!!groups?.length && shown?.length === 0 && (
-        <p className="muted">No {filter !== "all" && STATE_LABELS[filter]} groups.</p>
-      )}
-      <ul className="groups">
-        {shown?.map((g) => (
-          <GroupItem
-            key={g._id}
-            group={g}
-            flashing={flashingGroupIds.has(g._id)}
-            expanded={openId === g._id}
-            onToggle={(expand) => setOpenId(expand ? g._id : null)}
-          />
-        ))}
-      </ul>
+      {groups.length === 0 && <p className="muted">No Gaps yet.</p>}
+      {/* The list comes sorted by state, so the sections follow its order. */}
+      {[...new Set(groups.map((g) => g.state))].map((state) => {
+        const inSection = groups.filter((g) => g.state === state);
+        return (
+          <section key={state} className="group-section" aria-labelledby={`section-${state}`}>
+            <h3 id={`section-${state}`}>
+              {STATE_LABELS[state]} <span className="section-count">{inSection.length}</span>
+            </h3>
+            <ul className="groups">
+              {inSection.map((g) => (
+                <GroupItem
+                  key={g._id}
+                  group={g}
+                  flashing={flashingGroupIds.has(g._id)}
+                  focused={focusId === g._id}
+                  onOpen={() => onOpen(g)}
+                />
+              ))}
+            </ul>
+          </section>
+        );
+      })}
     </>
   );
 }
@@ -86,96 +119,91 @@ function GapGroups({ flashingGroupIds }: { flashingGroupIds: Set<Id<"gapGroups">
 function GroupItem({
   group: g,
   flashing,
-  expanded,
-  onToggle,
+  focused,
+  onOpen,
 }: {
   group: GroupSummary;
   flashing: boolean;
-  expanded: boolean;
-  onToggle: (expand: boolean) => void;
+  focused: boolean;
+  onOpen: () => void;
 }) {
-  const ref = useRef<HTMLLIElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
+  // Only on mount: Back remounts the list.
+  useEffect(() => {
+    if (focused) ref.current?.focus();
+  }, []);
   useEffect(() => {
     if (flashing) ref.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }, [flashing]);
 
-  // Drafting or approving moves the group down the list, so follow it there.
-  const [moved, setMoved] = useState(false);
-  const prevState = useRef(g.state);
-  useEffect(() => {
-    if (g.state === prevState.current) return;
-    prevState.current = g.state;
-    if (!expanded) return;
-    ref.current?.scrollIntoView({ block: "start", behavior: "smooth" });
-    setMoved(true);
-    const timer = setTimeout(() => setMoved(false), 2500);
-    return () => clearTimeout(timer);
-  }, [g.state]);
-
   return (
-    <li ref={ref} className={flashing || moved ? "group flash" : "group"}>
-      <button className="group-toggle" aria-expanded={expanded} onClick={() => onToggle(!expanded)}>
+    <li className={flashing ? "group flash" : "group"}>
+      <button ref={ref} className="group-open" onClick={onOpen}>
         <span>{g.title}</span>
         <span className="count">
-          <span className={`state ${g.state}`}>{STATE_LABELS[g.state]}</span>
-          {g.questionCount} {g.questionCount === 1 ? "question" : "questions"}
+          {questionCount(g.questionCount)}
           {g.includesYours && <strong className="yours"> · incl. yours</strong>}
         </span>
       </button>
-      {g.draftHint && !expanded && (
-        <button className="draft-hint" onClick={() => onToggle(true)}>
-          Next: draft the missing article →
-        </button>
-      )}
-      {expanded && <GroupDetail gapGroupId={g._id} />}
     </li>
   );
 }
 
-function GroupDetail({ gapGroupId }: { gapGroupId: Id<"gapGroups"> }) {
+function GroupDetail({ gapGroupId, onBack }: { gapGroupId: Id<"gapGroups">; onBack: () => void }) {
   const group = useQuery(api.gapGroups.get, { visitorId, gapGroupId });
-  if (!group) return null;
+  // Focusing Back brings the detail into view, wherever the list was scrolled.
+  const backRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => backRef.current?.focus(), []);
+
   return (
     <div className="group-detail">
-      <ul className="group-questions">
-        {group.questions.map((q) => (
-          <li key={q._id}>
-            {q.text}
-            {q.gapReason && <span className="reason">{GAP_REASON_LABELS[q.gapReason]}</span>}
-            <span className="when">{daysAgo(q.askedAt)}</span>
-            {q.answer && <p className="given-answer">Answer given: {q.answer}</p>}
-          </li>
-        ))}
-      </ul>
-      {group.revisesArticle && (
-        <p className="muted revises">Revises: {group.revisesArticle.title}</p>
-      )}
-      {group.state === "open" && <DraftButton gapGroupId={gapGroupId} />}
-      {group.state === "drafted" && group.draft && (
-        <DraftEditor gapGroupId={gapGroupId} draft={group.draft} />
-      )}
-      {group.state === "resolved" && group.draft && (
-        <div className="draft">
-          <p className="approved">
-            Approved {group.approvedAt !== null && daysAgo(group.approvedAt)}. Employees now get answers
-            from this article.
+      <button ref={backRef} className="back" onClick={onBack}>
+        ← All Gap groups
+      </button>
+      {group && (
+        <>
+          <h3>{group.title}</h3>
+          <p className="muted">
+            <span className={`state ${group.state}`}>{STATE_LABELS[group.state]}</span>
+            {questionCount(group.questions.length)}
           </p>
-          <h3>{group.draft.title}</h3>
-          <p className="answer">{group.draft.body}</p>
-          {group.answeredAfter.length > 0 && (
-            <>
-              <h3>Answered from it since</h3>
-              <ul className="group-questions">
-                {group.answeredAfter.map((q) => (
-                  <li key={q._id}>
-                    {q.text}
-                    <span className="when">{daysAgo(q.askedAt)}</span>
-                  </li>
-                ))}
-              </ul>
-            </>
+          <ul className="group-questions">
+            {group.questions.map((q) => (
+              <li key={q._id}>
+                {q.text}
+                {q.gapReason && <span className="reason">{GAP_REASON_LABELS[q.gapReason]}</span>}
+                <span className="when">{daysAgo(q.askedAt)}</span>
+                {q.answer && <p className="given-answer">Answer given: {q.answer}</p>}
+              </li>
+            ))}
+          </ul>
+          {group.revisesArticle && <p className="muted revises">Revises: {group.revisesArticle.title}</p>}
+          {group.state === "open" && <DraftButton gapGroupId={gapGroupId} />}
+          {group.state === "drafted" && group.draft && <DraftEditor gapGroupId={gapGroupId} draft={group.draft} />}
+          {group.state === "resolved" && group.draft && (
+            <div className="draft">
+              <p className="approved">
+                Approved {group.approvedAt !== null && daysAgo(group.approvedAt)}. Employees now get answers from this
+                article.
+              </p>
+              <h3>{group.draft.title}</h3>
+              <p className="answer">{group.draft.body}</p>
+              {group.answeredAfter.length > 0 && (
+                <>
+                  <h3>Answered from it since</h3>
+                  <ul className="group-questions">
+                    {group.answeredAfter.map((q) => (
+                      <li key={q._id}>
+                        {q.text}
+                        <span className="when">{daysAgo(q.askedAt)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
           )}
-        </div>
+        </>
       )}
     </div>
   );

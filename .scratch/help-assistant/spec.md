@@ -38,7 +38,7 @@ A case study page on Sebastian's site explains the project. It shows a static Ho
 
 9. As a Visitor, I want a single label reading "DEMO · fictional company, fake data · ⓘ", so that I never mistake this for a real company.
 10. As a Visitor, I want ⓘ to explain that the demo was built with AI-assisted coding, that my activity is private, and that it isn't affiliated with any vendor, so that I know what I'm looking at.
-11. As a Visitor, I want three Suggested questions, each with a hint saying what will happen and the Gap one marked "try this one", so that I can see the value without thinking up a question. One is answered, one is a Gap, and one is Off topic.
+11. As a Visitor, I want three Suggested questions, each with a hint saying what will happen, so that I can see the value without thinking up a question. One is answered, one is a Gap, and one is Off topic.
 12. As a Visitor, I want to type my own question, so that I can test the assistant on something it wasn't primed for.
 13. As an Employee, I want an answer drawn only from Help articles that names the article it came from, so that I can trust it and read more.
 14. As an Employee, I want the answer to include the team to contact, so that I know who to ask when the steps don't work.
@@ -54,12 +54,12 @@ A case study page on Sebastian's site explains the project. It shows a static Ho
 21. As a Visitor on desktop, I want the Employee and IT team panels side by side, so that I can see my question land in a Gap group right away.
 22. As a Visitor on a phone, I want **Employee | IT team** tabs, with a "1 new Gap" badge after my question becomes a Gap, so that I know where to look.
 23. As a Visitor, I want my Gap to join an existing Gap group that flashes and shows "5 questions · incl. yours", so that I see repeats being grouped. That's the value moment.
-24. As a first-time Visitor, I want a hint on that group, "Next: draft the missing article →", so that I know what to do next.
+24. As a first-time Visitor, I want steps under the top bar (ask a Gap question, open its Gap group, draft the missing article, approve it) that tick off as I go, so that I know what to do next.
 25. As the IT team, I want Gap groups listed with their state (Open, Drafted, Resolved) and question count, so that I can see which holes matter most.
 26. As the IT team, I want to open a Gap group and read its questions and their Gap reasons (No match, Not covered, Didn't help), so that I understand what's missing.
 27. As the IT team, I want a **Draft article** button on a Gap group, so that the AI writes the missing article from the Employees' questions, the related Help articles, and general knowledge.
 28. As the IT team, I want a Didn't help group's draft to be a revision of the existing article, so that I fix the old article instead of adding a duplicate.
-29. As the IT team, I want the Draft article to open right under its Gap group, not in a popup, so that I keep the context.
+29. As the IT team, I want a Gap group to open on its own in the IT team panel, with its questions above the Draft article and a way back to the list, not in a popup, so that I keep the context.
 30. As the IT team, I want every company fact the AI couldn't source marked as a [Check: …] placeholder, so that the draft never invents company rules.
 31. As the IT team, I want a **Fill from IT notes** button that fills placeholders only from the IT team notes and leaves the rest empty, so that I can approve quickly without the AI guessing.
 32. As the IT team, I want to type into any remaining placeholder, so that I can supply facts the notes don't have, such as rDNA approval and CRO accruals.
@@ -142,7 +142,7 @@ A one-off script runs about 300 history questions through the real assistant. It
 **UI.**
 - **Desktop:** a split screen with the Employee on the left and the IT team on the right. The IT team side has **Gap groups** (default) and **Dashboard** tabs. A thin header has "← How it works" linking back to the case study.
 - **Phones:** **Employee | IT team** tabs with the "1 new Gap" badge.
-- **Value moment:** the group flash and the first-time hint.
+- **Value moment:** the group flash and the steps.
 - **Dashboard:** the four numbers and the questions-by-system chart, computed from starting data plus the Visitor's own rows.
 
 **Test runner.** A script outside the app runs against a separate Convex deployment loaded with a fresh copy of the starting data. It asks the Test set questions in a fixed order and scores them with no AI grading.

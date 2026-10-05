@@ -18,7 +18,7 @@ input { flex: 1; padding: 10px 12px; border: 1px solid #c4cad3; border-radius: 6
 button { padding: 10px 16px; border: 0; border-radius: 6px; background: #1d5c8f; color: white; font: inherit; cursor: pointer; }
 button:disabled { opacity: 0.5; cursor: default; }
 .error { color: #b42318; }
-.app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+.app { display: grid; grid-template-rows: auto auto 1fr; min-height: 100vh; }
 .topbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 6px 16px; border-bottom: 1px solid #dde1e7; background: white; font-size: 0.85rem; }
 .how-it-works { color: #1d5c8f; text-decoration: none; }
 .demo-label { flex: 1; margin: 0; text-align: center; color: #5b6573; letter-spacing: 0.02em; }
@@ -35,36 +35,39 @@ button.start-over { margin-left: auto; padding: 4px 10px; background: none; colo
 }
 @media (max-width: 800px) {
   /* The phone tabs add a third row; keep the stretch on .split, not the tabs. */
-  .app { grid-template-rows: auto auto 1fr; }
+  .app { grid-template-rows: auto auto auto 1fr; }
   .split { grid-template-columns: 1fr; }
   .demo-label { order: 1; flex-basis: 100%; }
   .tabs.phone-tabs { position: sticky; top: 0; z-index: 1; margin: 0; padding: 0 16px; background: white; }
   .phone-tabs button { flex: 1; }
   /* Clear the sticky tabs when a group or answer scrolls into view. */
-  .groups .group, .questions .question { scroll-margin-top: 52px; }
+  .group-open, .back, .questions .question { scroll-margin-top: 52px; }
+  /* Only the current step fits on a phone. */
+  .steps li:not([aria-current]) { display: none; }
   .split > .pane:last-child { background: #eef1f5; }
 }
 .badge { margin-left: 6px; padding: 1px 6px; border-radius: 10px; background: #eb6834; color: white; font-size: 0.75rem; font-weight: 600; }
 h2 { margin: 0 0 4px; font-size: 1.2rem; }
 .sent { margin: 8px 0; color: #8a4b00; font-size: 0.95rem; }
 button.didnt-help { margin-top: 10px; padding: 4px 10px; background: none; color: #5b6573; border: 1px solid #c4cad3; font-size: 0.85rem; }
-.filters { display: flex; flex-wrap: wrap; gap: 6px; margin: -8px 0 12px; }
-.filters button { padding: 4px 10px; border: 1px solid #c4cad3; border-radius: 999px; background: white; color: #5b6573; font-size: 0.85rem; }
-.filters button[aria-pressed="true"] { border-color: #1d5c8f; background: #1d5c8f; color: white; }
-.filter-count { margin-left: 2px; opacity: 0.75; }
+.group-section + .group-section { margin-top: 20px; }
+.group-section h3 { margin: 0 0 8px; font-size: 0.9rem; color: #5b6573; }
+.section-count { margin-left: 4px; font-weight: 400; font-variant-numeric: tabular-nums; }
 .groups { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
-.group { background: white; border: 1px solid #dde1e7; border-radius: 8px; scroll-margin-top: 16px; }
-button.group-toggle { width: 100%; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; padding: 12px 14px; background: none; color: inherit; text-align: left; font-weight: 600; }
-.group-toggle > span:first-child { flex: 1 1 12em; }
-.count { color: #5b6573; font-weight: 400; white-space: nowrap; }
+.group { background: white; border: 1px solid #dde1e7; border-radius: 8px; }
+.group-open, button.back { scroll-margin: 16px; }
+button.group-open { width: 100%; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; padding: 12px 14px; background: none; color: inherit; text-align: left; font-weight: 600; }
+.group-open > span:first-child { flex: 1 1 12em; }
+.count { color: #5b6573; font-weight: 400; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .group-questions { margin: 0; padding: 0 14px 12px 32px; display: grid; gap: 6px; font-size: 0.95rem; }
 .reason { margin-left: 8px; padding: 1px 6px; border-radius: 4px; background: #eef1f5; color: #5b6573; font-size: 0.8rem; white-space: nowrap; }
 .given-answer { margin: 4px 0 0; color: #5b6573; font-size: 0.9rem; white-space: pre-wrap; }
 .state { margin-right: 8px; padding: 1px 6px; border-radius: 4px; font-size: 0.8rem; background: #fff4e5; color: #8a4b00; }
 .state.drafted { background: #e8f0fa; color: #1d5c8f; }
 .state.resolved { background: #e7f5ec; color: #1f7a3f; }
-.group-detail { padding: 0 14px 14px; }
+.group-detail > h3 { margin: 4px 0; font-size: 1.1rem; }
 .group-detail .group-questions { padding: 0 0 12px 18px; }
+button.back { margin: 0 0 8px; padding: 2px 0; background: none; color: #1d5c8f; font-size: 0.9rem; }
 .revises { margin: 0 0 10px; font-size: 0.9rem; }
 .draft { display: grid; gap: 10px; padding: 12px; border: 1px solid #dde1e7; border-radius: 6px; background: #fafbfc; }
 .draft h3 { margin: 0; font-size: 1rem; }
@@ -84,7 +87,6 @@ textarea { width: 100%; padding: 10px 12px; border: 1px solid #c4cad3; border-ra
 .suggested { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 8px; }
 .suggested button { width: 100%; display: grid; gap: 2px; padding: 10px 14px; background: white; color: inherit; border: 1px solid #c4cad3; text-align: left; font-weight: 600; }
 .hint { color: #5b6573; font-size: 0.85rem; font-weight: 400; }
-.hint strong { color: #1d5c8f; }
 .when { margin-left: 8px; color: #8a929e; font-size: 0.8rem; white-space: nowrap; }
 .tabs { display: flex; gap: 4px; margin: 8px 0 12px; border-bottom: 1px solid #dde1e7; }
 .tabs button { padding: 6px 12px; background: none; color: #5b6573; border-radius: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; }
@@ -114,4 +116,12 @@ textarea { width: 100%; padding: 10px 12px; border: 1px solid #c4cad3; border-ra
   0%, 30% { background: #fff1d6; box-shadow: 0 0 0 3px #eb6834; }
   100% { background: white; box-shadow: 0 0 0 3px transparent; }
 }
-button.draft-hint { padding: 0 14px 12px; background: none; color: #1d5c8f; font-weight: 600; font-size: 0.9rem; }
+.steps { padding: 8px 16px; border-bottom: 1px solid #dde1e7; background: white; font-size: 0.85rem; }
+.steps ol { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 24px; margin: 0; padding: 0; list-style: none; }
+.steps li { display: flex; align-items: center; gap: 6px; color: #8a929e; }
+.step-mark { display: grid; place-items: center; width: 20px; height: 20px; border: 1px solid #c4cad3; border-radius: 50%; font-size: 0.75rem; }
+.steps li[aria-current] { color: #1c2430; font-weight: 600; }
+.steps li[aria-current] .step-mark { border-color: #1d5c8f; background: #1d5c8f; color: white; }
+.steps li.done { color: #5b6573; }
+.steps li.done .step-mark { border-color: #1f7a3f; background: #e7f5ec; color: #1f7a3f; }
+.steps-done { margin: 4px 0 0; text-align: center; color: #1f7a3f; font-weight: 600; }
