@@ -16,3 +16,4 @@
 - [ ] Gap groups are listed in Drafted, Open, and Resolved sections instead of by filter chips and a state badge on every row. Replaces the filters above.
 - [ ] Opening a Gap group shows it on its own in the IT team panel, with "← All Gap groups" to go back. Back focuses the group, wherever drafting or approving moved it. Replaces the scroll-and-flash after a group moves.
 - [x] A Suggested question answered instantly, which gave away the saved answer. It now shows "Thinking…" for about 2 seconds first, like a typed question (2026-10-05).
+- [x] A new answer, typed or Suggested, streams in a word at a time like a chat reply, with its sources and Didn't help shown once it's done. Answers from before the page loaded show whole (2026-10-05).
