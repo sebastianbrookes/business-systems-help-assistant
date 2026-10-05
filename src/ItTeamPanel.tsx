@@ -8,6 +8,7 @@ import { Dashboard } from "./Dashboard";
 import { daysAgo } from "./daysAgo";
 import { errorMessage } from "./errorMessage";
 import { GAP_REASON_LABELS } from "./gapReasons";
+import { useReportToGuide } from "./Guide";
 import { visitorId } from "./visitorId";
 
 const STATE_LABELS = { open: "Open", drafted: "Drafted", resolved: "Resolved" } as const;
@@ -16,15 +17,10 @@ const questionCount = (n: number) => `${n} ${n === 1 ? "question" : "questions"}
 
 type GroupSummary = FunctionReturnType<typeof api.gapGroups.list>[number];
 
-export function ItTeamPanel({
-  flashingGroupIds,
-  onOpenYours,
-}: {
-  flashingGroupIds: Set<Id<"gapGroups">>;
-  onOpenYours: () => void;
-}) {
+export function ItTeamPanel({ flashingGroupIds }: { flashingGroupIds: Set<Id<"gapGroups">> }) {
   const [tab, setTab] = useState<"groups" | "dashboard">("groups");
   const [openId, setOpenId] = useState<Id<"gapGroups"> | null>(null);
+  useReportToGuide({ openGroupId: openId, itTeamTab: tab });
   // The group to focus when Back returns to the list, so it's found after drafting or approving moved it.
   const [backFrom, setBackFrom] = useState<Id<"gapGroups"> | null>(null);
   // Focus it only once. Parent effects run after the list's, so the group is focused by now.
@@ -41,14 +37,13 @@ export function ItTeamPanel({
   function onOpen(g: GroupSummary) {
     setBackFrom(null);
     setOpenId(g._id);
-    if (g.includesYours) onOpenYours();
   }
 
   return (
     <section className="panel">
       <h2>IT team</h2>
       <div className="tabs" role="tablist">
-        <button role="tab" aria-selected={tab === "groups"} onClick={() => setTab("groups")}>
+        <button role="tab" aria-selected={tab === "groups"} onClick={() => setTab("groups")} data-guide="tab:groups">
           Gap groups
         </button>
         <button role="tab" aria-selected={tab === "dashboard"} onClick={() => setTab("dashboard")}>
@@ -138,7 +133,7 @@ function GroupItem({
 
   return (
     <li className={flashing ? "group flash" : "group"}>
-      <button ref={ref} className="group-open" onClick={onOpen}>
+      <button ref={ref} className="group-open" onClick={onOpen} data-guide={`group:${g._id}`}>
         <span>{g.title}</span>
         <span className="count">
           {questionCount(g.questionCount)}
@@ -213,6 +208,7 @@ function DraftButton({ gapGroupId }: { gapGroupId: Id<"gapGroups"> }) {
   const draft = useAction(api.draftArticles.draft);
   const [drafting, setDrafting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  useReportToGuide({ drafting });
 
   async function onDraft() {
     setDrafting(true);
@@ -227,7 +223,7 @@ function DraftButton({ gapGroupId }: { gapGroupId: Id<"gapGroups"> }) {
 
   return (
     <div className="draft-actions">
-      <button disabled={drafting} onClick={onDraft}>
+      <button disabled={drafting} onClick={onDraft} data-guide="draft-button">
         {drafting ? "Drafting…" : "Draft article"}
       </button>
       {error && <p className="error">{error}</p>}
@@ -252,6 +248,7 @@ function DraftEditor({
   const [fillResult, setFillResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const placeholders = placeholdersIn(`${title}\n${body}`);
+  useReportToGuide({ editor: { gapGroupId, placeholderCount: placeholders.length, filled: fillResult !== null } });
 
   /** Saves the edits if they changed. Returns whether the draft is saved. */
   async function saveEdits() {
@@ -316,7 +313,7 @@ function DraftEditor({
         />
       </label>
       {placeholders.length > 0 ? (
-        <div className="placeholders">
+        <div className="placeholders" data-guide="placeholders">
           Replace {placeholders.length === 1 ? "this placeholder" : `these ${placeholders.length} placeholders`} with the real fact before approving:
           <ul>
             {placeholders.map((p, i) => (
@@ -330,11 +327,15 @@ function DraftEditor({
       {fillResult && <p className="muted">{fillResult}</p>}
       <div className="draft-actions">
         {placeholders.length > 0 && (
-          <button disabled={filling || approving} onClick={onFill}>
+          <button disabled={filling || approving} onClick={onFill} data-guide="fill-button">
             {filling ? "Filling…" : "Fill from IT notes"}
           </button>
         )}
-        <button disabled={filling || approving || placeholders.length > 0} onClick={onApprove}>
+        <button
+          disabled={filling || approving || placeholders.length > 0}
+          onClick={onApprove}
+          data-guide="approve-button"
+        >
           {approving ? "Approving…" : "Approve"}
         </button>
       </div>

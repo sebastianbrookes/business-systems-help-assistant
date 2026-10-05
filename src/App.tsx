@@ -1,7 +1,7 @@
 import { useState, useSyncExternalStore } from "react";
 import { EmployeePanel } from "./EmployeePanel";
 import { ItTeamPanel } from "./ItTeamPanel";
-import { LoopSteps } from "./LoopSteps";
+import { Guide, forgetGuideSkip, useGuide } from "./Guide";
 import { useNewGaps } from "./useNewGaps";
 import { startOver } from "./visitorId";
 
@@ -18,6 +18,7 @@ const useIsPhone = () => useSyncExternalStore(onPhoneChange, () => phoneQuery.ma
 
 function onStartOver() {
   if (confirm("Start over? Your questions, drafts, and approved articles will be cleared from this browser.")) {
+    forgetGuideSkip();
     startOver();
   }
 }
@@ -25,10 +26,9 @@ function onStartOver() {
 export function App() {
   const isPhone = useIsPhone();
   const [tab, setTab] = useState<"employee" | "itTeam">("employee");
-  // Opening a group isn't saved, so this step resets on reload until the Visitor drafts.
-  const [openedYours, setOpenedYours] = useState(false);
   const itTeamInView = !isPhone || tab === "itTeam";
   const { newGapCount, flashingGroupIds } = useNewGaps(itTeamInView);
+  const guide = useGuide({ isPhone, phoneTab: tab });
 
   return (
     <div className="app">
@@ -42,6 +42,11 @@ export function App() {
             ⓘ
           </button>
         </p>
+        {guide.hidden && (
+          <button className="guide-toggle" onClick={guide.show}>
+            Guide
+          </button>
+        )}
         <button className="start-over" onClick={onStartOver}>
           Start over
         </button>
@@ -52,13 +57,12 @@ export function App() {
           or drafts. Sebastian can review saved activity to improve the demo.
         </p>
       </header>
-      <LoopSteps openedYours={openedYours} />
       {isPhone && (
         <div className="tabs phone-tabs" role="tablist">
-          <button role="tab" aria-selected={tab === "employee"} onClick={() => setTab("employee")}>
+          <button role="tab" aria-selected={tab === "employee"} onClick={() => setTab("employee")} data-guide="tab:employee">
             Employee
           </button>
-          <button role="tab" aria-selected={tab === "itTeam"} onClick={() => setTab("itTeam")}>
+          <button role="tab" aria-selected={tab === "itTeam"} onClick={() => setTab("itTeam")} data-guide="tab:itTeam">
             IT team
             {newGapCount > 0 && (
               <span className="badge">
@@ -70,12 +74,13 @@ export function App() {
       )}
       <div className="split">
         <div className="pane" hidden={isPhone && tab !== "employee"}>
-          <EmployeePanel />
+          <EmployeePanel prefill={guide.step?.prefill} />
         </div>
         <div className="pane" hidden={!itTeamInView}>
-          <ItTeamPanel flashingGroupIds={flashingGroupIds} onOpenYours={() => setOpenedYours(true)} />
+          <ItTeamPanel flashingGroupIds={flashingGroupIds} />
         </div>
       </div>
+      {guide.step && <Guide step={guide.step} onHide={guide.hide} />}
     </div>
   );
 }

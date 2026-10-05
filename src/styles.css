@@ -18,12 +18,14 @@ input { flex: 1; padding: 10px 12px; border: 1px solid #c4cad3; border-radius: 6
 button { padding: 10px 16px; border: 0; border-radius: 6px; background: #1d5c8f; color: white; font: inherit; cursor: pointer; }
 button:disabled { opacity: 0.5; cursor: default; }
 .error { color: #b42318; }
-.app { display: grid; grid-template-rows: auto auto 1fr; min-height: 100vh; }
+.app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
 .topbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 6px 16px; border-bottom: 1px solid #dde1e7; background: white; font-size: 0.85rem; }
 .how-it-works { color: #1d5c8f; text-decoration: none; }
 .demo-label { flex: 1; margin: 0; text-align: center; color: #5b6573; letter-spacing: 0.02em; }
 button.about-toggle { padding: 0 2px; background: none; color: inherit; font-size: 1rem; anchor-name: --about-toggle; }
 .about { position-anchor: --about-toggle; position-area: bottom; width: min(420px, calc(100vw - 32px)); margin: 8px 16px 0; padding: 12px 14px; border: 1px solid #dde1e7; border-radius: 8px; background: white; box-shadow: 0 8px 24px rgb(28 36 48 / 0.12); color: #5b6573; font-size: 0.85rem; line-height: 1.45; }
+button.guide-toggle { margin-left: auto; padding: 4px 10px; background: none; color: #1d5c8f; border: 1px solid #c4cad3; }
+.guide-toggle + .start-over { margin-left: 0; }
 button.start-over { margin-left: auto; padding: 4px 10px; background: none; color: #5b6573; border: 1px solid #c4cad3; }
 .split { display: grid; grid-template-columns: 1fr 1fr; }
 @media (min-width: 801px) {
@@ -35,15 +37,13 @@ button.start-over { margin-left: auto; padding: 4px 10px; background: none; colo
 }
 @media (max-width: 800px) {
   /* The phone tabs add a third row; keep the stretch on .split, not the tabs. */
-  .app { grid-template-rows: auto auto auto 1fr; }
+  .app { grid-template-rows: auto auto 1fr; }
   .split { grid-template-columns: 1fr; }
   .demo-label { order: 1; flex-basis: 100%; }
   .tabs.phone-tabs { position: sticky; top: 0; z-index: 1; margin: 0; padding: 0 16px; background: white; }
   .phone-tabs button { flex: 1; }
   /* Clear the sticky tabs when a group or answer scrolls into view. */
   .group-open, .back, .questions .question { scroll-margin-top: 52px; }
-  /* Only the current step fits on a phone. */
-  .steps li:not([aria-current]) { display: none; }
   .split > .pane:last-child { background: #eef1f5; }
 }
 .badge { margin-left: 6px; padding: 1px 6px; border-radius: 10px; background: #eb6834; color: white; font-size: 0.75rem; font-weight: 600; }
@@ -116,12 +116,19 @@ textarea { width: 100%; padding: 10px 12px; border: 1px solid #c4cad3; border-ra
   0%, 30% { background: #fff1d6; box-shadow: 0 0 0 3px #eb6834; }
   100% { background: white; box-shadow: 0 0 0 3px transparent; }
 }
-.steps { padding: 8px 16px; border-bottom: 1px solid #dde1e7; background: white; font-size: 0.85rem; }
-.steps ol { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 24px; margin: 0; padding: 0; list-style: none; }
-.steps li { display: flex; align-items: center; gap: 6px; color: #8a929e; }
-.step-mark { display: grid; place-items: center; width: 20px; height: 20px; border: 1px solid #c4cad3; border-radius: 50%; font-size: 0.75rem; }
-.steps li[aria-current] { color: #1c2430; font-weight: 600; }
-.steps li[aria-current] .step-mark { border-color: #1d5c8f; background: #1d5c8f; color: white; }
-.steps li.done { color: #5b6573; }
-.steps li.done .step-mark { border-color: #1f7a3f; background: #e7f5ec; color: #1f7a3f; }
-.steps-done { margin: 4px 0 0; text-align: center; color: #1f7a3f; font-weight: 600; }
+/* The Guide's target: its anchor, with a pulsing ring that's steady under reduced motion. */
+[data-guide-active] { anchor-name: --guide-target; outline: 3px solid #eb6834; outline-offset: 2px; animation: guide-pulse 1.6s ease-in-out infinite; }
+@keyframes guide-pulse { 50% { outline-color: rgb(235 104 52 / 0.3); outline-offset: 5px; } }
+@media (prefers-reduced-motion: reduce) { [data-guide-active] { animation: none; } }
+/* Below the target, flipping above it when there's no room. Hidden while the target is scrolled out of view. */
+.guide { position-anchor: --guide-target; position-area: bottom; position-try-fallbacks: flip-block; position-visibility: anchors-visible; container-type: anchored; width: min(300px, calc(100vw - 32px)); margin: 14px 16px; padding: 12px 14px; overflow: visible; border: 0; border-radius: 8px; background: #1c2430; color: white; box-shadow: 0 8px 24px rgb(28 36 48 / 0.25); font-size: 0.9rem; line-height: 1.4; }
+.guide p { margin: 0 0 10px; }
+.guide-actions { display: flex; align-items: center; gap: 8px; }
+.guide-count { margin-right: auto; color: #aab3bf; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+.guide button { padding: 4px 10px; font-size: 0.85rem; background: white; color: #1c2430; }
+.guide button.guide-skip { background: none; color: #aab3bf; }
+/* The arrow is anchored to the target too, so it points at it even when the callout shifts to fit the screen. */
+.guide-arrow { position: fixed; position-anchor: --guide-target; position-area: bottom; position-visibility: anchors-visible; margin-top: 6px; border: 8px solid transparent; border-top-width: 0; border-bottom-color: #1c2430; }
+@container anchored(fallback: flip-block) {
+  .guide-arrow { position-area: top; margin: 0 0 6px; border-width: 8px 8px 0; border-color: #1c2430 transparent transparent; }
+}

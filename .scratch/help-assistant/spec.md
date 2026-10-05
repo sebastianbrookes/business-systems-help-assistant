@@ -54,7 +54,7 @@ A case study page on Sebastian's site explains the project. It shows a static Ho
 21. As a Visitor on desktop, I want the Employee and IT team panels side by side, so that I can see my question land in a Gap group right away.
 22. As a Visitor on a phone, I want **Employee | IT team** tabs, with a "1 new Gap" badge after my question becomes a Gap, so that I know where to look.
 23. As a Visitor, I want my Gap to join an existing Gap group that flashes and shows "5 questions · incl. yours", so that I see repeats being grouped. That's the value moment.
-24. As a first-time Visitor, I want steps under the top bar (ask a Gap question, open its Gap group, draft the missing article, approve it) that tick off as I go, so that I know what to do next.
+24. As a first-time Visitor, I want a Guide that points at one thing at a time and says what to do next (ask a Gap question, open its Gap group, draft the missing article, fill its placeholders, approve it, and ask again as an Employee), so that I'm not faced with a wall of text.
 25. As the IT team, I want Gap groups listed with their state (Open, Drafted, Resolved) and question count, so that I can see which holes matter most.
 26. As the IT team, I want to open a Gap group and read its questions and their Gap reasons (No match, Not covered, Didn't help), so that I understand what's missing.
 27. As the IT team, I want a **Draft article** button on a Gap group, so that the AI writes the missing article from the Employees' questions, the related Help articles, and general knowledge.
@@ -142,7 +142,7 @@ A one-off script runs about 300 history questions through the real assistant. It
 **UI.**
 - **Desktop:** a split screen with the Employee on the left and the IT team on the right. The IT team side has **Gap groups** (default) and **Dashboard** tabs. A thin header has "← How it works" linking back to the case study.
 - **Phones:** **Employee | IT team** tabs with the "1 new Gap" badge.
-- **Value moment:** the group flash and the steps.
+- **Value moment:** the group flash and the Guide.
 - **Dashboard:** the four numbers and the questions-by-system chart, computed from starting data plus the Visitor's own rows.
 
 **Test runner.** A script outside the app runs against a separate Convex deployment loaded with a fresh copy of the starting data. It asks the Test set questions in a fixed order and scores them with no AI grading.

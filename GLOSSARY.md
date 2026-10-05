@@ -50,6 +50,10 @@ _Avoid_: Reset, clear history
 A pre-written question offered to Visitors, with a saved answer.
 _Avoid_: Example prompt, sample question, starter
 
+**Guide**:
+Callouts that walk a first-time Visitor through the loop one step at a time, each pointing at where to look and what to do next.
+_Avoid_: Tour, walkthrough, onboarding, steps
+
 **Test set**:
 A fixed list of questions with known right outcomes, kept apart from the question history and run against the starting data to measure the assistant.
 _Avoid_: Eval, benchmark, sample

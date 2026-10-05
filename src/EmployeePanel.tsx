@@ -5,7 +5,8 @@ import type { Id } from "../convex/_generated/dataModel";
 import { errorMessage } from "./errorMessage";
 import { visitorId } from "./visitorId";
 
-export function EmployeePanel() {
+/** The Employee side. The Guide's prefill puts a question in the input to ask live. */
+export function EmployeePanel({ prefill }: { prefill?: string }) {
   const questions = useQuery(api.questions.list, { visitorId });
   const suggested = useQuery(api.questions.suggested, {});
   const ask = useAction(api.questions.ask);
@@ -15,6 +16,13 @@ export function EmployeePanel() {
   const [asking, setAsking] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [markingId, setMarkingId] = useState<Id<"questions"> | null>(null);
+  // Fill in each prefill once, so it doesn't come back after the Visitor asks it.
+  const prefilled = useRef<string>(undefined);
+  useEffect(() => {
+    if (!prefill || prefill === prefilled.current) return;
+    prefilled.current = prefill;
+    setText(prefill);
+  }, [prefill]);
 
   // A new answer lands at the bottom of the list, so scroll it into view and flash it.
   const newestRef = useRef<HTMLLIElement>(null);
@@ -73,7 +81,11 @@ export function EmployeePanel() {
       <ul className="suggested">
         {suggested?.map((s) => (
           <li key={s._id}>
-            <button disabled={asking} onClick={() => onSuggested(s._id)}>
+            <button
+              disabled={asking}
+              onClick={() => onSuggested(s._id)}
+              data-guide={s.outcome === "gap" ? "suggested-gap" : undefined}
+            >
               {s.text}
               <span className="hint">{s.hint}</span>
             </button>
@@ -83,7 +95,12 @@ export function EmployeePanel() {
 
       <ol className="questions">
         {questions?.map((q, i) => (
-          <li key={q._id} ref={i === questions.length - 1 ? newestRef : undefined} className={q._id === flashingId ? "question flash" : "question"}>
+          <li
+            key={q._id}
+            ref={i === questions.length - 1 ? newestRef : undefined}
+            className={q._id === flashingId ? "question flash" : "question"}
+            data-guide={`answer:${q._id}`}
+          >
             <p className="asked">{q.text}</p>
             {q.outcome === "gap" && (
               <p className="sent">
@@ -128,6 +145,7 @@ export function EmployeePanel() {
           placeholder="How do I…?"
           maxLength={500}
           disabled={asking}
+          data-guide="employee-input"
         />
         <button disabled={asking || !text.trim()}>
           {asking ? "Thinking…" : "Ask"}
