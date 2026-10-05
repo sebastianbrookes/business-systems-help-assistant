@@ -1,4 +1,4 @@
-# AI Help Assistant for Business Systems
+# Gapfinder: AI Help Assistant for Business Systems
 
 A live demo helpdesk for Northwake Therapeutics, a fictional biotech. Employees ask how to get things done in its business systems. The assistant answers only from Help articles and names the article it used. When the articles fall short, it logs a Gap, groups it with similar questions, and lets the IT team have the AI draft the missing article. A person fills in any facts the AI couldn't source and approves it.
 
